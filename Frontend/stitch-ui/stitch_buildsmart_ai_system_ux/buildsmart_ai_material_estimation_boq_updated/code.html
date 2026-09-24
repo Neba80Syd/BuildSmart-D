@@ -1,0 +1,421 @@
+<!DOCTYPE html><html class="light" lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Material Estimation &amp; BOQ - BuildSmart AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "on-secondary-fixed": "#002117",
+                "surface-bright": "#effcf7",
+                "surface-container-high": "#deebe6",
+                "on-primary-fixed": "#002116",
+                "background": "#effcf7",
+                "inverse-on-surface": "#e7f4ee",
+                "on-tertiary-fixed-variant": "#3f4946",
+                "secondary-fixed-dim": "#a7cfbe",
+                "on-surface": "#131e1b",
+                "surface-tint": "#3c6756",
+                "on-primary-container": "#a4d2be",
+                "error": "#ba1a1a",
+                "primary-fixed": "#beedd8",
+                "tertiary-fixed-dim": "#bfc9c5",
+                "surface-variant": "#d8e5e0",
+                "surface-container": "#e4f1eb",
+                "secondary-fixed": "#c3ecda",
+                "surface": "#effcf7",
+                "on-tertiary-container": "#c1cbc7",
+                "inverse-surface": "#27332f",
+                "secondary-container": "#c0e9d7",
+                "on-primary-fixed-variant": "#234e3f",
+                "primary-fixed-dim": "#a2d0bc",
+                "on-tertiary-fixed": "#141d1b",
+                "on-tertiary": "#ffffff",
+                "on-secondary-fixed-variant": "#294e41",
+                "tertiary-container": "#4c5653",
+                "outline": "#717974",
+                "tertiary": "#353f3c",
+                "primary-container": "#315c4c",
+                "outline-variant": "#c0c8c3",
+                "surface-container-lowest": "#ffffff",
+                "inverse-primary": "#a2d0bc",
+                "on-secondary": "#ffffff",
+                "on-secondary-container": "#456a5c",
+                "on-error": "#ffffff",
+                "error-container": "#ffdad6",
+                "on-surface-variant": "#414944",
+                "on-background": "#131e1b",
+                "surface-container-highest": "#d8e5e0",
+                "surface-dim": "#d0ddd8",
+                "on-error-container": "#93000a",
+                "secondary": "#416658",
+                "surface-container-low": "#eaf7f1",
+                "on-primary": "#ffffff",
+                "primary": "#184436",
+                "tertiary-fixed": "#dbe5e1"
+        },
+        "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+        },
+        "spacing": {
+                "base": "8px",
+                "margin-desktop": "48px",
+                "gutter": "24px",
+                "max-width": "1440px",
+                "md": "16px",
+                "xs": "4px",
+                "sm": "8px",
+                "lg": "24px",
+                "margin-mobile": "16px",
+                "xl": "40px"
+        },
+        "fontFamily": {
+                "headline-lg": [
+                        "Inter"
+                ],
+                "headline-md": [
+                        "Inter"
+                ],
+                "display": [
+                        "Inter"
+                ],
+                "mono-technical": [
+                        "Inter"
+                ],
+                "body-sm": [
+                        "Inter"
+                ],
+                "headline-lg-mobile": [
+                        "Inter"
+                ],
+                "body-md": [
+                        "Inter"
+                ],
+                "headline-sm": [
+                        "Inter"
+                ],
+                "body-lg": [
+                        "Inter"
+                ],
+                "label-md": [
+                        "Inter"
+                ]
+        },
+        "fontSize": {
+                "headline-lg": [
+                        "32px",
+                        {
+                                "lineHeight": "40px",
+                                "letterSpacing": "-0.01em",
+                                "fontWeight": "600"
+                        }
+                ],
+                "headline-md": [
+                        "24px",
+                        {
+                                "lineHeight": "32px",
+                                "fontWeight": "600"
+                        }
+                ],
+                "display": [
+                        "48px",
+                        {
+                                "lineHeight": "56px",
+                                "letterSpacing": "-0.02em",
+                                "fontWeight": "700"
+                        }
+                ],
+                "mono-technical": [
+                        "13px",
+                        {
+                                "lineHeight": "18px",
+                                "fontWeight": "500"
+                        }
+                ],
+                "body-sm": [
+                        "14px",
+                        {
+                                "lineHeight": "20px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "headline-lg-mobile": [
+                        "24px",
+                        {
+                                "lineHeight": "32px",
+                                "fontWeight": "600"
+                        }
+                ],
+                "body-md": [
+                        "16px",
+                        {
+                                "lineHeight": "24px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "headline-sm": [
+                        "20px",
+                        {
+                                "lineHeight": "28px",
+                                "fontWeight": "600"
+                        }
+                ],
+                "body-lg": [
+                        "18px",
+                        {
+                                "lineHeight": "28px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "label-md": [
+                        "12px",
+                        {
+                                "lineHeight": "16px",
+                                "letterSpacing": "0.05em",
+                                "fontWeight": "600"
+                        }
+                ]
+        }
+},
+    },
+  }
+</script>
+<style>
+        .shadow-elevation {
+            box-shadow: 0 4px 12px rgba(23, 32, 30, 0.05);
+        }
+        
+        .dark .shadow-elevation {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+<script>
+    function toggleTheme() {
+        const html = document.documentElement;
+        if (html.classList.contains('dark')) {
+            html.classList.remove('dark');
+            html.classList.add('light');
+            document.getElementById('theme-icon').textContent = 'dark_mode';
+        } else {
+            html.classList.remove('light');
+            html.classList.add('dark');
+            document.getElementById('theme-icon').textContent = 'light_mode';
+        }
+    }
+</script>
+</head>
+<body class="bg-background dark:bg-inverse-surface text-on-background dark:text-inverse-on-surface font-body-md antialiased flex flex-col min-h-screen transition-colors duration-200" style="background-color: rgb(250, 250, 248);">
+<!-- TopNavBar -->
+<header class="w-full sticky top-0 z-50 bg-background dark:bg-inverse-surface border-b border-outline-variant dark:border-outline" style="background-color: rgb(250, 250, 248);">
+<div class="flex justify-between items-center h-16 px-gutter max-w-max-width mx-auto">
+<div class="flex items-center gap-md">
+<span class="font-headline-md text-headline-md font-bold text-primary dark:text-inverse-primary">BuildSmart AI</span>
+</div>
+<nav class="hidden md:flex gap-lg">
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-inverse-primary transition-colors cursor-pointer transition-all duration-200" href="#">Platform</a>
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-inverse-primary transition-colors cursor-pointer transition-all duration-200" href="#">Marketplace</a>
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-inverse-primary transition-colors cursor-pointer transition-all duration-200" href="#">Enterprise</a>
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-inverse-primary transition-colors cursor-pointer transition-all duration-200" href="#">Pricing</a>
+</nav>
+<div class="flex items-center gap-md">
+<button aria-label="Toggle theme" class="p-2 rounded-full hover:bg-surface-variant dark:hover:bg-tertiary-container transition-colors text-on-surface-variant dark:text-outline-variant flex items-center justify-center" onclick="toggleTheme()">
+<span class="material-symbols-outlined text-xl" id="theme-icon">dark_mode</span>
+</button>
+<button class="font-label-md text-label-md text-primary dark:text-inverse-primary hover:text-primary-container dark:hover:text-primary-fixed transition-colors">Sign In</button>
+</div>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden">
+<!-- SideNavBar -->
+<aside class="hidden md:flex h-screen w-64 fixed left-0 top-16 border-r border-outline-variant dark:border-outline bg-surface-container-low dark:bg-tertiary flex-col py-md z-40" style="background-color: rgb(250, 250, 248);">
+<div class="px-4 mb-6">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 rounded-full bg-surface-variant flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A close up, high key corporate headshot of an architect in a well lit studio. The mood is professional and intelligent. Bright lighting with soft shadows. Wearing professional attire." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDOwEez2_Q1FKTU__PN-q-K7Y_90wv1xgn8bUxbuxCkNTRt6GobgzAel19mhtok-95CknRZkZ6xLkpvBhwKN6FwPbIh7zYm32qe2ARoD3_O2prBI2RGzDhQ3tNRJOT2Hg32VVAx_ukValrpDB4SK-x3sMjClJZnDIY8mQQS6fOJfSbDiB8H8AgGssKO6N7QCGH_XKBU3AY7Eh7HJ1ybX3nrwndWFIbL0hWGsCHN0kVEz-lUEN-0bcBnLg">
+</div>
+<div>
+<div class="font-headline-sm text-headline-sm font-bold text-primary dark:text-inverse-primary leading-tight">Project Alpha</div>
+<div class="font-label-md text-label-md text-on-surface-variant dark:text-outline-variant mt-1">Lead Architect</div>
+</div>
+</div>
+<button class="w-full py-2 bg-primary text-on-primary dark:bg-inverse-primary dark:text-on-primary-container font-label-md text-label-md rounded-lg hover:bg-primary-container dark:hover:bg-primary-fixed transition-colors shadow-elevation">
+                    New Project
+                </button>
+</div>
+<nav class="flex-1 overflow-y-auto">
+<a class="flex items-center gap-3 px-4 py-3 mx-2 my-1 transition-all duration-200 text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-high dark:hover:bg-tertiary-container rounded-lg" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 mx-2 my-1 transition-all duration-200 text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-high dark:hover:bg-tertiary-container rounded-lg" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">architecture</span>
+<span class="font-label-md text-label-md">Design Studio</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 mx-2 my-1 transition-all duration-200 text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-high dark:hover:bg-tertiary-container rounded-lg" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">edit_square</span>
+<span class="font-label-md text-label-md">Floor Plans</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 mx-2 my-1 transition-all duration-200 text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-high dark:hover:bg-tertiary-container rounded-lg" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">view_in_ar</span>
+<span class="font-label-md text-label-md">3D Visualizer</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 mx-2 my-1 transition-all duration-200 text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-high dark:hover:bg-tertiary-container rounded-lg" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">storefront</span>
+<span class="font-label-md text-label-md">Marketplace</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 mx-2 my-1 transition-all duration-200 bg-primary-container text-on-primary-container dark:bg-primary dark:text-on-primary font-semibold rounded-lg" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">folder_open</span>
+<span class="font-label-md text-label-md">Projects</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 mx-2 my-1 transition-all duration-200 text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-high dark:hover:bg-tertiary-container rounded-lg" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</nav>
+<div class="mt-auto px-2">
+<a class="flex items-center gap-3 px-4 py-3 mx-2 my-1 transition-all duration-200 text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-high dark:hover:bg-tertiary-container rounded-lg" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">help</span>
+<span class="font-label-md text-label-md">Help Center</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 mx-2 my-1 transition-all duration-200 text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-high dark:hover:bg-tertiary-container rounded-lg" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">logout</span>
+<span class="font-label-md text-label-md">Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 md:ml-64 p-margin-mobile md:p-margin-desktop overflow-y-auto" style="background-color: rgb(250, 250, 248);">
+<div class="max-w-[1200px] mx-auto">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-xl gap-md">
+<div>
+<h1 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-background dark:text-inverse-on-surface mb-1">Material Estimation &amp; BOQ</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant dark:text-outline-variant">Bill of Quantities and cost estimation for selected project phases.</p>
+</div>
+<div class="flex flex-wrap items-center gap-sm w-full md:w-auto">
+<div class="relative flex-1 md:w-64">
+<select class="w-full appearance-none bg-surface-container-lowest dark:bg-inverse-surface border border-outline-variant dark:border-outline rounded-lg py-2 pl-3 pr-10 font-body-sm text-body-sm text-on-surface dark:text-inverse-on-surface focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10">
+<option>Project Alpha - Phase 1</option>
+<option>Project Alpha - Phase 2</option>
+<option>Beta Tower Core</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 transform -translate-y-1/2 text-on-surface-variant dark:text-outline-variant pointer-events-none">expand_more</span>
+</div>
+<div class="flex gap-sm">
+<button class="px-4 py-2 border border-outline-variant dark:border-outline rounded-lg font-label-md text-label-md text-on-surface dark:text-inverse-on-surface hover:bg-surface-container-high dark:hover:bg-tertiary-container transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">download</span> CSV
+                            </button>
+<button class="px-4 py-2 bg-primary text-on-primary dark:bg-inverse-primary dark:text-on-primary-container rounded-lg font-label-md text-label-md hover:bg-primary-container dark:hover:bg-primary-fixed transition-colors flex items-center gap-2 shadow-elevation">
+<span class="material-symbols-outlined text-sm">picture_as_pdf</span> Export PDF
+                            </button>
+</div>
+</div>
+</div>
+<!-- BOQ Table Container -->
+<div class="bg-surface-container-lowest dark:bg-tertiary border border-outline-variant dark:border-outline rounded-xl overflow-hidden shadow-elevation mb-xl" style="background-color: rgb(255, 255, 255);">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low dark:bg-inverse-surface border-b border-outline-variant dark:border-outline" style="background-color: rgb(255, 255, 255);">
+<th class="py-3 px-4 font-label-md text-label-md text-on-surface-variant dark:text-outline-variant w-16">Item</th>
+<th class="py-3 px-4 font-label-md text-label-md text-on-surface-variant dark:text-outline-variant">Description</th>
+<th class="py-3 px-4 font-label-md text-label-md text-on-surface-variant dark:text-outline-variant text-right">Quantity</th>
+<th class="py-3 px-4 font-label-md text-label-md text-on-surface-variant dark:text-outline-variant w-24">Unit</th>
+<th class="py-3 px-4 font-label-md text-label-md text-on-surface-variant dark:text-outline-variant text-right">Est. Unit Cost</th>
+<th class="py-3 px-4 font-label-md text-label-md text-on-surface-variant dark:text-outline-variant text-right">Est. Total</th>
+</tr>
+</thead>
+<tbody class="font-mono-technical text-mono-technical text-on-surface dark:text-inverse-on-surface divide-y divide-outline-variant dark:divide-outline">
+<tr class="hover:bg-surface-container-lowest dark:hover:bg-tertiary transition-colors">
+<td class="py-4 px-4 font-body-sm text-body-sm font-semibold text-on-surface dark:text-inverse-on-surface bg-surface-container-lowest dark:bg-tertiary" colspan="6" style="background-color: rgb(255, 255, 255);">1.0 Substructure &amp; Framing</td>
+</tr>
+<tr class="hover:bg-surface-container-high dark:hover:bg-tertiary-container transition-colors">
+<td class="py-3 px-4 text-on-surface-variant dark:text-outline-variant">1.1</td>
+<td class="py-3 px-4 font-body-sm text-body-sm">Structural Steel (W-Shapes, Grade 50)</td>
+<td class="py-3 px-4 text-right">45,200</td>
+<td class="py-3 px-4 text-on-surface-variant dark:text-outline-variant">lbs</td>
+<td class="py-3 px-4 text-right">1.45 XAF</td>
+<td class="py-3 px-4 text-right font-medium">65,540.00 XAF</td>
+</tr>
+<tr class="hover:bg-surface-container-high dark:hover:bg-tertiary-container transition-colors">
+<td class="py-3 px-4 text-on-surface-variant dark:text-outline-variant">1.2</td>
+<td class="py-3 px-4 font-body-sm text-body-sm">Reinforced Concrete (4000 PSI)</td>
+<td class="py-3 px-4 text-right">320</td>
+<td class="py-3 px-4 text-on-surface-variant dark:text-outline-variant">cu yd</td>
+<td class="py-3 px-4 text-right">155.00 XAF</td>
+<td class="py-3 px-4 text-right font-medium">49,600.00 XAF</td>
+</tr>
+<tr class="hover:bg-surface-container-lowest dark:hover:bg-tertiary transition-colors">
+<td class="py-4 px-4 font-body-sm text-body-sm font-semibold text-on-surface dark:text-inverse-on-surface bg-surface-container-lowest dark:bg-tertiary" colspan="6" style="background-color: rgb(255, 255, 255);">2.0 Masonry &amp; Finishes</td>
+</tr>
+<tr class="hover:bg-surface-container-high dark:hover:bg-tertiary-container transition-colors">
+<td class="py-3 px-4 text-on-surface-variant dark:text-outline-variant">2.1</td>
+<td class="py-3 px-4 font-body-sm text-body-sm">Portland Cement (Type I/II)</td>
+<td class="py-3 px-4 text-right">150</td>
+<td class="py-3 px-4 text-on-surface-variant dark:text-outline-variant">bags</td>
+<td class="py-3 px-4 text-right">14.50 XAF</td>
+<td class="py-3 px-4 text-right font-medium">2,175.00 XAF</td>
+</tr>
+<tr class="hover:bg-surface-container-high dark:hover:bg-tertiary-container transition-colors">
+<td class="py-3 px-4 text-on-surface-variant dark:text-outline-variant">2.2</td>
+<td class="py-3 px-4 font-body-sm text-body-sm">Ceramic Tiles (600x600mm, Non-slip)</td>
+<td class="py-3 px-4 text-right">4,500</td>
+<td class="py-3 px-4 text-on-surface-variant dark:text-outline-variant">sq ft</td>
+<td class="py-3 px-4 text-right">4.20 XAF</td>
+<td class="py-3 px-4 text-right font-medium">18,900.00 XAF</td>
+</tr>
+</tbody>
+<tfoot class="bg-surface-container dark:bg-inverse-surface border-t-2 border-outline dark:border-outline-variant">
+<tr>
+<td class="py-4 px-4 font-body-sm text-body-sm font-semibold text-right" colspan="4">Subtotal:</td>
+<td class="py-4 px-4 font-mono-technical text-mono-technical font-bold text-right text-lg" colspan="2">136,215.00 XAF</td>
+</tr>
+<tr>
+<td class="py-2 px-4 font-body-sm text-body-sm text-on-surface-variant dark:text-outline-variant text-right border-none" colspan="4">Contingency (10%):</td>
+<td class="py-2 px-4 font-mono-technical text-mono-technical text-right text-on-surface-variant dark:text-outline-variant border-none" colspan="2">13,621.50 XAF</td>
+</tr>
+<tr>
+<td class="py-4 px-4 font-headline-sm text-headline-sm font-bold text-primary dark:text-inverse-primary text-right" colspan="4">Total Estimated Project Cost:</td>
+<td class="py-4 px-4 font-display text-2xl font-bold text-primary dark:text-inverse-primary text-right" colspan="2">149,836.50 XAF</td>
+</tr>
+</tfoot>
+</table>
+</div>
+</div>
+<!-- Footer Summary Area -->
+<div class="flex flex-col md:flex-row items-center justify-between p-lg bg-surface-container-low dark:bg-tertiary border border-outline-variant dark:border-outline rounded-xl" style="background-color: rgb(255, 255, 255);">
+<div class="flex items-start gap-3 mb-4 md:mb-0">
+<span class="material-symbols-outlined text-outline">info</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant dark:text-outline-variant max-w-2xl">
+<strong>Disclaimer:</strong> This Bill of Quantities is AI-generated based on preliminary architectural models. Prices are estimates reflecting current market averages and do not constitute a binding quote. Always verify quantities and local material costs before final procurement.
+                        </p>
+</div>
+</div>
+</div>
+<!-- Shared Footer Component -->
+<footer class="w-full mt-auto py-xl px-gutter grid grid-cols-1 md:grid-cols-2 gap-base max-w-max-width mx-auto border-t border-outline-variant dark:border-outline mt-xl">
+<div>
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface dark:text-inverse-on-surface">BuildSmart AI</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant dark:text-outline-variant mt-2">© 2024 BuildSmart AI. Professional Construction Management.</p>
+</div>
+<div class="flex flex-wrap gap-4 md:justify-end items-center font-body-sm text-body-sm">
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-inverse-primary transition-colors duration-200" href="#">Privacy Policy</a>
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-inverse-primary transition-colors duration-200" href="#">Terms of Service</a>
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-inverse-primary transition-colors duration-200" href="#">API Docs</a>
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-inverse-primary transition-colors duration-200" href="#">Contact Support</a>
+</div>
+</footer>
+</main>
+</div>
+
+
+</body></html>

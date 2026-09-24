@@ -1,0 +1,584 @@
+<!DOCTYPE html><html lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Architect Dashboard - BuildSmart AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-primary-container": "#a4d2be",
+                      "on-primary": "#ffffff",
+                      "surface-variant": "#d8e5e0",
+                      "secondary": "#416658",
+                      "surface-container-high": "#deebe6",
+                      "secondary-fixed-dim": "#a7cfbe",
+                      "surface-container": "#e4f1eb",
+                      "on-secondary": "#ffffff",
+                      "on-error": "#ffffff",
+                      "on-tertiary": "#ffffff",
+                      "primary-fixed": "#beedd8",
+                      "secondary-fixed": "#c3ecda",
+                      "surface": "#effcf7",
+                      "tertiary-fixed-dim": "#bfc9c5",
+                      "on-primary-fixed": "#002116",
+                      "on-primary-fixed-variant": "#234e3f",
+                      "surface-container-highest": "#d8e5e0",
+                      "surface-bright": "#effcf7",
+                      "tertiary": "#353f3c",
+                      "on-tertiary-container": "#c1cbc7",
+                      "surface-container-lowest": "#ffffff",
+                      "inverse-on-surface": "#e7f4ee",
+                      "on-secondary-fixed": "#002117",
+                      "surface-dim": "#d0ddd8",
+                      "error": "#ba1a1a",
+                      "outline-variant": "#c0c8c3",
+                      "on-tertiary-fixed-variant": "#3f4946",
+                      "outline": "#717974",
+                      "on-error-container": "#93000a",
+                      "inverse-primary": "#a2d0bc",
+                      "surface-tint": "#3c6756",
+                      "on-secondary-container": "#456a5c",
+                      "inverse-surface": "#27332f",
+                      "tertiary-fixed": "#dbe5e1",
+                      "on-surface-variant": "#414944",
+                      "on-secondary-fixed-variant": "#294e41",
+                      "secondary-container": "#c0e9d7",
+                      "primary": "#184436",
+                      "surface-container-low": "#eaf7f1",
+                      "primary-fixed-dim": "#a2d0bc",
+                      "on-tertiary-fixed": "#141d1b",
+                      "on-background": "#131e1b",
+                      "tertiary-container": "#4c5653",
+                      "primary-container": "#315c4c",
+                      "error-container": "#ffdad6",
+                      "on-surface": "#131e1b",
+                      "background": "#effcf7"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "margin-desktop": "48px",
+                      "base": "8px",
+                      "gutter": "24px",
+                      "lg": "24px",
+                      "xl": "40px",
+                      "xs": "4px",
+                      "md": "16px",
+                      "sm": "8px",
+                      "max-width": "1440px",
+                      "margin-mobile": "16px"
+              },
+              "fontFamily": {
+                      "headline-lg": [
+                              "Inter"
+                      ],
+                      "display": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Inter"
+                      ],
+                      "label-md": [
+                              "Inter"
+                      ],
+                      "headline-sm": [
+                              "Inter"
+                      ],
+                      "body-sm": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "mono-technical": [
+                              "Inter"
+                      ],
+                      "headline-lg-mobile": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-md": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-sm": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-sm": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "mono-technical": [
+                              "13px",
+                              {
+                                      "lineHeight": "18px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        body {
+            background-color: #FAFAF8;
+            color: #17201E;
+        }
+        .dark body {
+            background-color: #121212;
+            color: #E0E0E0;
+        }
+        .shadow-elevation {
+            box-shadow: 0 4px 12px rgba(23, 32, 30, 0.05);
+        }
+        .dark .shadow-elevation {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
+      </style>
+<script>
+    function toggleTheme() {
+        document.documentElement.classList.toggle('dark');
+        const isDark = document.documentElement.classList.contains('dark');
+        const icon = document.getElementById('theme-toggle-icon');
+        icon.textContent = isDark ? 'light_mode' : 'dark_mode';
+    }
+</script>
+</head>
+<body class="font-body-md text-body-md antialiased flex h-screen overflow-hidden dark:bg-inverse-surface dark:text-inverse-on-surface">
+<!-- SideNavBar -->
+<nav class="dark:bg-surface border-r border-outline-variant dark:border-outline h-screen w-64 fixed left-0 top-0 flex flex-col h-full py-md px-sm z-50 bg-[#FAFAF8]">
+<div class="flex items-center gap-3 px-3 mb-8 mt-2">
+<img alt="BuildSmart AI Logo" class="w-8 h-8 rounded" data-alt="A clean, minimalist logo icon for an architectural software company, featuring sharp geometric shapes in deep green on a white background, representing structural stability and professional precision." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDo1FOFSAX56rXLXXludrEdS_jIyuwGelK9pN24yprq0AKf9m7SbrQRe4ekrDYveEHmXQ7C84exCvMKrRM37hkdxK_jmPh7b8MvNS4rE9C8Tmrb43xjcZX8ylpvA89bcdJvOzrSoyI0VVOawwL8lgJGGqG_abRvW7Zh_KUV4kNkhRC6xQdodLLsLdC0eMwaaEfaoy7GMUCAuOkT9obPxNuvUM5ZZa_FGqeTor-LwNueomV4WMmsIihAPQ">
+<div>
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary dark:text-primary-fixed-dim">BuildSmart AI</h1>
+<p class="font-label-md text-label-md text-on-surface-variant dark:text-surface-variant">Professional Suite</p>
+</div>
+</div>
+<button class="bg-primary-container text-on-primary w-full py-2 px-4 rounded-lg font-body-md font-medium mb-6 hover:bg-[#264B3E] transition-colors shadow-elevation flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" style="font-size: 20px;">add</span>
+            New Project
+        </button>
+<ul class="flex flex-col gap-1 flex-1 overflow-y-auto">
+<li class="">
+<a class="flex items-center gap-3 px-3 py-2 text-primary dark:text-primary-fixed-dim font-bold bg-secondary-container dark:bg-primary-container rounded-lg transition-all scale-98 active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-weight="fill" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+                    Dashboard
+                </a>
+</li>
+<li class="">
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">architecture</span>
+                    Projects
+                </a>
+</li>
+<li class="">
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">design_services</span>
+                    AI Studio
+                </a>
+</li>
+<li class="">
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+                    Inventory
+                </a>
+</li>
+<li class="">
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">groups</span>
+                    Clients
+                </a>
+</li>
+<li class="">
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">forum</span>
+                    Messages
+                </a>
+</li>
+<li class="">
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">verified</span>
+                    Verification
+                </a>
+</li>
+<li class="">
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">star_rate</span>
+                    Reviews
+                </a>
+</li>
+<li class="">
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">monitoring</span>
+                    Analytics
+                </a>
+</li>
+<li class="">
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">settings</span>
+                    Settings
+                </a>
+</li>
+</ul>
+<div class="mt-auto border-t border-outline-variant dark:border-outline pt-4 flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">help</span>
+                Support
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">logout</span>
+                Sign Out
+            </a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 ml-64 flex flex-col overflow-hidden bg-[#FAFAF8] dark:bg-inverse-surface">
+<!-- TopAppBar -->
+<header class="bg-[#FAFAF8] dark:bg-surface border-b border-outline-variant dark:border-outline flex justify-between items-center h-16 px-margin-desktop sticky top-0 z-40 w-full z-50">
+<div class="flex items-center gap-6">
+<!-- Search (Left aligned as per JSON) -->
+<div class="relative focus-within:ring-2 focus-within:ring-primary/10 rounded-lg">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant dark:text-surface-variant" style="font-size: 20px;">search</span>
+<input class="pl-10 pr-4 py-2 bg-white dark:bg-surface-dim border border-outline-variant dark:border-outline rounded-lg font-body-sm focus:border-primary focus:ring-0 w-64 outline-none dark:text-on-surface" placeholder="Search projects, clients..." type="text">
+</div>
+<nav class="hidden md:flex gap-6">
+<a class="text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors font-label-md text-label-md py-5 border-b-2 border-transparent" href="#">Drafts</a>
+<a class="text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors font-label-md text-label-md py-5 border-b-2 border-transparent" href="#">Archive</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-primary dark:text-primary-fixed-dim font-label-md text-label-md px-4 py-1.5 border border-primary dark:border-primary-fixed-dim rounded-lg hover:bg-surface-container-low dark:hover:bg-surface-variant transition-colors">
+                    Upgrade
+                </button>
+<div class="flex items-center gap-2 text-on-surface-variant dark:text-surface-variant">
+<button class="p-2 hover:bg-surface-container-high dark:hover:bg-surface-variant rounded-full transition-colors flex items-center justify-center" onclick="toggleTheme()">
+<span class="material-symbols-outlined" id="theme-toggle-icon">dark_mode</span>
+</button>
+<button class="p-2 hover:bg-surface-container-high dark:hover:bg-surface-variant rounded-full transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 hover:bg-surface-container-high dark:hover:bg-surface-variant rounded-full transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined">apps</span>
+</button>
+</div>
+<img alt="User Profile" class="w-8 h-8 rounded-full border border-outline-variant dark:border-outline object-cover" data-alt="A professional headshot of a mature male architect looking confident, wearing a smart casual dark blazer over a light shirt, standing in front of an out-of-focus modern architectural structure with soft, natural daylight." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqZOCYWxey-e_W9g0ZfEEZxEmjXyRyABf-s3-ayYRG4dMUT4RTdYdtUSPuIaxonwtg-tIye-aEFeWfs4zhwtULtOBCzVaERpm3ZBL7A70nK2a4RzQ5PKEZQQyBPq83Jnmfo2OZEoTVb6OEYrC3f1Uhz6QiZb6_ixN4gUsNxNWOx_s2hmFLTpmAGmxazhAFSsCCoQ7Hx7ndowl2i9FQqM07IYcLvp6YymBnv1kuEZROPabVtaWZMl5-6Q">
+</div>
+</header>
+<!-- Dashboard Canvas -->
+<div class="flex-1 overflow-y-auto p-gutter lg:p-margin-desktop">
+<div class="max-w-max-width mx-auto">
+<!-- Welcome & Profile Summary -->
+<div class="flex flex-col md:flex-row md:items-end justify-between mb-xl gap-4">
+<div>
+<div class="flex items-center gap-3 mb-2">
+<h2 class="font-headline-lg text-headline-lg text-on-surface dark:text-inverse-on-surface">Welcome back, Marcus</h2>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#Eaf7f1] dark:bg-primary-container text-[#2F6B50] dark:text-on-primary-container font-label-md text-label-md uppercase tracking-wide border border-[#C0E9D7] dark:border-primary">
+<span class="material-symbols-outlined" style="font-size: 14px;">verified</span>
+                                Verified Architect
+                            </span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant dark:text-surface-variant">Here is an overview of your active projects and client requests.</p>
+</div>
+<div class="flex gap-3">
+<button class="bg-white dark:bg-surface-dim border border-outline-variant dark:border-outline text-on-surface dark:text-inverse-on-surface px-4 py-2 rounded-lg font-label-md text-label-md hover:bg-surface-container-low dark:hover:bg-surface-variant transition-colors shadow-sm">
+                            Generate Report
+                        </button>
+</div>
+</div>
+<!-- Stats Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter mb-xl">
+<!-- Stat Card 1 -->
+<div class="bg-white dark:bg-surface-dim border border-outline-variant dark:border-outline rounded-xl p-6 shadow-elevation hover:shadow-md transition-shadow relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity dark:text-inverse-on-surface">
+<span class="material-symbols-outlined" style="font-size: 64px;">architecture</span>
+</div>
+<p class="font-label-md text-label-md text-on-surface-variant dark:text-surface-variant mb-2">ACTIVE PROJECTS</p>
+<h3 class="font-display text-display text-on-surface dark:text-inverse-on-surface mb-2">3</h3>
+<div class="flex items-center gap-2">
+<span class="text-[#2F6B50] dark:text-primary-fixed-dim bg-[#eaf7f1] dark:bg-surface-variant px-2 py-0.5 rounded font-mono-technical text-mono-technical flex items-center gap-1">
+<span class="material-symbols-outlined" style="font-size: 14px;">trending_up</span> +1 this week
+                            </span>
+</div>
+</div>
+<!-- Stat Card 2 -->
+<div class="bg-white dark:bg-surface-dim border border-outline-variant dark:border-outline rounded-xl p-6 shadow-elevation hover:shadow-md transition-shadow relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity dark:text-inverse-on-surface">
+<span class="material-symbols-outlined" style="font-size: 64px;">pending_actions</span>
+</div>
+<p class="font-label-md text-label-md text-on-surface-variant dark:text-surface-variant mb-2">PENDING REQUESTS</p>
+<h3 class="font-display text-display text-on-surface dark:text-inverse-on-surface mb-2">2</h3>
+<div class="flex items-center gap-2">
+<span class="text-on-surface-variant dark:text-surface-variant font-body-sm text-body-sm">Requires attention</span>
+</div>
+</div>
+<!-- Stat Card 3 -->
+<div class="bg-white dark:bg-surface-dim border border-outline-variant dark:border-outline rounded-xl p-6 shadow-elevation hover:shadow-md transition-shadow relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity dark:text-inverse-on-surface">
+<span class="material-symbols-outlined" style="font-size: 64px;">account_balance</span>
+</div>
+<p class="font-label-md text-label-md text-on-surface-variant dark:text-surface-variant mb-2">TOTAL EARNINGS</p>
+<h3 class="font-headline-lg text-headline-lg text-on-surface dark:text-inverse-on-surface mb-2 mt-4">2.5M <span class="font-body-md text-on-surface-variant dark:text-surface-variant">XAF</span></h3>
+<div class="flex items-center gap-2">
+<span class="text-[#2F6B50] dark:text-primary-fixed-dim bg-[#eaf7f1] dark:bg-surface-variant px-2 py-0.5 rounded font-mono-technical text-mono-technical flex items-center gap-1">
+<span class="material-symbols-outlined" style="font-size: 14px;">trending_up</span> 12% YTD
+                            </span>
+</div>
+</div>
+<!-- Stat Card 4 -->
+<div class="bg-white dark:bg-surface-dim border border-outline-variant dark:border-outline rounded-xl p-6 shadow-elevation hover:shadow-md transition-shadow relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity dark:text-inverse-on-surface">
+<span class="material-symbols-outlined" style="font-size: 64px;">star</span>
+</div>
+<p class="font-label-md text-label-md text-on-surface-variant dark:text-surface-variant mb-2">AVG RATING</p>
+<h3 class="font-display text-display text-on-surface dark:text-inverse-on-surface mb-2">4.9</h3>
+<div class="flex items-center gap-1 text-[#A66A00] dark:text-yellow-400">
+<span class="material-symbols-outlined" data-weight="fill" style="font-variation-settings: 'FILL' 1; font-size: 16px;">star</span>
+<span class="material-symbols-outlined" data-weight="fill" style="font-variation-settings: 'FILL' 1; font-size: 16px;">star</span>
+<span class="material-symbols-outlined" data-weight="fill" style="font-variation-settings: 'FILL' 1; font-size: 16px;">star</span>
+<span class="material-symbols-outlined" data-weight="fill" style="font-variation-settings: 'FILL' 1; font-size: 16px;">star</span>
+<span class="material-symbols-outlined" style="font-size: 16px;">star_half</span>
+<span class="font-body-sm text-on-surface-variant dark:text-surface-variant ml-2">(24 reviews)</span>
+</div>
+</div>
+</div>
+<!-- Main Grid Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
+<!-- Left Column: Active Projects (Spans 2 columns) -->
+<div class="lg:col-span-2 flex flex-col gap-6">
+<div class="flex items-center justify-between">
+<h3 class="font-headline-md text-headline-md text-on-surface dark:text-inverse-on-surface">Active Design Projects</h3>
+<a class="font-label-md text-label-md text-primary dark:text-primary-fixed-dim hover:underline" href="#">View All</a>
+</div>
+<!-- Project Card 1 -->
+<div class="bg-white dark:bg-surface-dim border border-outline-variant dark:border-outline rounded-xl p-6 shadow-elevation flex flex-col md:flex-row gap-6">
+<div class="w-full md:w-1/3 aspect-video bg-surface-container-low dark:bg-surface-variant rounded-lg overflow-hidden border border-outline-variant dark:border-outline relative">
+<img alt="Villa Nova Render" class="w-full h-full object-cover" data-alt="A highly detailed architectural rendering of a modern minimalist villa exterior, featuring large glass windows, concrete walls, and natural wood accents, bathed in soft morning sunlight, set against a clear blue sky. Professional drafted style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBDCl_x6ZQMyZKEwdN8pMaOjhMfxdnexgXdIGsLjxrfqxuGc7o1rgGOTBMOo0JEwdKlmVslgjBLGtYmHAe-x9Wds8dpfPAEZTxxLaciQ5kLOY_Ge3qR9m1n7BEd7mmIRvnELI4nDFSDC3LPLqpC8B2OHCKmo66qQpC3ekRo8_Wm7_c453qy3_L7gpvVJJnroCMngQ8EeNHSfeb_DywWeAP7dfHBRQSL4hU1Xlj7E0H51wCKz0ZNWiYNmQ">
+<div class="absolute bottom-2 right-2 bg-white/90 dark:bg-surface-dim/90 backdrop-blur-sm px-2 py-1 rounded text-xs font-mono-technical font-semibold border border-outline-variant dark:border-outline dark:text-inverse-on-surface">
+                                    V1.4
+                                </div>
+</div>
+<div class="flex-1 flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start mb-2">
+<h4 class="font-headline-sm text-headline-sm text-on-surface dark:text-inverse-on-surface">Villa Nova Residence</h4>
+<button class="text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim p-1 rounded hover:bg-surface-container-low dark:hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant dark:text-surface-variant mb-4">Client: Sarah Jenkins • Douala, CM</p>
+<div class="mb-4">
+<div class="flex justify-between font-label-md text-label-md mb-1">
+<span class="text-on-surface-variant dark:text-surface-variant">Design Phase</span>
+<span class="text-on-surface dark:text-inverse-on-surface">65%</span>
+</div>
+<div class="w-full bg-surface-variant dark:bg-surface-container-high rounded-full h-1.5 overflow-hidden">
+<div class="bg-primary dark:bg-primary-fixed-dim h-1.5 rounded-full" style="width: 65%"></div>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-3 mt-4">
+<button class="flex-1 bg-white dark:bg-surface-dim border border-outline-variant dark:border-outline text-on-surface dark:text-inverse-on-surface px-4 py-2 rounded-lg font-label-md text-label-md hover:bg-surface-container-low dark:hover:bg-surface-variant transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" style="font-size: 18px;">design_services</span>
+                                        Open AI Studio
+                                    </button>
+<button class="flex-1 bg-white dark:bg-surface-dim border border-outline-variant dark:border-outline text-on-surface dark:text-inverse-on-surface px-4 py-2 rounded-lg font-label-md text-label-md hover:bg-surface-container-low dark:hover:bg-surface-variant transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" style="font-size: 18px;">upload_file</span>
+                                        Upload Draft
+                                    </button>
+</div>
+</div>
+</div>
+<!-- Project Card 2 -->
+<div class="bg-white dark:bg-surface-dim border border-outline-variant dark:border-outline rounded-xl p-6 shadow-elevation flex flex-col md:flex-row gap-6">
+<div class="w-full md:w-1/3 aspect-video bg-surface-container-low dark:bg-surface-variant rounded-lg overflow-hidden border border-outline-variant dark:border-outline relative">
+<img alt="Tech Hub Floorplan" class="w-full h-full object-cover" data-alt="An isometric 3D architectural blueprint visualization of a commercial office complex floor plan. Clean, precise lines, monochromatic slate grey background with structural green highlights showing load-bearing walls. Technical and professional aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJzJ38Id9bQcJLffQr3zHW9FXNs1glopZx4sKBLkr__A0cjcyAA4Kxw0eg-sil_3eJMoT1I1f6AM3I4SkN6LHoDGBtiQA2aJkZUU5zvZVguhLsbplhwovKGSwjn5BvxSc05n_92axOPoJlLoy7lZg2xvXZ_XQubVt-o-9KZS-kENCbkiT2-gji5jbLMPHYPmTd-D65FY7njI4o2tLtbspPHGKV4a0SFu7xGg2J34N_wrZjB9ILlbv3cw">
+<div class="absolute bottom-2 right-2 bg-white/90 dark:bg-surface-dim/90 backdrop-blur-sm px-2 py-1 rounded text-xs font-mono-technical font-semibold border border-outline-variant dark:border-outline dark:text-inverse-on-surface">
+                                    V0.8
+                                </div>
+</div>
+<div class="flex-1 flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start mb-2">
+<h4 class="font-headline-sm text-headline-sm text-on-surface dark:text-inverse-on-surface">Downtown Tech Hub</h4>
+<button class="text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim p-1 rounded hover:bg-surface-container-low dark:hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant dark:text-surface-variant mb-4">Client: Innovate Corp • Yaoundé, CM</p>
+<div class="mb-4">
+<div class="flex justify-between font-label-md text-label-md mb-1">
+<span class="text-on-surface-variant dark:text-surface-variant">Initial Concept</span>
+<span class="text-on-surface dark:text-inverse-on-surface">20%</span>
+</div>
+<div class="w-full bg-surface-variant dark:bg-surface-container-high rounded-full h-1.5 overflow-hidden">
+<div class="bg-primary dark:bg-primary-fixed-dim h-1.5 rounded-full" style="width: 20%"></div>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-3 mt-4">
+<button class="flex-1 bg-white dark:bg-surface-dim border border-outline-variant dark:border-outline text-on-surface dark:text-inverse-on-surface px-4 py-2 rounded-lg font-label-md text-label-md hover:bg-surface-container-low dark:hover:bg-surface-variant transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" style="font-size: 18px;">design_services</span>
+                                        Open AI Studio
+                                    </button>
+<button class="flex-1 bg-white dark:bg-surface-dim border border-outline-variant dark:border-outline text-on-surface dark:text-inverse-on-surface px-4 py-2 rounded-lg font-label-md text-label-md hover:bg-surface-container-low dark:hover:bg-surface-variant transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" style="font-size: 18px;">upload_file</span>
+                                        Upload Draft
+                                    </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Side Panel Widgets -->
+<div class="flex flex-col gap-6">
+<!-- Pending Verification Alert -->
+<div class="bg-[#FFF4E5] dark:bg-yellow-900/20 border border-[#F5D09D] dark:border-yellow-700 rounded-xl p-5 shadow-elevation relative overflow-hidden">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-[#A66A00] dark:text-yellow-500 mt-0.5">warning</span>
+<div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface dark:text-inverse-on-surface mb-1">License Renewal Pending</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant dark:text-surface-variant mb-3">Your architectural license verification expires in 14 days. Please upload the renewed document.</p>
+<button class="text-sm font-semibold text-[#A66A00] dark:text-yellow-500 hover:underline flex items-center gap-1">
+                                        Upload Document <span class="material-symbols-outlined" style="font-size: 16px;">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Client Messages -->
+<div class="bg-white dark:bg-surface-dim border border-outline-variant dark:border-outline rounded-xl p-6 shadow-elevation">
+<div class="flex items-center justify-between mb-4">
+<h3 class="font-headline-sm text-headline-sm text-on-surface dark:text-inverse-on-surface">Recent Messages</h3>
+<a class="font-label-md text-label-md text-primary dark:text-primary-fixed-dim hover:underline" href="#">Inbox</a>
+</div>
+<div class="flex flex-col gap-4">
+<!-- Message 1 -->
+<div class="flex items-start gap-3 p-3 -mx-3 rounded-lg hover:bg-surface-container-low dark:hover:bg-surface-variant transition-colors cursor-pointer group">
+<div class="w-10 h-10 rounded-full bg-surface-variant dark:bg-surface-container-high flex items-center justify-center flex-shrink-0 text-on-surface dark:text-inverse-on-surface font-bold">
+                                        SJ
+                                    </div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-baseline mb-0.5">
+<h5 class="font-body-md font-semibold text-on-surface dark:text-inverse-on-surface truncate">Sarah Jenkins</h5>
+<span class="font-label-md text-label-md text-on-surface-variant dark:text-surface-variant flex-shrink-0">10:42 AM</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant dark:text-surface-variant truncate">The new renders for the kitchen layout look incredible. Can we...</p>
+</div>
+</div>
+<!-- Message 2 -->
+<div class="flex items-start gap-3 p-3 -mx-3 rounded-lg hover:bg-surface-container-low dark:hover:bg-surface-variant transition-colors cursor-pointer group">
+<div class="w-10 h-10 rounded-full bg-primary dark:bg-primary-fixed-dim text-white dark:text-on-primary-fixed flex items-center justify-center flex-shrink-0 font-bold">
+                                        IC
+                                    </div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-baseline mb-0.5">
+<h5 class="font-body-md font-semibold text-on-surface dark:text-inverse-on-surface truncate">Innovate Corp</h5>
+<span class="font-label-md text-label-md text-on-surface-variant dark:text-surface-variant flex-shrink-0">Yesterday</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant dark:text-surface-variant truncate font-medium text-on-surface dark:text-inverse-on-surface">Are we still on track for Friday's preliminary structural review?</p>
+</div>
+<div class="w-2 h-2 rounded-full bg-primary dark:bg-primary-fixed-dim mt-2"></div>
+</div>
+<!-- Message 3 -->
+<div class="flex items-start gap-3 p-3 -mx-3 rounded-lg hover:bg-surface-container-low dark:hover:bg-surface-variant transition-colors cursor-pointer group">
+<img alt="Site Manager" class="w-10 h-10 rounded-full object-cover flex-shrink-0 border border-outline-variant dark:border-outline" data-alt="A small circular avatar portrait of a construction site manager wearing a hard hat, smiling slightly, shot in natural daylight." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBcytfu_8dFCT_I-7NqsetLC3juQb74QhOugyKcMfZ01VlM8Xv20bfSAnbVho4mhdCkQoasrzZE6nlOQHaggBkUIkn_6ZE0gJjpBH0_wM6wGC2kBfei9t_ysKC4eNg9pQqLdvZrQ7ReimUKVoM5699JElp0b11hytdN3sI7U7s6oMHN5SH2_dcExofm5xsQA-rNZLTS1aAedU5mtw9xp2JqzRU_PleYuBQaZwSMeUeXLi32QUhfMogG-w">
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-baseline mb-0.5">
+<h5 class="font-body-md font-semibold text-on-surface dark:text-inverse-on-surface truncate">Mike (Site Mgr)</h5>
+<span class="font-label-md text-label-md text-on-surface-variant dark:text-surface-variant flex-shrink-0">Mon</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant dark:text-surface-variant truncate">Sent attachment: site_survey_q3.pdf</p>
+</div>
+</div>
+</div>
+<button class="w-full mt-4 py-2 border border-outline-variant dark:border-outline rounded-lg font-label-md text-label-md text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-low dark:hover:bg-surface-variant transition-colors text-center">
+                                View All Messages
+                            </button>
+</div>
+<!-- Quick Tool Access (Bento style extra) -->
+<div class="bg-primary-container dark:bg-primary-container text-on-primary rounded-xl p-6 shadow-elevation relative overflow-hidden group">
+<!-- Subtle background element -->
+<div class="absolute -right-8 -bottom-8 opacity-20 transform rotate-12 group-hover:scale-110 transition-transform duration-500 text-on-primary-container">
+<span class="material-symbols-outlined" style="font-size: 140px;">architecture</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm mb-2 relative z-10 text-on-primary-container">AI Material Estimator</h3>
+<p class="font-body-sm text-body-sm text-on-primary-container mb-4 relative z-10">Upload your drafted plans to instantly generate a local cost estimate.</p>
+<button class="bg-white dark:bg-surface-dim text-primary-container dark:text-primary-fixed-dim px-4 py-2 rounded-lg font-label-md text-label-md hover:bg-surface dark:hover:bg-surface-variant transition-colors shadow-sm relative z-10 w-full text-center">
+                                Launch Tool
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+
+
+</body></html>

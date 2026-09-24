@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BuildSmart AI - Marketplace</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-container": "#315c4c",
+                        "on-background": "#131e1b",
+                        "surface-container": "#e4f1eb",
+                        "on-tertiary-fixed": "#141d1b",
+                        "primary-fixed-dim": "#a2d0bc",
+                        "tertiary": "#353f3c",
+                        "secondary-fixed": "#c3ecda",
+                        "tertiary-container": "#4c5653",
+                        "tertiary-fixed-dim": "#bfc9c5",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-surface": "#27332f",
+                        "secondary-fixed-dim": "#a7cfbe",
+                        "inverse-on-surface": "#e7f4ee",
+                        "on-primary-fixed-variant": "#234e3f",
+                        "on-secondary-container": "#456a5c",
+                        "surface-container-highest": "#d8e5e0",
+                        "outline": "#717974",
+                        "background": "#effcf7",
+                        "surface-tint": "#3c6756",
+                        "outline-variant": "#c0c8c3",
+                        "surface-container-high": "#deebe6",
+                        "surface-variant": "#d8e5e0",
+                        "on-surface-variant": "#414944",
+                        "on-secondary": "#ffffff",
+                        "tertiary-fixed": "#dbe5e1",
+                        "surface-dim": "#d0ddd8",
+                        "surface-container-low": "#eaf7f1",
+                        "surface-bright": "#effcf7",
+                        "on-primary-fixed": "#002116",
+                        "primary": "#184436",
+                        "on-tertiary-fixed-variant": "#3f4946",
+                        "on-surface": "#131e1b",
+                        "on-tertiary-container": "#c1cbc7",
+                        "on-error-container": "#93000a",
+                        "secondary": "#416658",
+                        "inverse-primary": "#a2d0bc",
+                        "on-secondary-fixed": "#002117",
+                        "secondary-container": "#c0e9d7",
+                        "on-error": "#ffffff",
+                        "primary-fixed": "#beedd8",
+                        "error-container": "#ffdad6",
+                        "surface": "#effcf7",
+                        "on-primary": "#ffffff",
+                        "on-secondary-fixed-variant": "#294e41",
+                        "on-primary-container": "#a4d2be",
+                        "on-tertiary": "#ffffff",
+                        "error": "#ba1a1a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "md": "16px",
+                        "gutter": "24px",
+                        "margin-desktop": "48px",
+                        "sm": "8px",
+                        "lg": "24px",
+                        "margin-mobile": "16px",
+                        "max-width": "1440px",
+                        "xl": "40px",
+                        "xs": "4px",
+                        "base": "8px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "display": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "mono-technical": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "display": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "mono-technical": ["13px", { "lineHeight": "18px", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #FAFAF8; color: #17201E; transition: background-color 0.3s, color 0.3s; }
+        .dark body { background-color: #1a1c1e; color: #e2e2e5; }
+        .border-soft-slate { border-color: #DDE2E0; }
+        .dark .border-soft-slate { border-color: #44474e; }
+        .bg-slate-50 { background-color: #F6F7F7; }
+        .dark .bg-slate-50 { background-color: #2b2e32; }
+        .btn-primary { background-color: #315C4C; color: white; transition: background-color 0.2s; }
+        .dark .btn-primary { background-color: #8fd5b5; color: #003828; }
+        .btn-primary:hover { background-color: #264B3E; }
+        .dark .btn-primary:hover { background-color: #74ba9b; }
+        .btn-secondary { background-color: transparent; border: 1px solid #17201E; color: #17201E; transition: background-color 0.2s; }
+        .dark .btn-secondary { border-color: #c4c7c5; color: #c4c7c5; }
+        .btn-secondary:hover { background-color: #F6F7F7; }
+        .dark .btn-secondary:hover { background-color: #44474e; }
+        .input-field { background-color: white; border: 1px solid #DDE2E0; border-radius: 8px; color: #17201E; }
+        .dark .input-field { background-color: #1a1c1e; border-color: #44474e; color: #e2e2e5; }
+        .input-field:focus { border-color: #315C4C; box-shadow: 0 0 0 2px rgba(49, 92, 76, 0.1); outline: none; }
+        .dark .input-field:focus { border-color: #8fd5b5; box-shadow: 0 0 0 2px rgba(143, 213, 181, 0.2); }
+        .card-shadow { box-shadow: 0 4px 12px rgba(23, 32, 30, 0.05); }
+        .hover-card-shadow:hover { box-shadow: 0 4px 12px rgba(23, 32, 30, 0.05); cursor: pointer; }
+        .dark .bg-white { background-color: #1e2022 !important; }
+        .dark .text-on-surface { color: #e2e2e5 !important; }
+        .dark .text-on-surface-variant { color: #c4c7c5 !important; }
+        .dark .text-outline-variant { color: #8e918f !important; }
+        .dark .text-outline { color: #8e918f !important; }
+        .dark .bg-surface-variant { background-color: #44474e !important; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased bg-[#FAFAF8] dark:bg-[#1a1c1e]">
+<!-- TopNavBar (Shared Component) -->
+<nav class="bg-white dark:bg-[#1e2022] w-full sticky top-0 z-50 border-b border-soft-slate flat no shadows flex justify-between items-center h-16 px-gutter max-w-max-width mx-auto">
+<div class="flex items-center gap-lg">
+<div class="font-headline-md text-headline-md font-bold text-primary dark:text-[#8fd5b5]">BuildSmart AI</div>
+<div class="hidden md:flex gap-md font-body-md text-body-md">
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-[#8fd5b5] transition-colors cursor-pointer transition-all duration-200" href="#">Platform</a>
+<a class="text-primary dark:text-[#8fd5b5] border-b-2 border-primary dark:border-[#8fd5b5] pb-1 hover:text-primary dark:hover:text-[#8fd5b5] transition-colors cursor-pointer transition-all duration-200" href="#">Marketplace</a>
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-[#8fd5b5] transition-colors cursor-pointer transition-all duration-200" href="#">Enterprise</a>
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-[#8fd5b5] transition-colors cursor-pointer transition-all duration-200" href="#">Pricing</a>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<button aria-label="Toggle Dark Mode" class="p-2 rounded-full hover:bg-slate-50 dark:hover:bg-[#2b2e32] text-outline dark:text-outline-variant transition-colors" id="theme-toggle">
+<span class="material-symbols-outlined dark:hidden">dark_mode</span>
+<span class="material-symbols-outlined hidden dark:block">light_mode</span>
+</button>
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline dark:text-outline-variant">search</span>
+<input class="input-field pl-10 pr-4 py-2 text-body-sm w-64" placeholder="Search materials..." type="text"/>
+</div>
+<button class="btn-primary px-4 py-2 rounded font-label-md text-label-md">Sign In</button>
+</div>
+</nav>
+<div class="flex flex-1 w-full max-w-max-width mx-auto">
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col p-margin-mobile md:p-margin-desktop gap-xl overflow-y-auto">
+<!-- Hero Banner -->
+<section class="w-full relative h-64 md:h-80 rounded-xl overflow-hidden border border-soft-slate">
+<div class="absolute inset-0 bg-cover bg-center w-full h-full" data-alt="A high-quality architectural photograph of a modern construction site at dawn, showing precisely stacked steel I-beams and premium concrete forms. The lighting is soft and directional, creating a sense of professional reliability and structural integrity. The color palette emphasizes industrial grays and warm sunrise tones." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDnfo-dPvEnlJy284YoDpUD8sX3atBMXOmO6rZpUbxZEM0dwNMR6vFIzDuMtE8CJN2drpBbhFg-c-Xgfn4T_2vjd2A17Y4tmkcqGQJQSHOe3jiI6WavFt-YJXKBSQNMDvq1OYcTj27GWKv0SY6bU360ktLkyZHz4f4kcEsIqEbpYUL7cOyx6SSEQ-iSXuqKDPxbE0eiaPeBQ_a4XhaEUDkw7MBgDB6GOZ0y5wTaXOZiwyM0tt7Alz5LkA')"></div>
+<div class="absolute inset-0 bg-surface-tint opacity-70"></div>
+<div class="absolute inset-0 flex flex-col justify-center p-lg md:p-xl">
+<span class="font-label-md text-label-md text-primary-fixed uppercase tracking-wider mb-2">Featured Partner</span>
+<h1 class="font-display text-display text-surface-container-lowest mb-4">Premium Structural Steel</h1>
+<p class="font-body-lg text-body-lg text-surface-container-low max-w-2xl mb-6">Sourced from top-tier foundries. Pre-certified for commercial high-rise projects. Bulk discounts available.</p>
+<button class="btn-primary w-fit px-6 py-3 rounded-lg font-label-md text-label-md flex items-center gap-2 shadow-sm">
+                        View Supplier Catalog <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</section>
+<!-- Search and Filter Bar (Mobile/Tablet) -->
+<div class="w-full flex md:hidden flex-col gap-4 bg-white dark:bg-[#1e2022] p-4 rounded-xl border border-soft-slate">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline dark:text-outline-variant">search</span>
+<input class="input-field pl-10 pr-4 py-3 w-full font-body-md text-body-md" placeholder="Search materials..." type="text"/>
+</div>
+<div class="flex overflow-x-auto gap-2 pb-2 hide-scrollbar">
+<button class="whitespace-nowrap px-4 py-2 rounded-full border border-soft-slate bg-white font-body-sm text-body-sm text-on-surface hover:bg-slate-50 dark:hover:bg-[#2b2e32]">Cement &amp; Concrete</button>
+<button class="whitespace-nowrap px-4 py-2 rounded-full border-2 border-primary dark:border-[#8fd5b5] bg-primary-container text-white font-body-sm text-body-sm font-medium">Structural Steel</button>
+<button class="whitespace-nowrap px-4 py-2 rounded-full border border-soft-slate bg-white font-body-sm text-body-sm text-on-surface hover:bg-slate-50 dark:hover:bg-[#2b2e32]">Roofing</button>
+<button class="whitespace-nowrap px-4 py-2 rounded-full border border-soft-slate bg-white font-body-sm text-body-sm text-on-surface hover:bg-slate-50 dark:hover:bg-[#2b2e32]">Electrical</button>
+</div>
+</div>
+<div class="flex gap-lg h-full">
+<!-- Sidebar Filters -->
+<aside class="hidden md:flex w-64 flex-col gap-lg p-lg border border-soft-slate rounded-xl bg-white dark:bg-[#1e2022] overflow-y-auto h-fit">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-4">Categories</h3>
+<ul class="flex flex-col gap-2 font-body-sm text-body-sm text-on-surface-variant">
+<li class="flex justify-between items-center cursor-pointer hover:text-primary dark:hover:text-[#8fd5b5]"><label class="flex items-center gap-2 cursor-pointer"><input class="rounded border-soft-slate text-primary dark:text-[#8fd5b5] focus:ring-primary h-4 w-4" type="checkbox"/> Cement &amp; Concrete</label> <span class="">142</span></li>
+<li class="flex justify-between items-center cursor-pointer font-medium text-primary dark:text-[#8fd5b5]"><label class="flex items-center gap-2 cursor-pointer"><input checked="" class="rounded border-soft-slate text-primary dark:text-[#8fd5b5] focus:ring-primary h-4 w-4" type="checkbox"/> Structural Steel</label> <span class="">89</span></li>
+<li class="flex justify-between items-center cursor-pointer hover:text-primary dark:hover:text-[#8fd5b5]"><label class="flex items-center gap-2 cursor-pointer"><input class="rounded border-soft-slate text-primary dark:text-[#8fd5b5] focus:ring-primary h-4 w-4" type="checkbox"/> Roofing</label> <span class="">210</span></li>
+<li class="flex justify-between items-center cursor-pointer hover:text-primary dark:hover:text-[#8fd5b5]"><label class="flex items-center gap-2 cursor-pointer"><input class="rounded border-soft-slate text-primary dark:text-[#8fd5b5] focus:ring-primary h-4 w-4" type="checkbox"/> Electrical</label> <span class="">356</span></li>
+<li class="flex justify-between items-center cursor-pointer hover:text-primary dark:hover:text-[#8fd5b5]"><label class="flex items-center gap-2 cursor-pointer"><input class="rounded border-soft-slate text-primary dark:text-[#8fd5b5] focus:ring-primary h-4 w-4" type="checkbox"/> Plumbing</label> <span class="">184</span></li>
+</ul>
+</div>
+<hr class="border-soft-slate"/>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-4">Price Range</h3>
+<div class="flex items-center gap-2">
+<div class="relative w-full">
+<span class="absolute left-2 top-1/2 -translate-y-1/2 text-outline-variant font-body-sm">XAF</span>
+<input class="input-field pl-6 pr-2 py-2 w-full text-body-sm" placeholder="Min" type="number"/>
+</div>
+<span class="text-outline-variant">-</span>
+<div class="relative w-full">
+<span class="absolute left-2 top-1/2 -translate-y-1/2 text-outline-variant font-body-sm">XAF</span>
+<input class="input-field pl-6 pr-2 py-2 w-full text-body-sm" placeholder="Max" type="number"/>
+</div>
+</div>
+</div>
+<hr class="border-soft-slate"/>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-4">Certifications</h3>
+<ul class="flex flex-col gap-2 font-body-sm text-body-sm text-on-surface-variant">
+<li class=""><label class="flex items-center gap-2 cursor-pointer"><input class="rounded border-soft-slate text-primary dark:text-[#8fd5b5] focus:ring-primary h-4 w-4" type="checkbox"/> LEED Certified</label></li>
+<li class=""><label class="flex items-center gap-2 cursor-pointer"><input class="rounded border-soft-slate text-primary dark:text-[#8fd5b5] focus:ring-primary h-4 w-4" type="checkbox"/> ISO 9001</label></li>
+<li class=""><label class="flex items-center gap-2 cursor-pointer"><input class="rounded border-soft-slate text-primary dark:text-[#8fd5b5] focus:ring-primary h-4 w-4" type="checkbox"/> OSHA Compliant</label></li>
+</ul>
+</div>
+</aside>
+<!-- Product Grid -->
+<div class="flex-1">
+<div class="flex justify-between items-center mb-6">
+<p class="font-body-md text-body-md text-on-surface-variant">Showing 89 results for <strong>"Structural Steel"</strong></p>
+<div class="flex items-center gap-2">
+<label class="font-body-sm text-body-sm text-on-surface-variant">Sort by:</label>
+<select class="input-field py-1 px-3 text-body-sm font-medium text-on-surface bg-transparent">
+<option>Relevance</option>
+<option>Price: Low to High</option>
+<option>Price: High to Low</option>
+<option>Top Rated</option>
+</select>
+</div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-lg">
+<!-- Product Card 1 -->
+<div class="bg-white border border-soft-slate rounded-xl overflow-hidden hover-card-shadow transition-shadow flex flex-col h-full group">
+<div class="relative h-48 w-full bg-surface-variant">
+<img class="object-cover w-full h-full" data-alt="A clean, isolated product shot of a standardized W-shape wide-flange steel beam. The lighting is studio-quality, highlighting the metallic texture and precise manufacturing edges of the steel. The background is pure white to emphasize the product." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_z03vV2d4sQm4DlptNgozbukRgPrd4R2RYT7rDi6LqIwVk86kmB465VyEyZfJZ2E00yOxR3fOuHc8Gi6nlw9Py5ABF4AJTti9lGiZJOdUoX74bEn4a_VGI7dkgjJXRTM-K5KAR3L4oAKM2tabFH37b5s4hAt2puLbwqVyHdRi3GGoxy8SeaeXujwvOdGlfr4JvJWnDzAP0oivp7FhTelqTznfibG3olBmH-7VjpsIa0mQEKCdvKymwQ"/>
+<button class="absolute top-2 right-2 bg-white/80 dark:bg-black/50 backdrop-blur rounded-full p-1.5 text-outline dark:text-outline-variant hover:text-primary dark:hover:text-[#8fd5b5] transition-colors">
+<span class="material-symbols-outlined text-[20px]">favorite</span>
+</button>
+</div>
+<div class="p-4 flex flex-col flex-1">
+<div class="flex items-center gap-1 mb-1">
+<span class="font-label-md text-[10px] uppercase text-primary-container dark:text-[#8fd5b5] tracking-wider">Atlas Steelworks</span>
+<span class="material-symbols-outlined text-[14px] text-primary dark:text-[#8fd5b5]" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<h3 class="font-headline-sm text-body-lg font-semibold text-on-surface leading-tight mb-2 group-hover:text-primary dark:group-hover:text-[#8fd5b5] transition-colors line-clamp-2">W14x90 Wide Flange Steel Beam</h3>
+<div class="mt-auto">
+<div class="flex items-end gap-1 mb-4">
+<span class="font-headline-md text-headline-md font-bold text-on-surface">1,450 XAF</span>
+<span class="font-body-sm text-body-sm text-outline-variant mb-1">/ ton</span>
+</div>
+<button class="w-full btn-secondary py-2 rounded-lg font-label-md text-label-md flex justify-center items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">shopping_cart</span> Add to Cart
+                                    </button>
+</div>
+</div>
+</div>
+<!-- Product Card 2 -->
+<div class="bg-white border border-soft-slate rounded-xl overflow-hidden hover-card-shadow transition-shadow flex flex-col h-full group">
+<div class="relative h-48 w-full bg-surface-variant">
+<img class="object-cover w-full h-full" data-alt="A macro studio shot of galvanized steel angle iron, showing the protective zinc coating texture. The lighting is sharp, revealing the structural integrity of the material against a clean, minimal light gray background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZt0KON3XeLvmC-uvZGqy-MU7qmbwR4wIqH5OzKiDumcjod59RpIuGfBFdSouQ4QxzD5-kaMH-CXbU2JmnbhcaJsGBfrMItx06HgYWFCLJEqMSls8Aus20t-kG9S1TCx6ELbcByAHmRiMUWaxPT7Z8Hf6w1icabWoQ1D5EXAsukxBhFptUye328p76bDl_7Us5hGJEk4BMH0qyqgIcgfUpVYIjK7V-nvKZQ71N0iBqjsvF2U6GO1hWGA"/>
+</div>
+<div class="p-4 flex flex-col flex-1">
+<div class="flex items-center gap-1 mb-1">
+<span class="font-label-md text-[10px] uppercase text-primary-container dark:text-[#8fd5b5] tracking-wider">National Metals</span>
+</div>
+<h3 class="font-headline-sm text-body-lg font-semibold text-on-surface leading-tight mb-2 group-hover:text-primary dark:group-hover:text-[#8fd5b5] transition-colors line-clamp-2">L6x6x1/2 Galvanized Angle Iron</h3>
+<div class="mt-auto">
+<div class="flex items-end gap-1 mb-4">
+<span class="font-headline-md text-headline-md font-bold text-on-surface">320 XAF</span>
+<span class="font-body-sm text-body-sm text-outline-variant mb-1">/ unit</span>
+</div>
+<button class="w-full btn-secondary py-2 rounded-lg font-label-md text-label-md flex justify-center items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">shopping_cart</span> Add to Cart
+                                    </button>
+</div>
+</div>
+</div>
+<!-- Product Card 3 -->
+<div class="bg-white border border-soft-slate rounded-xl overflow-hidden hover-card-shadow transition-shadow flex flex-col h-full group">
+<div class="relative h-48 w-full bg-surface-variant">
+<img class="object-cover w-full h-full" data-alt="A stack of heavy-duty steel rebar bundles in a well-lit warehouse setting. The focus is sharp on the ribbed texture of the closest rebar, with a slight depth of field blurring the background slightly. Industrial aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAc5XR--_FapDfByB3WmuLDODFDduklpb9R5W0uYrV_L7PEb-a77mELE7WS3diRr4kiryU4PVrLh4g9M4lXCmH-53X-yhdQiu-IACTXdMT8lFddInsj_lBePZaCeplnxgZVRgiEmhF7Vwj2x7oEmh2K4PLCBYhdVMQCxK9JBISzatq7RU5jZtmyozpoytOpgDU4Yw2B7xUCsnFl8B9omPjTto6WuW-dZ87nLVxvv_-x8dwVsfzSYnLr7g"/>
+<div class="absolute top-2 left-2 bg-on-error-container text-on-error font-label-md text-[10px] px-2 py-1 rounded">10% OFF BULK</div>
+</div>
+<div class="p-4 flex flex-col flex-1">
+<div class="flex items-center gap-1 mb-1">
+<span class="font-label-md text-[10px] uppercase text-primary-container dark:text-[#8fd5b5] tracking-wider">Atlas Steelworks</span>
+<span class="material-symbols-outlined text-[14px] text-primary dark:text-[#8fd5b5]" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<h3 class="font-headline-sm text-body-lg font-semibold text-on-surface leading-tight mb-2 group-hover:text-primary dark:group-hover:text-[#8fd5b5] transition-colors line-clamp-2">#8 Grade 60 Rebar (20ft lengths)</h3>
+<div class="mt-auto">
+<div class="flex items-end gap-1 mb-4">
+<span class="font-headline-md text-headline-md font-bold text-on-surface">850 XAF</span>
+<span class="font-body-sm text-body-sm text-outline-variant mb-1">/ bundle</span>
+</div>
+<button class="w-full btn-secondary py-2 rounded-lg font-label-md text-label-md flex justify-center items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">shopping_cart</span> Add to Cart
+                                    </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Footer (Shared Component) -->
+<footer class="bg-white dark:bg-[#1e2022] w-full mt-auto border-t border-soft-slate flat no shadows py-xl px-gutter grid grid-cols-1 md:grid-cols-2 gap-base max-w-max-width mx-auto">
+<div class="flex flex-col gap-sm">
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface">BuildSmart AI</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant dark:text-outline-variant">© 2024 BuildSmart AI. Professional Construction Management.</span>
+</div>
+<div class="flex gap-lg font-body-sm text-body-sm justify-start md:justify-end">
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-[#8fd5b5] transition-colors duration-200" href="#">Privacy Policy</a>
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-[#8fd5b5] transition-colors duration-200" href="#">Terms of Service</a>
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-[#8fd5b5] transition-colors duration-200" href="#">API Docs</a>
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-[#8fd5b5] transition-colors duration-200" href="#">Contact Support</a>
+</div>
+</footer>
+<script>
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const html = document.documentElement;
+    
+    // Check local storage for theme preference, default to light
+    if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        html.classList.add('dark');
+        html.classList.remove('light');
+    } else {
+        html.classList.remove('dark');
+        html.classList.add('light');
+    }
+
+    themeToggleBtn.addEventListener('click', () => {
+        html.classList.toggle('dark');
+        html.classList.toggle('light');
+        if (html.classList.contains('dark')) {
+            localStorage.setItem('theme', 'dark');
+        } else {
+            localStorage.setItem('theme', 'light');
+        }
+    });
+</script>
+</body></html>

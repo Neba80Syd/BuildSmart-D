@@ -1,0 +1,714 @@
+@import "tailwindcss";
+
+/* Dark mode is driven by the `.dark` class on the root element, not the OS
+   media query alone.  The design system swaps all --color-* tokens inside
+   `.dark` (see the `.dark { ... }` block below).  Without this custom
+   variant, Tailwind's default `dark:` would use `prefers-color-scheme` while
+   still reading the *light* CSS variables, which made dark-mode forms render
+   light-background/light-text (invisible input fields and modal content). */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ---------------------------------------------------------------------------
+   BuildSmart AI Design System tokens (mirrors the Stitch UI Tailwind config)
+   These generate the utility classes used across every interface, e.g.
+   bg-primary, text-on-surface-variant, bg-surface-container-low, p-gutter,
+   mb-xl, shadow-elevation, etc.
+--------------------------------------------------------------------------- */
+@theme {
+  /* Color */
+  --color-primary: #184436;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #315c4c;
+  --color-on-primary-container: #a4d2be;
+  --color-inverse-primary: #a2d0bc;
+
+  --color-secondary: #416658;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #c0e9d7;
+  --color-on-secondary-container: #456a5c;
+  --color-secondary-fixed: #c3ecda;
+  --color-secondary-fixed-dim: #a7cfbe;
+  --color-on-secondary-fixed: #002117;
+  --color-on-secondary-fixed-variant: #294e41;
+
+  --color-tertiary: #353f3c;
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-container: #4c5653;
+  --color-on-tertiary-container: #c1cbc7;
+  --color-tertiary-fixed: #dbe5e1;
+  --color-tertiary-fixed-dim: #bfc9c5;
+  --color-on-tertiary-fixed: #141d1b;
+  --color-on-tertiary-fixed-variant: #3f4946;
+
+  --color-error: #ba1a1a;
+  --color-on-error: #ffffff;
+  --color-error-container: #ffdad6;
+  --color-on-error-container: #93000a;
+
+  --color-primary-fixed: #beedd8;
+  --color-primary-fixed-dim: #a2d0bc;
+  --color-on-primary-fixed: #002116;
+  --color-on-primary-fixed-variant: #234e3f;
+
+  --color-background: #effcf7;
+  --color-on-background: #131e1b;
+
+  --color-surface: #effcf7;
+  --color-on-surface: #131e1b;
+  --color-surface-variant: #d8e5e0;
+  --color-on-surface-variant: #414944;
+  --color-surface-dim: #d0ddd8;
+  --color-surface-bright: #effcf7;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #eaf7f1;
+  --color-surface-container: #e4f1eb;
+  --color-surface-container-high: #deebe6;
+  --color-surface-container-highest: #d8e5e0;
+
+  --color-inverse-surface: #27332f;
+  --color-inverse-on-surface: #e7f4ee;
+
+  --color-outline: #717974;
+  --color-outline-variant: #c0c8c3;
+  --color-surface-tint: #3c6756;
+
+  /* Spacing tokens for custom layout gutters & margins */
+  --spacing-gutter: 24px;
+  --spacing-margin-mobile: 16px;
+  --spacing-margin-desktop: 48px;
+
+  /* Elevation */
+  --shadow-elevation: 0 4px 12px rgba(23, 32, 30, 0.05);
+  --shadow-elevation-hover: 0 4px 16px rgba(23, 32, 30, 0.08);
+
+  /* Font families (all Inter per Stitch; technical uses a real mono stack) */
+  --font-display: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-headline-lg: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-headline-lg-mobile: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-headline-md: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-headline-sm: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-body-lg: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-body-md: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-body-sm: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-label-md: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono-technical: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, monospace;
+
+  /* Type scale (Stitch fontSize tokens) */
+  --text-display: 48px;
+  --text-display--line-height: 56px;
+  --text-display--letter-spacing: -0.02em;
+  --text-display--font-weight: 700;
+
+  --text-headline-lg: 32px;
+  --text-headline-lg--line-height: 40px;
+  --text-headline-lg--letter-spacing: -0.01em;
+  --text-headline-lg--font-weight: 600;
+
+  --text-headline-md: 24px;
+  --text-headline-md--line-height: 32px;
+  --text-headline-md--font-weight: 600;
+
+  --text-headline-sm: 20px;
+  --text-headline-sm--line-height: 28px;
+  --text-headline-sm--font-weight: 600;
+
+  --text-body-lg: 18px;
+  --text-body-lg--line-height: 28px;
+
+  --text-body-md: 16px;
+  --text-body-md--line-height: 24px;
+
+  --text-body-sm: 14px;
+  --text-body-sm--line-height: 20px;
+
+  --text-label-md: 12px;
+  --text-label-md--line-height: 16px;
+  --text-label-md--letter-spacing: 0.05em;
+  --text-label-md--font-weight: 600;
+
+  --text-mono-technical: 13px;
+  --text-mono-technical--line-height: 20px;
+}
+
+:root {
+  /* BuildSmart AI Design System - Professional Architectural */
+  --color-surface: #effcf7;
+  --color-surface-dim: #d0ddd8;
+  --color-surface-bright: #effcf7;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #eaf7f1;
+  --color-surface-container: #e4f1eb;
+  --color-surface-container-high: #deebe6;
+  --color-surface-container-highest: #d8e5e0;
+  --color-on-surface: #131e1b;
+  --color-on-surface-variant: #414944;
+  --color-inverse-surface: #27332f;
+  --color-inverse-on-surface: #e7f4ee;
+  --color-outline: #717974;
+  --color-outline-variant: #c0c8c3;
+  --color-surface-tint: #3c6756;
+  
+  /* Primary - Architectural Green */
+  --color-primary: #184436;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #315c4c;
+  --color-on-primary-container: #a4d2be;
+  --color-inverse-primary: #a2d0bc;
+  --color-primary-fixed: #beedd8;
+  --color-primary-fixed-dim: #a2d0bc;
+  --color-on-primary-fixed: #002116;
+  --color-on-primary-fixed-variant: #234e3f;
+
+  /* Secondary */
+  --color-secondary: #416658;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #c0e9d7;
+  --color-on-secondary-container: #456a5c;
+  --color-secondary-fixed: #c3ecda;
+  --color-secondary-fixed-dim: #a7cfbe;
+  --color-on-secondary-fixed: #002117;
+  --color-on-secondary-fixed-variant: #294e41;
+
+  /* Tertiary */
+  --color-tertiary: #353f3c;
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-container: #4c5653;
+  --color-on-tertiary-container: #c1cbc7;
+  --color-tertiary-fixed: #dbe5e1;
+  --color-tertiary-fixed-dim: #bfc9c5;
+  --color-on-tertiary-fixed: #141d1b;
+  --color-on-tertiary-fixed-variant: #3f4946;
+
+  /* Error */
+  --color-error: #ba1a1a;
+  --color-on-error: #ffffff;
+  --color-error-container: #ffdad6;
+  --color-on-error-container: #93000a;
+
+  /* Backgrounds */
+  --color-background: #effcf7;
+  --color-on-background: #131e1b;
+
+  /* Semantic */
+  --color-white: #ffffff;
+  --color-charcoal: #17201e;
+  --color-slate: #4b5753;
+
+  /* Spacing (8px grid) */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 40px;
+  --spacing-gutter: 24px;
+  --spacing-margin-mobile: 16px;
+  --spacing-margin-desktop: 48px;
+  --max-width: 1440px;
+
+  /* Typography */
+  --font-display: 'Inter', system-ui, sans-serif;
+  --font-headline: 'Inter', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-mono-technical: 'Inter', ui-monospace, monospace;
+
+  /* Border radius */
+  --radius-sm: 0.25rem;
+  --radius: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-card: 0 4px 12px rgba(23, 32, 30, 0.05);
+}
+
+.dark {
+  --color-surface: #17201e;
+  --color-surface-dim: #27332f;
+  --color-surface-container-lowest: #131e1b;
+  --color-surface-container-low: #1f2926;
+  --color-surface-container: #25312e;
+  --color-surface-container-high: #2b3834;
+  --color-surface-container-highest: #31403b;
+  --color-on-surface: #effcf7;
+  --color-on-surface-variant: #a8b1ad;
+  --color-inverse-surface: #effcf7;
+  --color-inverse-on-surface: #17201e;
+  --color-outline: #5d6762;
+  --color-outline-variant: #3f4946;
+  --color-background: #17201e;
+  --color-on-background: #effcf7;
+}
+
+/* ---------------------------------------------------------------------------
+   Stitch UI 8px grid spacing utilities
+   Explicitly defined as utilities so standard Tailwind container max-widths
+   (max-w-xs, max-w-sm, max-w-md, max-w-lg, max-w-xl) are never hijacked.
+--------------------------------------------------------------------------- */
+@utility p-xs { padding: 4px; }
+@utility p-sm { padding: 8px; }
+@utility p-md { padding: 16px; }
+@utility p-lg { padding: 24px; }
+@utility p-xl { padding: 40px; }
+
+@utility px-xs { padding-left: 4px; padding-right: 4px; }
+@utility px-sm { padding-left: 8px; padding-right: 8px; }
+@utility px-md { padding-left: 16px; padding-right: 16px; }
+@utility px-lg { padding-left: 24px; padding-right: 24px; }
+@utility px-xl { padding-left: 40px; padding-right: 40px; }
+
+@utility py-xs { padding-top: 4px; padding-bottom: 4px; }
+@utility py-sm { padding-top: 8px; padding-bottom: 8px; }
+@utility py-md { padding-top: 16px; padding-bottom: 16px; }
+@utility py-lg { padding-top: 24px; padding-bottom: 24px; }
+@utility py-xl { padding-top: 40px; padding-bottom: 40px; }
+
+@utility pt-xs { padding-top: 4px; }
+@utility pt-sm { padding-top: 8px; }
+@utility pt-md { padding-top: 16px; }
+@utility pt-lg { padding-top: 24px; }
+@utility pt-xl { padding-top: 40px; }
+
+@utility pb-xs { padding-bottom: 4px; }
+@utility pb-sm { padding-bottom: 8px; }
+@utility pb-md { padding-bottom: 16px; }
+@utility pb-lg { padding-bottom: 24px; }
+@utility pb-xl { padding-bottom: 40px; }
+
+@utility pl-xs { padding-left: 4px; }
+@utility pl-sm { padding-left: 8px; }
+@utility pl-md { padding-left: 16px; }
+@utility pl-lg { padding-left: 24px; }
+@utility pl-xl { padding-left: 40px; }
+
+@utility pr-xs { padding-right: 4px; }
+@utility pr-sm { padding-right: 8px; }
+@utility pr-md { padding-right: 16px; }
+@utility pr-lg { padding-right: 24px; }
+@utility pr-xl { padding-right: 40px; }
+
+@utility gap-xs { gap: 4px; }
+@utility gap-sm { gap: 8px; }
+@utility gap-base { gap: 8px; }
+@utility gap-md { gap: 16px; }
+@utility gap-lg { gap: 24px; }
+@utility gap-xl { gap: 40px; }
+
+@utility m-xs { margin: 4px; }
+@utility m-sm { margin: 8px; }
+@utility m-md { margin: 16px; }
+@utility m-lg { margin: 24px; }
+@utility m-xl { margin: 40px; }
+
+@utility mb-xs { margin-bottom: 4px; }
+@utility mb-sm { margin-bottom: 8px; }
+@utility mb-md { margin-bottom: 16px; }
+@utility mb-lg { margin-bottom: 24px; }
+@utility mb-xl { margin-bottom: 40px; }
+
+@utility mt-xs { margin-top: 4px; }
+@utility mt-sm { margin-top: 8px; }
+@utility mt-md { margin-top: 16px; }
+@utility mt-lg { margin-top: 24px; }
+@utility mt-xl { margin-top: 40px; }
+
+@utility my-xs { margin-top: 4px; margin-bottom: 4px; }
+@utility my-sm { margin-top: 8px; margin-bottom: 8px; }
+@utility my-md { margin-top: 16px; margin-bottom: 16px; }
+@utility my-lg { margin-top: 24px; margin-bottom: 24px; }
+@utility my-xl { margin-top: 40px; margin-bottom: 40px; }
+
+@utility mx-xs { margin-left: 4px; margin-right: 4px; }
+@utility mx-sm { margin-left: 8px; margin-right: 8px; }
+@utility mx-md { margin-left: 16px; margin-right: 16px; }
+@utility mx-lg { margin-left: 24px; margin-right: 24px; }
+@utility mx-xl { margin-left: 40px; margin-right: 40px; }
+
+@utility bottom-lg { bottom: 24px; }
+
+@utility space-y-xl {
+  & > :not(:last-child) {
+    margin-bottom: 40px;
+  }
+}
+@utility space-y-lg {
+  & > :not(:last-child) {
+    margin-bottom: 24px;
+  }
+}
+@utility space-y-md {
+  & > :not(:last-child) {
+    margin-bottom: 16px;
+  }
+}
+
+/* Standard container max-width utilities (guaranteed fallbacks) */
+@utility max-w-xs { max-width: 20rem; }
+@utility max-w-sm { max-width: 24rem; }
+@utility max-w-md { max-width: 28rem; }
+@utility max-w-lg { max-width: 32rem; }
+@utility max-w-xl { max-width: 36rem; }
+@utility max-w-2xl { max-width: 42rem; }
+@utility max-w-3xl { max-width: 48rem; }
+@utility max-w-4xl { max-width: 56rem; }
+@utility max-w-5xl { max-width: 64rem; }
+@utility max-w-6xl { max-width: 72rem; }
+@utility max-w-7xl { max-width: 80rem; }
+
+/* Design System Typography */
+.font-display {
+  font-family: var(--font-display);
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 56px;
+  letter-spacing: -0.02em;
+}
+
+.font-headline-lg {
+  font-family: var(--font-headline);
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 40px;
+  letter-spacing: -0.01em;
+}
+
+.font-headline-md {
+  font-family: var(--font-headline);
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 32px;
+}
+
+.font-headline-sm {
+  font-family: var(--font-headline);
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 28px;
+}
+
+.font-body-lg {
+  font-family: var(--font-body);
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 28px;
+}
+
+.font-body-md {
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+}
+
+.font-body-sm {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+.font-label-md {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+  letter-spacing: 0.05em;
+}
+
+.font-mono-technical {
+  font-family: var(--font-mono-technical);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 18px;
+}
+
+/* Component Styles */
+.btn-primary {
+  background-color: var(--color-primary-container);
+  color: var(--color-on-primary);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  padding: 10px 24px;
+  border-radius: var(--radius);
+  transition: all 0.2s ease;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-primary:hover {
+  background-color: #264b3e;
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--color-on-surface);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  padding: 10px 24px;
+  border-radius: var(--radius);
+  transition: all 0.2s ease;
+  border: 1px solid var(--color-outline);
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-surface-container-low);
+  border-color: var(--color-primary-container);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--color-on-surface-variant);
+  padding: 8px 16px;
+  border-radius: var(--radius);
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.btn-ghost:hover {
+  background-color: var(--color-surface-container-low);
+  color: var(--color-on-surface);
+}
+
+.card {
+  background-color: var(--color-white);
+  border: 1px solid var(--color-outline-variant);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-card);
+  transition: box-shadow 0.2s ease;
+}
+
+.dark .card {
+  background-color: var(--color-surface-container);
+  border-color: var(--color-outline);
+}
+
+.card:hover {
+  box-shadow: 0 4px 16px rgba(23, 32, 30, 0.08);
+}
+
+.input {
+  background-color: var(--color-white);
+  border: 1px solid var(--color-outline-variant);
+  border-radius: var(--radius);
+  padding: 10px 14px;
+  font-size: 15px;
+  color: var(--color-on-surface);
+  transition: all 0.2s;
+  width: 100%;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--color-primary-container);
+  box-shadow: 0 0 0 3px rgba(49, 92, 76, 0.1);
+}
+
+.dark .input {
+  background-color: var(--color-surface-container);
+  border-color: var(--color-outline);
+  color: var(--color-on-surface);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.badge-success {
+  background-color: rgba(49, 92, 76, 0.1);
+  color: #2f6b50;
+}
+
+.badge-warning {
+  background-color: rgba(166, 106, 0, 0.1);
+  color: #a66a00;
+}
+
+.badge-error {
+  background-color: rgba(186, 26, 26, 0.1);
+  color: #b42318;
+}
+
+/* Navigation */
+.nav-link {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 14px;
+  padding: 6px 10px;
+  border-radius: var(--radius);
+  transition: all 0.2s;
+}
+
+.nav-link:hover {
+  background-color: var(--color-surface-container-low);
+  color: var(--color-primary-container);
+}
+
+.nav-link.active {
+  color: var(--color-primary-container);
+  border-bottom: 2px solid var(--color-primary-container);
+}
+
+/* Responsive Grid */
+.container {
+  max-width: var(--max-width);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--spacing-margin-mobile);
+  padding-right: var(--spacing-margin-mobile);
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding-left: var(--spacing-margin-desktop);
+    padding-right: var(--spacing-margin-desktop);
+  }
+}
+
+/* Material Symbols */
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Hero pattern */
+.hero-pattern {
+  background-image: radial-gradient(#DDE2E0 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.dark .hero-pattern {
+  background-image: radial-gradient(#27332f 1px, transparent 1px);
+}
+
+/* Professional architectural feel */
+.architectural-text {
+  font-feature-settings: "tnum";
+}
+
+/* Table styles for marketplace/BOQ */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th {
+  text-align: left;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-on-surface-variant);
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--color-outline-variant);
+}
+
+.table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--color-outline-variant);
+  font-size: 15px;
+}
+
+.table tr:hover {
+  background-color: var(--color-surface-container-low);
+}
+
+/* Status indicators */
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 6px;
+}
+
+.status-dot.verified { background-color: #2f6b50; }
+.status-dot.pending { background-color: #a66a00; }
+.status-dot.rejected { background-color: #b42318; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Stitch UI utility classes ported from the design references
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Blueprint grid canvas (AI Design Studio) */
+.blueprint-grid {
+  background-color: #fafaf8;
+  background-image:
+    linear-gradient(#dde2e0 1px, transparent 1px),
+    linear-gradient(90deg, #dde2e0 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.dark .blueprint-grid {
+  background-color: #131e1b;
+  background-image:
+    linear-gradient(#27332f 1px, transparent 1px),
+    linear-gradient(90deg, #27332f 1px, transparent 1px);
+}
+
+/* Form input field (Marketplace / Estimation) */
+.input-field {
+  background-color: #ffffff;
+  border: 1px solid #dde2e0;
+  border-radius: 8px;
+  color: #17201e;
+}
+
+.input-field:focus {
+  border-color: #315c4c;
+  box-shadow: 0 0 0 2px rgba(49, 92, 76, 0.1);
+  outline: none;
+}
+
+.dark .input-field {
+  background-color: #1a1c1e;
+  border-color: #44474e;
+  color: #e2e2e5;
+}
+
+.dark .input-field:focus {
+  border-color: #8fd5b5;
+  box-shadow: 0 0 0 2px rgba(143, 213, 181, 0.2);
+}
+
+/* Product card hover elevation (Marketplace) */
+.hover-card-shadow:hover {
+  box-shadow: 0 4px 12px rgba(23, 32, 30, 0.05);
+  cursor: pointer;
+}
+
+/* Hide horizontal scrollbar for chip rows (Marketplace / Dashboards) */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}

@@ -1,0 +1,48 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1788078293203,
+      "tag": "0000_broken_captain_marvel",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1788089156840,
+      "tag": "0001_natural_toad",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1788089400443,
+      "tag": "0002_overrated_wallop",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1788257344956,
+      "tag": "0003_gigantic_scream",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1788286808215,
+      "tag": "0004_client_console",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1788364129105,
+      "tag": "0005_admin_console",
+      "breakpoints": true
+    }
+  ]
+}

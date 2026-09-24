@@ -1,0 +1,930 @@
+// BuildSmart AI — Prisma schema.
+// Generated from the existing embedded-PostgreSQL schema. Model/field names
+// match the application's dbClient API; @map/@@map bind them to the physical
+// tables/columns created by the original data layer so existing rows are
+// preserved when Prisma takes over.
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgres"
+}
+
+model User {
+  id String @id
+  email String @unique
+  name String?
+  role String @default("CLIENT")
+  passwordHash String? @map("password_hash")
+  emailVerified Boolean @default(false) @map("email_verified")
+  status String @default("ACTIVE")
+  lastActiveAt DateTime? @map("last_active_at")
+  adminRole String? @map("admin_role")
+  createdAt DateTime @map("created_at")
+  @@map("users")
+}
+
+model UserProfile {
+  id String @id
+  userId String @unique @map("user_id")
+  location String?
+  bio String?
+  phone String?
+  settings Json?
+  @@map("user_profiles")
+}
+
+model ArchitectProfile {
+  id String @id
+  userId String @unique @map("user_id")
+  biography String?
+  specializations String @default("[]")
+  experience Int?
+  licenseNumber String? @map("license_number")
+  verificationStatus String @default("PENDING") @map("verification_status")
+  verifiedAt DateTime? @map("verified_at")
+  rating Float @default(0)
+  reviewCount Int @default(0) @map("review_count")
+  portfolio String @default("[]")
+  location String?
+  hourlyRate Float @default(0) @map("hourly_rate")
+  title String?
+  education Json?
+  memberships Json?
+  languages Json?
+  serviceAreas Json? @map("service_areas")
+  visibility String @default("PUBLIC")
+  credentials Json?
+  verificationDocs Json? @map("verification_docs")
+  settings Json?
+  @@map("architect_profiles")
+}
+
+model VendorProfile {
+  id String @id
+  userId String @unique @map("user_id")
+  businessName String @default("") @map("business_name")
+  description String?
+  location String?
+  registrationNumber String? @map("registration_number")
+  verificationLevel String @default("UNVERIFIED") @map("verification_level")
+  verificationStatus String @default("DRAFT") @map("verification_status")
+  verifiedAt DateTime? @map("verified_at")
+  rating Float @default(0)
+  reviewCount Int @default(0) @map("review_count")
+  bannerUrl String? @map("banner_url")
+  logoUrl String? @map("logo_url")
+  socialLinks Json? @map("social_links")
+  taxId String? @map("tax_id")
+  shippingPolicy Json? @map("shipping_policy")
+  taxSettings Json? @map("tax_settings")
+  verificationDocs Json? @map("verification_docs")
+  @@map("vendor_profiles")
+}
+
+model Product {
+  id String @id
+  vendorId String @map("vendor_id")
+  name String
+  description String?
+  category String
+  unit String
+  price Float
+  stock Int @default(0)
+  imageUrl String? @map("image_url")
+  certifications String?
+  isActive Boolean @default(true) @map("is_active")
+  approvalStatus String @default("APPROVED") @map("approval_status")
+  sku String?
+  barcode String?
+  tags Json?
+  attributes Json?
+  backorderable Boolean @default(false)
+  createdAt DateTime @map("created_at")
+  @@map("products")
+}
+
+model Project {
+  id String @id
+  name String
+  description String?
+  status String @default("DESIGNING")
+  ownerId String @map("owner_id")
+  architectId String? @map("architect_id")
+  budget Float?
+  location String?
+  progress Int @default(0)
+  projectType String? @map("project_type")
+  siteArea Float? @map("site_area")
+  floors Int?
+  rooms Int?
+  style String?
+  deadline DateTime?
+  requirements Json?
+  archived Boolean @default(false)
+  createdAt DateTime @map("created_at")
+  updatedAt DateTime @map("updated_at")
+  @@map("projects")
+}
+
+model FloorPlan {
+  id String @id
+  projectId String @map("project_id")
+  name String
+  data String?
+  svgData String? @map("svg_data")
+  kind String @default("2D")
+  version Int @default(1)
+  status String @default("DRAFT")
+  reviewStatus String @default("NOT_STARTED") @map("review_status")
+  publishedAt DateTime? @map("published_at")
+  createdAt DateTime @map("created_at")
+  updatedAt DateTime @map("updated_at")
+  @@map("floor_plans")
+}
+
+model Cart {
+  id String @id
+  userId String @unique @map("user_id")
+  createdAt DateTime @map("created_at")
+  @@map("carts")
+}
+
+model CartItem {
+  id String @id
+  cartId String @map("cart_id")
+  productId String @map("product_id")
+  quantity Int @default(1)
+  createdAt DateTime @map("created_at")
+  @@map("cart_items")
+}
+
+model ChatRoom {
+  id String @id
+  projectId String? @map("project_id")
+  name String?
+  createdAt DateTime @map("created_at")
+  @@map("chat_rooms")
+}
+
+model ChatParticipant {
+  id String @id
+  roomId String @map("room_id")
+  userId String @map("user_id")
+  joinedAt DateTime @map("joined_at")
+  @@map("chat_participants")
+}
+
+model Message {
+  id String @id
+  senderId String @map("sender_id")
+  roomId String? @map("room_id")
+  content String
+  read Boolean @default(false)
+  createdAt DateTime @map("created_at")
+  @@map("messages")
+}
+
+model Order {
+  id String @id
+  userId String @map("user_id")
+  status String @default("PENDING")
+  totalAmount Float @default(0) @map("total_amount")
+  currency String @default("XAF")
+  carrier String?
+  trackingNumber String? @map("tracking_number")
+  shippedAt DateTime? @map("shipped_at")
+  fulfilledAt DateTime? @map("fulfilled_at")
+  escrowStatus String? @default("ESCROWED") @map("escrow_status")
+  confirmationDeadline DateTime? @map("confirmation_deadline")
+  createdAt DateTime @map("created_at")
+  @@map("orders")
+}
+
+model OrderItem {
+  id String @id
+  orderId String @map("order_id")
+  productId String @map("product_id")
+  quantity Int
+  unitPrice Float @map("unit_price")
+  total Float
+  @@map("order_items")
+}
+
+model Notification {
+  id String @id
+  userId String @map("user_id")
+  type String
+  title String
+  body String?
+  read Boolean @default(false)
+  link String?
+  resourceId String? @map("resource_id")
+  createdAt DateTime @map("created_at")
+  @@map("notifications")
+}
+
+model Review {
+  id String @id
+  targetType String @map("target_type")
+  targetId String @map("target_id")
+  authorId String @map("author_id")
+  authorName String? @map("author_name")
+  rating Int
+  title String?
+  body String?
+  status String @default("PENDING")
+  response String?
+  respondedAt DateTime? @map("responded_at")
+  createdAt DateTime @map("created_at")
+  @@map("reviews")
+}
+
+model BlogPost {
+  id String @id
+  title String
+  slug String @unique
+  category String?
+  excerpt String?
+  content String?
+  author String?
+  status String @default("DRAFT")
+  coverImage String? @map("cover_image")
+  scheduledAt DateTime? @map("scheduled_at")
+  publishedAt DateTime? @map("published_at")
+  createdAt DateTime @map("created_at")
+  @@map("blog_posts")
+}
+
+model SupportTicket {
+  id String @id
+  userId String @map("user_id")
+  subject String
+  category String?
+  status String @default("OPEN")
+  priority String?
+  description String?
+  messages Json?
+  assignedTo String? @map("assigned_to")
+  internalNotes Json? @map("internal_notes")
+  createdAt DateTime @map("created_at")
+  updatedAt DateTime @map("updated_at")
+  @@map("support_tickets")
+}
+
+model Subscription {
+  id String @id
+  userId String @map("user_id")
+  plan String @default("FREE")
+  status String @default("ACTIVE")
+  startedAt DateTime? @map("started_at")
+  renewsAt DateTime? @map("renews_at")
+  @@map("subscriptions")
+}
+
+model Payment {
+  id String @id
+  userId String @map("user_id")
+  subscriptionId String? @map("subscription_id")
+  amount Float @default(0)
+  currency String @default("EUR")
+  status String
+  description String?
+  createdAt DateTime @map("created_at")
+  @@map("payments")
+}
+
+model Document {
+  id String @id
+  ownerId String @map("owner_id")
+  projectId String? @map("project_id")
+  name String
+  type String
+  size Int @default(0)
+  category String?
+  version Int @default(1)
+  content String?
+  createdAt DateTime @map("created_at")
+  @@map("documents")
+}
+
+model ProductMedia {
+  id String @id
+  vendorId String @map("vendor_id")
+  productId String @map("product_id")
+  kind String @default("image")
+  url String
+  name String?
+  position Int @default(0)
+  createdAt DateTime @map("created_at")
+  @@map("product_media")
+}
+
+model Warehouse {
+  id String @id
+  vendorId String @map("vendor_id")
+  name String
+  location String?
+  isDefault Boolean @default(false) @map("is_default")
+  createdAt DateTime @map("created_at")
+  @@map("warehouses")
+}
+
+model WarehouseStock {
+  id String @id
+  warehouseId String @map("warehouse_id")
+  productId String @map("product_id")
+  quantity Int @default(0)
+  @@map("warehouse_stock")
+}
+
+model Coupon {
+  id String @id
+  vendorId String @map("vendor_id")
+  code String
+  type String @default("PERCENT")
+  value Float @default(0)
+  minOrder Float @default(0) @map("min_order")
+  maxUses Int @default(0) @map("max_uses")
+  usedCount Int @default(0) @map("used_count")
+  startsAt DateTime? @map("starts_at")
+  endsAt DateTime? @map("ends_at")
+  active Boolean @default(true)
+  createdAt DateTime @map("created_at")
+  @@map("coupons")
+}
+
+model Campaign {
+  id String @id
+  vendorId String @map("vendor_id")
+  name String
+  type String @default("FLASH_SALE")
+  discountType String @default("PERCENT") @map("discount_type")
+  discountValue Float @default(0) @map("discount_value")
+  startsAt DateTime? @map("starts_at")
+  endsAt DateTime? @map("ends_at")
+  active Boolean @default(true)
+  createdAt DateTime @map("created_at")
+  @@map("campaigns")
+}
+
+model CrossSell {
+  id String @id
+  vendorId String @map("vendor_id")
+  productId String @map("product_id")
+  relatedProductId String @map("related_product_id")
+  createdAt DateTime @map("created_at")
+  @@map("cross_sells")
+}
+
+model ReturnRequest {
+  id String @id
+  vendorId String @map("vendor_id")
+  orderId String @map("order_id")
+  userId String @map("user_id")
+  reason String
+  items Json?
+  status String @default("REQUESTED")
+  resolutionNote String? @map("resolution_note")
+  requestedAt DateTime @map("requested_at")
+  resolvedAt DateTime? @map("resolved_at")
+  @@map("returns")
+}
+
+model Withdrawal {
+  id String @id
+  vendorId String? @map("vendor_id")
+  architectId String? @map("architect_id")
+  walletId String? @map("wallet_id")
+  amount Float @default(0)
+  currency String @default("XAF")
+  method String @default("BANK")
+  destinationType String? @map("destination_type")
+  destinationReference String? @map("destination_reference")
+  status String @default("PENDING")
+  account Json?
+  providerReference String? @map("provider_reference")
+  idempotencyKey String? @map("idempotency_key")
+  failureReason String? @map("failure_reason")
+  requestedAt DateTime @map("requested_at")
+  processedAt DateTime? @map("processed_at")
+  completedAt DateTime? @map("completed_at")
+  @@map("withdrawals")
+}
+
+model Inquiry {
+  id String @id
+  vendorId String @map("vendor_id")
+  userId String @map("user_id")
+  subject String
+  orderId String? @map("order_id")
+  productId String? @map("product_id")
+  status String @default("OPEN")
+  messages Json?
+  createdAt DateTime @map("created_at")
+  updatedAt DateTime @map("updated_at")
+  @@map("inquiries")
+}
+
+model VendorTraffic {
+  id String @id
+  vendorId String @map("vendor_id")
+  day String
+  source String
+  visits Int @default(0)
+  @@map("vendor_traffic")
+}
+
+model DesignRequest {
+  id String @id
+  architectId String @map("architect_id")
+  clientId String @map("client_id")
+  clientName String @map("client_name")
+  projectType String @map("project_type")
+  description String?
+  location String?
+  budget Float?
+  style String?
+  siteArea Float? @map("site_area")
+  floors Int?
+  rooms Int?
+  requirements Json?
+  status String @default("NEW")
+  timeline String?
+  price Float?
+  createdAt DateTime @map("created_at")
+  updatedAt DateTime @map("updated_at")
+  @@map("design_requests")
+}
+
+model Design {
+  id String @id
+  architectId String @map("architect_id")
+  projectId String? @map("project_id")
+  clientId String? @map("client_id")
+  name String
+  category String @default("Residential")
+  type String?
+  thumbnail String?
+  status String @default("DRAFT")
+  version Int @default(1)
+  tags Json?
+  aiGenerated Boolean @default(false) @map("ai_generated")
+  requirements Json?
+  createdAt DateTime @map("created_at")
+  updatedAt DateTime @map("updated_at")
+  @@map("designs")
+}
+
+model Appointment {
+  id String @id
+  architectId String @map("architect_id")
+  clientId String? @map("client_id")
+  projectId String? @map("project_id")
+  title String
+  type String @default("MEETING")
+  date String
+  startTime String @map("start_time")
+  endTime String? @map("end_time")
+  method String @default("VIDEO")
+  location String?
+  notes String?
+  status String @default("PENDING")
+  createdAt DateTime @map("created_at")
+  @@map("appointments")
+}
+
+model Boq {
+  id String @id
+  architectId String @map("architect_id")
+  projectId String? @map("project_id")
+  name String
+  status String @default("DRAFT")
+  version Int @default(1)
+  currency String @default("XAF")
+  notes String?
+  createdAt DateTime @map("created_at")
+  updatedAt DateTime @map("updated_at")
+  @@map("boqs")
+}
+
+model BoqItem {
+  id String @id
+  boqId String @map("boq_id")
+  category String
+  material String
+  description String?
+  unit String
+  quantity Float @default(0)
+  unitPrice Float @default(0) @map("unit_price")
+  total Float @default(0)
+  source String?
+  notes String?
+  linkedProductId String? @map("linked_product_id")
+  createdAt DateTime @map("created_at")
+  @@map("boq_items")
+}
+
+model Transaction {
+  id String @id
+  userId String @map("user_id")
+  kind String @default("EARNING")
+  amount Float @default(0)
+  currency String @default("XAF")
+  status String @default("SUCCEEDED")
+  description String?
+  projectId String? @map("project_id")
+  createdAt DateTime @map("created_at")
+  @@map("transactions")
+}
+
+model Activity {
+  id String @id
+  userId String @map("user_id")
+  projectId String? @map("project_id")
+  type String
+  title String
+  body String?
+  createdAt DateTime @map("created_at")
+  @@map("activities")
+}
+
+model FloorPlanFeedback {
+  id String @id
+  projectId String @map("project_id")
+  floorPlanId String @map("floor_plan_id")
+  clientId String @map("client_id")
+  version Int @default(1)
+  floor String?
+  area String?
+  category String @default("General Feedback")
+  description String
+  priority String @default("NORMAL")
+  status String @default("SUBMITTED")
+  marker Json?
+  attachments Json?
+  architectResponse String? @map("architect_response")
+  respondedAt DateTime? @map("responded_at")
+  createdAt DateTime @map("created_at")
+  updatedAt DateTime @map("updated_at")
+  @@map("floor_plan_feedback")
+}
+
+model Favorite {
+  id String @id
+  userId String @map("user_id")
+  resourceType String @map("resource_type")
+  resourceId String @map("resource_id")
+  createdAt DateTime @map("created_at")
+  @@map("favorites")
+}
+
+model Invoice {
+  id String @id
+  userId String @map("user_id")
+  number String @unique
+  projectId String? @map("project_id")
+  orderId String? @map("order_id")
+  description String?
+  subtotal Float @default(0)
+  fees Float @default(0)
+  total Float @default(0)
+  currency String @default("XAF")
+  status String @default("PENDING")
+  createdAt DateTime @map("created_at")
+  dueAt DateTime? @map("due_at")
+  @@map("invoices")
+}
+
+model AuditLog {
+  id String @id
+  actorId String @map("actor_id")
+  actorName String? @map("actor_name")
+  action String
+  resource String
+  resourceId String? @map("resource_id")
+  result String @default("SUCCESS")
+  reason String?
+  ip String?
+  device String?
+  createdAt DateTime @map("created_at")
+  @@map("audit_logs")
+}
+
+model SecurityEvent {
+  id String @id
+  type String
+  severity String @default("MEDIUM")
+  actorId String? @map("actor_id")
+  targetId String? @map("target_id")
+  description String
+  ip String?
+  status String @default("OPEN")
+  notes Json?
+  createdAt DateTime @map("created_at")
+  @@map("security_events")
+}
+
+model Report {
+  id String @id
+  reporterId String @map("reporter_id")
+  reporterName String? @map("reporter_name")
+  targetType String @map("target_type")
+  targetId String @map("target_id")
+  category String @default("Other")
+  reason String
+  status String @default("OPEN")
+  priority String @default("MEDIUM")
+  assignedTo String? @map("assigned_to")
+  resolution String?
+  createdAt DateTime @map("created_at")
+  updatedAt DateTime @map("updated_at")
+  @@map("reports")
+}
+
+model Dispute {
+  id String @id
+  projectId String? @map("project_id")
+  orderId String? @map("order_id")
+  escrowId String? @map("escrow_id")
+  vendorId String? @map("vendor_id")
+  architectId String? @map("architect_id")
+  clientId String? @map("client_id")
+  designId String? @map("design_id")
+  title String
+  category String @default("Service Complaint")
+  priority String @default("MEDIUM")
+  status String @default("OPEN")
+  reason String?
+  parties Json?
+  description String?
+  evidence Json?
+  vendorResponse String? @map("vendor_response")
+  vendorEvidence Json? @map("vendor_evidence")
+  vendorRespondedAt DateTime? @map("vendor_responded_at")
+  architectResponse String? @map("architect_response")
+  architectEvidence Json? @map("architect_evidence")
+  architectRespondedAt DateTime? @map("architect_responded_at")
+  amount Float? @default(0)
+  timeline Json?
+  assignedTo String? @map("assigned_to")
+  resolution String?
+  resolutionType String? @map("resolution_type")
+  refundAmount Float? @default(0) @map("refund_amount")
+  releaseAmount Float? @default(0) @map("release_amount")
+  resolvedAt DateTime? @map("resolved_at")
+  resolvedBy String? @map("resolved_by")
+  createdAt DateTime @map("created_at")
+  updatedAt DateTime @map("updated_at")
+  @@map("disputes")
+}
+
+model Announcement {
+  id String @id
+  title String
+  body String
+  audience String @default("ALL")
+  status String @default("DRAFT")
+  scheduledAt DateTime? @map("scheduled_at")
+  expiresAt DateTime? @map("expires_at")
+  createdAt DateTime @map("created_at")
+  @@map("announcements")
+}
+
+model Faq {
+  id String @id
+  question String
+  answer String
+  category String @default("General")
+  position Int @default(0)
+  status String @default("ACTIVE")
+  createdAt DateTime @map("created_at")
+  @@map("faqs")
+}
+
+model PlatformSetting {
+  id String @id
+  key String @unique
+  value Json?
+  updatedAt DateTime @map("updated_at")
+  @@map("platform_settings")
+}
+
+model AdminRole {
+  id String @id
+  name String @unique
+  description String?
+  permissions Json?
+  isSystem Boolean @default(false) @map("is_system")
+  createdAt DateTime @map("created_at")
+  @@map("admin_roles")
+}
+
+model AiConversation {
+  id String @id
+  userId String @map("user_id")
+  title String @default("New conversation")
+  mode String @default("architecture")
+  projectId String? @map("project_id")
+  context Json?
+  status String @default("ACTIVE")
+  messageCount Int @default(0) @map("message_count")
+  lastMessageAt DateTime? @map("last_message_at")
+  createdAt DateTime @map("created_at")
+  updatedAt DateTime @map("updated_at")
+  @@map("ai_conversations")
+}
+
+model AiMessage {
+  id String @id
+  conversationId String @map("conversation_id")
+  userId String @map("user_id")
+  role String
+  content String
+  category String?
+  model String?
+  tokenCount Int? @map("token_count")
+  feedback String?
+  feedbackReason String? @map("feedback_reason")
+  meta Json?
+  createdAt DateTime @map("created_at")
+  @@map("ai_messages")
+}
+
+model AiFeedback {
+  id String @id
+  conversationId String @map("conversation_id")
+  messageId String @map("message_id")
+  userId String @map("user_id")
+  rating String
+  reason String?
+  comment String?
+  createdAt DateTime @map("created_at")
+  @@map("ai_feedback")
+}
+
+model AiToolExecution {
+  id String @id
+  conversationId String? @map("conversation_id")
+  userId String @map("user_id")
+  tool String
+  input Json?
+  outputSummary String? @map("output_summary")
+  status String @default("SUCCESS")
+  error String?
+  createdAt DateTime @map("created_at")
+  @@map("ai_tool_executions")
+}
+
+model AiUsageLog {
+  id String @id
+  userId String @map("user_id")
+  conversationId String? @map("conversation_id")
+  category String?
+  model String?
+  status String @default("SUCCESS")
+  tokenCount Int? @map("token_count")
+  latencyMs Int? @map("latency_ms")
+  errorCategory String? @map("error_category")
+  createdAt DateTime @map("created_at")
+  @@map("ai_usage_logs")
+}
+
+model VendorWallet {
+  id String @id
+  vendorId String @unique @map("vendor_id")
+  currency String @default("XAF")
+  availableBalance Float @default(0) @map("available_balance")
+  escrowBalance Float @default(0) @map("escrow_balance")
+  pendingWithdrawalBalance Float @default(0) @map("pending_withdrawal_balance")
+  withdrawnAmount Float @default(0) @map("withdrawn_amount")
+  createdAt DateTime @map("created_at")
+  updatedAt DateTime @map("updated_at")
+  @@map("vendor_wallets")
+}
+
+model WalletTransaction {
+  id String @id
+  walletId String @map("wallet_id")
+  vendorId String? @map("vendor_id")
+  architectId String? @map("architect_id")
+  orderId String? @map("order_id")
+  designId String? @map("design_id")
+  projectId String? @map("project_id")
+  escrowId String? @map("escrow_id")
+  disputeId String? @map("dispute_id")
+  withdrawalId String? @map("withdrawal_id")
+  idempotencyKey String? @map("idempotency_key")
+  transactionType String @map("transaction_type")
+  amount Float
+  fee Float @default(0)
+  netAmount Float @default(0) @map("net_amount")
+  currency String @default("XAF")
+  status String @default("COMPLETED")
+  balanceBefore Float? @map("balance_before")
+  balanceAfter Float? @map("balance_after")
+  reference String?
+  description String?
+  metadata Json?
+  createdAt DateTime @map("created_at")
+  updatedAt DateTime @map("updated_at")
+  @@map("wallet_transactions")
+}
+
+model EscrowTransaction {
+  id String @id
+  escrowType String @default("VENDOR") @map("escrow_type")
+  orderId String? @map("order_id")
+  walletId String @map("wallet_id")
+  vendorId String? @map("vendor_id")
+  architectId String? @map("architect_id")
+  clientId String @map("client_id")
+  projectId String? @map("project_id")
+  designId String? @map("design_id")
+  milestoneId String? @map("milestone_id")
+  paymentId String? @map("payment_id")
+  amount Float
+  platformFee Float @default(0) @map("platform_fee")
+  grossAmount Float @map("gross_amount")
+  currency String @default("XAF")
+  status String @default("ESCROWED")
+  revisionCount Int @default(0) @map("revision_count")
+  maxRevisions Int @default(2) @map("max_revisions")
+  fundedAt DateTime? @map("funded_at")
+  deliveredAt DateTime? @map("delivered_at")
+  unlockedAt DateTime? @map("unlocked_at")
+  confirmationDeadline DateTime? @map("confirmation_deadline")
+  acceptanceDeadline DateTime? @map("acceptance_deadline")
+  releasedAt DateTime? @map("released_at")
+  refundedAt DateTime? @map("refunded_at")
+  disputedAt DateTime? @map("disputed_at")
+  releaseReason String? @map("release_reason")
+  contentHash String? @map("content_hash")
+  autoReleaseEligible Boolean @default(true) @map("auto_release_eligible")
+  createdAt DateTime @map("created_at")
+  updatedAt DateTime @map("updated_at")
+  @@map("escrow_transactions")
+}
+
+model ArchitectWallet {
+  id String @id
+  architectId String @unique @map("architect_id")
+  currency String @default("XAF")
+  availableBalance Float @default(0) @map("available_balance")
+  escrowBalance Float @default(0) @map("escrow_balance")
+  pendingWithdrawalBalance Float @default(0) @map("pending_withdrawal_balance")
+  withdrawnAmount Float @default(0) @map("withdrawn_amount")
+  createdAt DateTime @map("created_at")
+  updatedAt DateTime @map("updated_at")
+  @@map("architect_wallets")
+}
+
+model DesignRevision {
+  id String @id
+  escrowId String @map("escrow_id")
+  designId String @map("design_id")
+  projectId String? @map("project_id")
+  clientId String @map("client_id")
+  architectId String @map("architect_id")
+  revisionNumber Int @default(1) @map("revision_number")
+  clientRequest String @map("client_request")
+  architectResponse String? @map("architect_response")
+  status String @default("REQUESTED")
+  attachments Json?
+  submittedAt DateTime? @map("submitted_at")
+  reviewedAt DateTime? @map("reviewed_at")
+  createdAt DateTime @map("created_at")
+  updatedAt DateTime @map("updated_at")
+  @@map("design_revisions")
+}
+
+model RoomagenJob {
+  id String @id
+  projectId String? @map("project_id")
+  userId String @map("user_id")
+  architectId String? @map("architect_id")
+  roomagenJobId String? @unique @map("roomagen_job_id")
+  tool String
+  status String @default("PENDING")
+  inputAssetUrl String? @map("input_asset_url")
+  outputAssetUrl String? @map("output_asset_url")
+  inputAssetId String? @map("input_asset_id")
+  outputAssetId String? @map("output_asset_id")
+  version Int @default(1)
+  prompt String?
+  options Json?
+  metadata Json?
+  errorMessage String? @map("error_message")
+  provider String @default("roomagen")
+  completedAt DateTime? @map("completed_at")
+  failedAt DateTime? @map("failed_at")
+  createdAt DateTime @map("created_at")
+  updatedAt DateTime @map("updated_at")
+  @@map("roomagen_jobs")
+}
+
+
+
