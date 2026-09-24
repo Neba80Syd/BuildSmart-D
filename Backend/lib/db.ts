@@ -25,7 +25,7 @@ const localEnv = path.join("Frontend", ".env.local");
 const localEnvPath = fs.existsSync(path.resolve(localEnv))
   ? path.resolve(localEnv)
   : path.resolve(".env");
-dotenv.config({ path: localEnvPath });
+dotenv.config({ quiet: true, path: localEnvPath });
 
 const g = globalThis as unknown as {
   __buildsmartPrisma?: Promise<PrismaClient>;

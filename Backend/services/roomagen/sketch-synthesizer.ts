@@ -3,7 +3,6 @@
 // and dynamically generates matching 2D floor plans, 3D visualizations, and colorizations.
 
 import { dbClient } from '../../lib/db.ts';
-import { callGeminiVision } from '../../lib/gemini.ts';
 import type { RoomagenTool } from './roomagen.types.ts';
 import {
   type RoomLayoutSpec,
@@ -15,7 +14,6 @@ import {
   generateColorizedFloorPlanSVG,
   type VisualizationOptions,
 } from './visualization-3d-generator.ts';
-import fs from 'node:fs';
 import path from 'node:path';
 
 export type BuildingTypology =
@@ -39,7 +37,7 @@ export interface SketchAnalysis {
 export class SketchSynthesizer {
   /**
    * Analyzes an uploaded sketch image and its contextual prompt/options.
-   * Leverages Gemini Multimodal Vision analysis with resilient domain heuristics.
+   * Selects a deterministic template for explicitly configured mock generation.
    */
   async analyzeSketch(
     imageUrl: string,
@@ -49,110 +47,9 @@ export class SketchSynthesizer {
     const normPrompt = (prompt || '').toLowerCase();
     const styleOption = (options?.stylePreset || '').toLowerCase();
 
-    let assetName = '';
-    let assetBase64: string | null = null;
-    let mimeType = 'image/png';
-
-    // 1. If imageUrl references an uploaded document in the database, fetch its content & name
-    if (imageUrl.includes('/api/roomagen/assets/')) {
-      const parts = imageUrl.split('/api/roomagen/assets/');
-      const docId = parts[1]?.split('?')[0];
-      if (docId) {
-        try {
-          const doc: any = await dbClient.document.findUnique({ where: { id: docId } });
-          if (doc) {
-            assetName = doc.name?.toLowerCase() || '';
-            assetBase64 = doc.content || null;
-            if (doc.type) mimeType = doc.type;
-          }
-        } catch {
-          // Non-blocking DB lookup
-        }
-      }
-    } else if (imageUrl.startsWith('data:image/')) {
-      // Data URI
-      const match = imageUrl.match(/^data:([^;]+);base64,(.+)$/);
-      if (match) {
-        mimeType = match[1];
-        assetBase64 = match[2];
-      }
-    } else if (imageUrl.startsWith('/images/')) {
-      // Local public asset reference
-      assetName = path.basename(imageUrl).toLowerCase();
-      try {
-        const localPath = path.join(process.cwd(), 'Frontend', 'public', imageUrl.replace(/^\//, ''));
-        if (fs.existsSync(localPath)) {
-          const buf = fs.readFileSync(localPath);
-          assetBase64 = buf.toString('base64');
-          if (imageUrl.endsWith('.jpg') || imageUrl.endsWith('.jpeg')) mimeType = 'image/jpeg';
-        }
-      } catch {
-        // Non-blocking
-      }
-    } else if (fs.existsSync(imageUrl)) {
-      // Direct local file path
-      try {
-        const buf = fs.readFileSync(imageUrl);
-        assetBase64 = buf.toString('base64');
-        assetName = path.basename(imageUrl).toLowerCase();
-        if (imageUrl.endsWith('.jpg') || imageUrl.endsWith('.jpeg')) mimeType = 'image/jpeg';
-      } catch {
-        // Non-blocking
-      }
-    }
-
-    // 2. Try Gemini Multimodal Vision if base64 data is present
-    if (assetBase64) {
-      try {
-        const visionPrompt = `You are a licensed architect and CAD drafting AI. Thoroughly inspect this architectural drawing, sketch, or blueprint.
-Analyze what building typology this represents and identify ALL visible rooms, functional spaces, dimensions (e.g. "14' x 16'", "12' x 15'", or metric like "3.6m x 4.5m"), doors, and windows.
-For each room/space, identify its normalized bounding box on a 0 to 100 percentage scale (x: 0-100, y: 0-100, w: 0-100, h: 0-100) within the overall building perimeter.
-
-Return ONLY valid JSON matching this exact schema:
-{
-  "typology": "COMMERCIAL_OFFICE" | "RESIDENTIAL_VILLA" | "APARTMENT_FLAT" | "HEALTHCARE_CLINIC" | "RETAIL_COMMERCIAL" | "GENERAL_RESIDENTIAL",
-  "title": "Descriptive Architectural Title (e.g. Modern Residential Villa Plan)",
-  "summary": "1-2 sentence description of the visible spaces, layout flow, and architectural organization",
-  "detectedSpaces": ["Room Name 1", "Room Name 2", "Room Name 3"],
-  "rooms": [
-    {
-      "id": "room_1",
-      "name": "Room Name (e.g. Master Bedroom)",
-      "type": "living" | "kitchen" | "bedroom" | "bath" | "dining" | "hallway" | "balcony" | "office" | "patio" | "garage" | "utility" | "general",
-      "dimensions": "14' × 16'",
-      "areaSqFt": 224,
-      "bounds": { "x": 10, "y": 12, "w": 40, "h": 36 }
-    }
-  ]
-}`;
-
-        const geminiRes = await callGeminiVision(visionPrompt, assetBase64, mimeType, { jsonMode: true });
-        const parsed = JSON.parse(geminiRes.text);
-
-        if (parsed?.typology) {
-          const validatedRooms = this.sanitizeRooms(parsed.rooms, parsed.typology);
-          const detectedSpaces = Array.isArray(parsed.detectedSpaces) && parsed.detectedSpaces.length > 0
-            ? parsed.detectedSpaces
-            : validatedRooms.map((r) => r.name);
-
-          return {
-            typology: parsed.typology as BuildingTypology,
-            title: parsed.title || 'Architectural Floor Plan Design',
-            summary: parsed.summary || 'Custom architectural plan layout synthesized with AI.',
-            detectedSpaces,
-            stylePreset: options?.stylePreset || 'Modern Minimalist',
-            confidence: 0.96,
-            rooms: validatedRooms,
-          };
-        }
-      } catch (err: any) {
-        console.warn('[SketchSynthesizer] Gemini Vision extraction fallback:', err?.message || err);
-      }
-    }
-
-    // 3. Resilient Architectural Domain Heuristics
+    // Explicit mock mode uses deterministic templates, with no external AI calls.
     const imageBasename = path.basename(imageUrl).toLowerCase();
-    const cleanContext = `${normPrompt} ${assetName} ${styleOption} ${imageBasename}`;
+    const cleanContext = `${normPrompt} ${styleOption} ${imageBasename}`;
 
     const isOffice = /\b(office|commercial|workstation|cubicle|conference|boardroom|reception|pantry|level\s*02)\b/i.test(cleanContext);
     const isApartment = /\b(apartment|flat|condo|penthouse|studio)\b/i.test(cleanContext);

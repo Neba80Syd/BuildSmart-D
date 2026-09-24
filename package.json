@@ -11,7 +11,7 @@
     "db:seed": "node --experimental-strip-types Backend/lib/seed.ts",
     "db:smoke": "node --experimental-strip-types Backend/scripts/db-smoke.ts",
     "db:migrate-pglite": "node --experimental-strip-types Backend/scripts/migrate-pglite-to-postgres.ts",
-    "prisma:generate": "PRISMA_DATABASE_URL='postgresql://postgres:12345678@localhost:5432/build' PRISMA_SCHEMA_ENGINE_BINARY=\"$(pwd)/.prisma-tools/fake-schema-engine\" prisma generate",
+    "prisma:generate": "prisma generate",
     "test:escrow": "node --experimental-strip-types Backend/scripts/escrow-smoke-test.ts",
     "test:architect-escrow": "node --experimental-strip-types Backend/scripts/architect-escrow-smoke-test.ts",
     "test:gemini": "node --experimental-strip-types Backend/scripts/gemini-smoke-test.ts",

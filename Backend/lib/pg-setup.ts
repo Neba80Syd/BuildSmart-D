@@ -23,7 +23,7 @@ const candidates = [
 ];
 for (const candidate of candidates) {
   if (fs.existsSync(candidate)) {
-    dotenv.config({ path: candidate });
+    dotenv.config({ quiet: true, path: candidate });
   }
 }
 

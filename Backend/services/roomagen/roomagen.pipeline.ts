@@ -1,7 +1,6 @@
 // BuildSmart AI — Roomagen Chained Multi-Stage Pipeline Orchestrator
 // Coordinates automated sequential workflows: Sketch ➔ 2D Architectural Plan ➔ 3D Concept Visualization.
 
-import { dbClient } from '../../lib/db.ts';
 import { RoomagenService } from './roomagen.service.ts';
 import type { RoomagenTool } from './roomagen.types.ts';
 import { RoomagenValidationError } from './roomagen.errors.ts';
@@ -98,15 +97,16 @@ export class RoomagenPipelineService {
     // Wait or poll for stage 1 completion (fast in mock mode or with quick provider)
     let completedStage1 = stage1Job;
     let attempts = 0;
-    const maxAttempts = 15;
+    const maxAttempts = 30;
 
-    while (completedStage1.status === 'PROCESSING' && attempts < maxAttempts) {
-      await new Promise((res) => setTimeout(res, 800));
+    while (['PROCESSING', 'PENDING'].includes(completedStage1.status) && attempts < maxAttempts) {
+      await new Promise((res) => setTimeout(res, 4000));
       attempts++;
       completedStage1 = await this.roomagenService.getJobStatus(stage1Job.id, userId);
     }
 
-    const plan2DUrl = completedStage1.outputAssetUrl || completedStage1.inputAssetUrl;
+    const plan2DUrl = completedStage1.status === 'COMPLETED' ? completedStage1.outputAssetUrl : null;
+    Object.assign(stages[0], { status: completedStage1.status, outputUrl: plan2DUrl });
 
     roomagenLogger.logPipelineStage({
       pipelineId,
@@ -118,14 +118,14 @@ export class RoomagenPipelineService {
       error: completedStage1.errorMessage,
     });
 
-    if (completedStage1.status === 'FAILED') {
+    if (completedStage1.status !== 'COMPLETED' || !plan2DUrl) {
       return {
         pipelineId,
         status: 'FAILED',
         currentStage: 1,
         totalStages: 2,
         stages,
-        error: completedStage1.errorMessage || 'Stage 1 (2D Floor Plan) failed',
+        error: completedStage1.errorMessage || '2D plan was not ready before the wait limit. 3D generation was not started; check the 2D job in history.',
       };
     }
 
@@ -168,13 +168,14 @@ export class RoomagenPipelineService {
     // Poll for stage 2 completion
     let completedStage2 = stage2Job;
     attempts = 0;
-    while (completedStage2.status === 'PROCESSING' && attempts < maxAttempts) {
-      await new Promise((res) => setTimeout(res, 800));
+    while (['PROCESSING', 'PENDING'].includes(completedStage2.status) && attempts < maxAttempts) {
+      await new Promise((res) => setTimeout(res, 4000));
       attempts++;
       completedStage2 = await this.roomagenService.getJobStatus(stage2Job.id, userId);
     }
 
-    const scene3DUrl = completedStage2.outputAssetUrl || completedStage2.inputAssetUrl;
+    const scene3DUrl = completedStage2.status === 'COMPLETED' ? completedStage2.outputAssetUrl : null;
+    Object.assign(stages[1], { status: completedStage2.status, outputUrl: scene3DUrl });
     const isSuccess = completedStage2.status === 'COMPLETED';
 
     roomagenLogger.logPipelineStage({

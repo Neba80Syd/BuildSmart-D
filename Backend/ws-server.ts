@@ -10,8 +10,8 @@ import { dbClient } from "./lib/db.ts";
 import { publish, subscribe } from "./lib/chat-events.ts";
 
 // Load environment variables
-dotenv.config({ path: path.resolve(process.cwd(), "Frontend/.env.local") });
-dotenv.config({ path: path.resolve(process.cwd(), ".env") });
+dotenv.config({ quiet: true, path: path.resolve(process.cwd(), "Frontend/.env.local") });
+dotenv.config({ quiet: true, path: path.resolve(process.cwd(), ".env") });
 
 export interface ChatSocket extends WebSocket {
   id: string;

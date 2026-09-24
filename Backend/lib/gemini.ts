@@ -8,8 +8,8 @@ import dotenv from 'dotenv';
 import path from 'path';
 
 if (!process.env.GEMINI_API_KEY) {
-  dotenv.config({ path: path.resolve(process.cwd(), 'Frontend/.env.local') });
-  dotenv.config({ path: path.resolve(process.cwd(), '.env') });
+  dotenv.config({ quiet: true, path: path.resolve(process.cwd(), 'Frontend/.env.local') });
+  dotenv.config({ quiet: true, path: path.resolve(process.cwd(), '.env') });
 }
 
 export type GeminiMessage = {

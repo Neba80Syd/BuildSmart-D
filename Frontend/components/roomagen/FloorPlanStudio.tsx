@@ -42,68 +42,76 @@ export function FloorPlanStudio({
   // History / Versions
   const [history, setHistory] = useState<any[]>([]);
   const [loadingHistory, setLoadingHistory] = useState<boolean>(false);
+  const [historyError, setHistoryError] = useState<string | null>(null);
+  const historyRequest = useRef(0);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const pollingRef = useRef<NodeJS.Timeout | null>(null);
+  const pollController = useRef<AbortController | null>(null);
 
   // Fetch project generations history
   const fetchHistory = useCallback(async (projId: string) => {
-    if (!projId) return;
+    const request = ++historyRequest.current;
     setLoadingHistory(true);
+    setHistoryError(null);
     try {
-      const res = await fetch(`/api/projects/${projId}/roomagen`);
+      const res = await fetch('/api/roomagen/jobs' + (projId ? '?projectId=' + encodeURIComponent(projId) : ''));
       const data = await res.json();
-      if (data?.success) {
-        setHistory(data.data?.generations || []);
-      }
+      if (!res.ok || !data?.success) throw new Error('Unable to load history');
+      if (request === historyRequest.current) setHistory(data.data?.jobs || []);
     } catch {
-      // Ignore background history failure
+      if (request === historyRequest.current) setHistoryError('Unable to load generation history. Please refresh.');
     } finally {
-      setLoadingHistory(false);
+      if (request === historyRequest.current) setLoadingHistory(false);
     }
   }, []);
 
   useEffect(() => {
-    if (projectId) {
-      fetchHistory(projectId);
-    }
+    setHistory([]);
+    fetchHistory(projectId);
   }, [projectId, fetchHistory]);
 
-  // Clean up polling interval on unmount
-  useEffect(() => {
-    return () => {
-      if (pollingRef.current) clearInterval(pollingRef.current);
-    };
+  useEffect(() => () => {
+    if (pollingRef.current) clearTimeout(pollingRef.current);
+    pollController.current?.abort();
   }, []);
 
-  // Poll active job status
+  // Schedule only after the previous request finishes; cancel stale job requests.
   const startPolling = useCallback((jobId: string) => {
-    if (pollingRef.current) clearInterval(pollingRef.current);
-
-    pollingRef.current = setInterval(async () => {
+    if (pollingRef.current) clearTimeout(pollingRef.current);
+    pollController.current?.abort();
+    const controller = new AbortController();
+    pollController.current = controller;
+    const startedAt = Date.now();
+    const poll = async () => {
+      if (controller.signal.aborted) return;
       try {
-        const res = await fetch(`/api/roomagen/jobs/${jobId}`);
+        const res = await fetch('/api/roomagen/jobs/' + jobId, { signal: controller.signal });
         const data = await res.json();
+        if (controller.signal.aborted) return;
         if (data?.success && data?.data) {
           const job = data.data;
           setCurrentJob(job);
-
-          if (job.status === 'COMPLETED') {
+          if (['COMPLETED', 'FAILED', 'CANCELLED', 'EXPIRED'].includes(job.status)) {
             setIsGenerating(false);
-            if (pollingRef.current) clearInterval(pollingRef.current);
-            toast.success('AI generation completed!');
-            if (projectId) fetchHistory(projectId);
-          } else if (job.status === 'FAILED') {
-            setIsGenerating(false);
-            if (pollingRef.current) clearInterval(pollingRef.current);
-            toast.error(job.errorMessage || 'Floor plan generation failed');
-            if (projectId) fetchHistory(projectId);
+            if (job.status === 'COMPLETED') toast.success('AI generation completed!');
+            else toast.error(job.errorMessage || 'Generation ' + job.status.toLowerCase());
+            fetchHistory(projectId);
+            return;
           }
         }
       } catch {
-        // Retry next interval
+        if (controller.signal.aborted) return;
       }
-    }, 2500);
+      if (Date.now() - startedAt > 10 * 60_000) {
+        setIsGenerating(false);
+        toast.info('Generation is taking longer than expected. Check project history later.');
+        return;
+      }
+      const delay = document.hidden ? 15_000 : Date.now() - startedAt > 60_000 ? 8_000 : 4_000;
+      pollingRef.current = setTimeout(poll, delay);
+    };
+    pollingRef.current = setTimeout(poll, 4_000);
   }, [projectId, fetchHistory]);
 
   // Handle local file selection
@@ -204,7 +212,7 @@ export function FloorPlanStudio({
       if (job.status === 'COMPLETED') {
         setIsGenerating(false);
         toast.success('AI generation completed!');
-        if (projectId) fetchHistory(projectId);
+        fetchHistory(projectId);
       } else {
         startPolling(job.id);
       }
@@ -285,6 +293,7 @@ export function FloorPlanStudio({
               onChange={(e) => setProjectId(e.target.value)}
               aria-label="Select Project"
             >
+              <option value="">All projects / unassigned</option>
               {projects.map((p) => (
                 <option key={p.id} value={p.id}>
                   {p.name}
@@ -571,24 +580,37 @@ export function FloorPlanStudio({
           )}
 
           {/* Project Generation History & Versioning */}
-          {projectId && history.length > 0 && (
+          {(
             <Card pad={true} className="space-y-4">
               <div className="flex items-center justify-between">
                 <h3 className="text-headline-sm font-semibold text-on-surface dark:text-inverse-on-surface flex items-center gap-2">
                   <span className="material-symbols-outlined text-[20px] text-primary">history</span>
-                  Generation History & Versions ({history.length})
+                  Generation History ({history.length})
                 </h3>
-                {loadingHistory && <Spinner size={16} />}
+                <button type="button" onClick={() => fetchHistory(projectId)} disabled={loadingHistory} className={btnGhost}>
+                  {loadingHistory ? <Spinner size={16} /> : 'Refresh'}
+                </button>
               </div>
 
+              {historyError && <p role="alert" className="text-sm text-red-600">{historyError}</p>}
+              {!loadingHistory && !historyError && history.length === 0 && <p className="text-sm text-on-surface-variant">No generations yet. Your 2D plans and 3D renders will appear here automatically.</p>}
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
                 {history.map((item) => (
-                  <div
+                  <button
+                    type="button"
                     key={item.id}
                     onClick={() => {
+                      if (pollingRef.current) clearTimeout(pollingRef.current);
+                      pollController.current?.abort();
                       setCurrentJob(item);
-                      if (item.inputAssetUrl) setPreviewUrl(item.inputAssetUrl);
-                      if (item.outputAssetUrl) setUploadedAssetUrl(item.outputAssetUrl);
+                      setSelectedTool(item.tool);
+                      setSelectedFile(null);
+                      setPreviewUrl(item.inputAssetUrl || null);
+                      setUploadedAssetUrl(item.inputAssetUrl || null);
+                      setUploadedAssetId(item.inputAssetId || null);
+                      const pending = ['PROCESSING', 'PENDING'].includes(item.status);
+                      setIsGenerating(pending);
+                      if (pending) startPolling(item.id);
                     }}
                     className={`cursor-pointer rounded-xl border p-3 flex flex-col gap-2 transition-all ${
                       currentJob?.id === item.id
@@ -599,6 +621,7 @@ export function FloorPlanStudio({
                     <div className="relative aspect-video rounded-lg overflow-hidden bg-black/5 dark:bg-white/5 flex items-center justify-center">
                       <img
                         src={item.outputAssetUrl || item.inputAssetUrl || '/images/project-floorplan.png'}
+                        loading="lazy"
                         alt={`Version ${item.version}`}
                         className="w-full h-full object-cover"
                       />
@@ -612,13 +635,13 @@ export function FloorPlanStudio({
 
                     <div className="flex items-center justify-between text-label-sm">
                       <span className="font-semibold text-on-surface dark:text-inverse-on-surface truncate">
-                        {item.tool === 'FLOOR_PLAN_TO_3D' ? '3D Render' : '2D Floor Plan'}
+                        {item.tool === 'FLOOR_PLAN_TO_3D' ? '3D Render' : item.tool === 'FLOOR_PLAN_COLORIZE' ? 'Colorized Plan' : '2D Floor Plan'}
                       </span>
                       <span className="text-[11px] text-on-surface-variant">
-                        {new Date(item.createdAt).toLocaleDateString()}
+                        {new Date(item.createdAt).toLocaleString()}
                       </span>
                     </div>
-                  </div>
+                  </button>
                 ))}
               </div>
             </Card>

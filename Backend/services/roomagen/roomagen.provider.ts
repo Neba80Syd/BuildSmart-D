@@ -25,16 +25,7 @@ export class RoomagenProvider implements FloorPlanGenerationProvider {
   }
 
   async createJob(params: CreateJobParams): Promise<ProviderJobResponse> {
-    try {
-      return await this.client.createJob(params);
-    } catch (err: any) {
-      roomagenLogger.logProviderFallback({
-        reason: err?.message || 'Live API request failed',
-        fallbackProvider: 'mock (Intelligent Sketch Synthesizer)',
-      });
-      const fallback = new MockRoomagenProvider();
-      return fallback.createJob(params);
-    }
+    return this.client.createJob(params);
   }
 
   async getJob(jobId: string): Promise<ProviderJobResponse> {
@@ -192,20 +183,7 @@ export function getGenerationProvider(): FloorPlanGenerationProvider {
   if (config.provider === 'mock') {
     activeProvider = new MockRoomagenProvider();
   } else {
-    try {
-      activeProvider = new RoomagenProvider();
-    } catch (err: any) {
-      // Fallback to mock if key is missing in development
-      if (process.env.NODE_ENV !== 'production') {
-        roomagenLogger.logProviderFallback({
-          reason: err?.message || 'ROOMAGEN_API_KEY not configured for live provider',
-          fallbackProvider: 'mock (Intelligent Sketch Synthesizer)',
-        });
-        activeProvider = new MockRoomagenProvider();
-      } else {
-        throw new Error('Roomagen live provider could not be initialized: missing configuration');
-      }
-    }
+    activeProvider = new RoomagenProvider();
   }
 
   return activeProvider;

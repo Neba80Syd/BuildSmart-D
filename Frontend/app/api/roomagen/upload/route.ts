@@ -14,10 +14,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: false, error: { code: 'INVALID_FORM', message: 'Invalid form data' } }, { status: 400 });
   }
 
-  const file = form.get('file') as File | null;
+  const file = form.get('file');
   const projectId = (form.get('projectId') as string) || null;
 
-  if (!file) {
+  if (!file || typeof file === 'string' || file.size === 0) {
     return NextResponse.json({ success: false, error: { code: 'NO_FILE', message: 'No file was uploaded' } }, { status: 400 });
   }
 
@@ -33,6 +33,38 @@ export async function POST(req: NextRequest) {
   const buf = Buffer.from(await file.arrayBuffer());
   const assetId = `ast_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
 
+  const apiKey = process.env.IMGBB_API_KEY?.trim();
+  if (!apiKey) {
+    return NextResponse.json({ success: false, error: { code: 'IMGBB_NOT_CONFIGURED', message: 'Image hosting is not configured. Set IMGBB_API_KEY on the server.' } }, { status: 503 });
+  }
+
+  // Roomagen must be able to download the original image from outside our server.
+  const uploadForm = new FormData();
+  uploadForm.set('key', apiKey);
+  uploadForm.set('image', buf.toString('base64'));
+  uploadForm.set('name', assetId);
+
+  let assetUrl: string;
+  try {
+    const response = await fetch('https://api.imgbb.com/1/upload', {
+      method: 'POST',
+      body: uploadForm,
+      signal: AbortSignal.timeout(30_000),
+    });
+    const result = await response.json();
+    if (!response.ok || result.success !== true || typeof result.data?.url !== 'string') {
+      throw new Error('Image hosting upload failed');
+    }
+    const hostedUrl = new URL(result.data.url);
+    if (hostedUrl.protocol !== 'https:') {
+      throw new Error('Image hosting returned an invalid URL');
+    }
+    assetUrl = hostedUrl.href;
+  } catch {
+    // Do not expose upstream responses, credentials, or deletion URLs to clients.
+    return NextResponse.json({ success: false, error: { code: 'IMGBB_UPLOAD_FAILED', message: 'Unable to host the image. Check the server ImgBB configuration and try again.' } }, { status: 502 });
+  }
+
   // Store in database Document model
   const doc = await dbClient.document.create({
     data: {
@@ -47,10 +79,6 @@ export async function POST(req: NextRequest) {
       content: buf.toString('base64'),
     },
   });
-
-  // Construct accessible asset URL
-  const origin = req.nextUrl.origin;
-  const assetUrl = `${origin}/api/roomagen/assets/${doc.id}`;
 
   return NextResponse.json({
     success: true,

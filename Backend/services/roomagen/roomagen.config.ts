@@ -17,7 +17,7 @@ const envCandidates = [
 
 for (const p of envCandidates) {
   if (fs.existsSync(p)) {
-    dotenv.config({ path: p });
+    dotenv.config({ quiet: true, path: p });
   }
 }
 
@@ -36,14 +36,8 @@ export function getRoomagenConfig(): RoomagenConfig {
   const rawKey = process.env.ROOMAGEN_API_KEY?.trim() || '';
   const configuredProvider = (process.env.ROOMAGEN_PROVIDER || '').trim().toLowerCase();
 
-  // Determine provider mode:
-  // If explicitly set to 'mock', use mock.
-  // If no API key is provided and running in dev/test, fallback to mock to prevent crashing.
-  // If API key is provided and provider is not set to 'mock', use 'roomagen'.
-  let provider: 'roomagen' | 'mock' = 'roomagen';
-  if (configuredProvider === 'mock' || (!rawKey && process.env.NODE_ENV !== 'production')) {
-    provider = 'mock';
-  }
+  // Mock generation must be explicitly selected, including in development.
+  const provider = configuredProvider === 'mock' ? 'mock' : 'roomagen';
 
   const baseUrl = (process.env.ROOMAGEN_BASE_URL?.trim() || 'https://api.roomagen.com/api/v1').replace(/\/+$/, '');
 

@@ -20,6 +20,31 @@ export class RoomagenApiClient {
     this.config = customConfig || validateLiveConfig();
   }
 
+  // https://developers.roomagen.com/docs/tools: common options for tool handlers.
+  private mapOptions(tool: CreateJobParams['tool'], options: CreateJobParams['options'] = {}): Record<string, unknown> {
+    const result: Record<string, unknown> = {};
+    for (const key of ['resolution', 'tier', 'customPrompt']) {
+      if (options[key] !== undefined) result[key] = options[key];
+    }
+    const userPrompt = options.customPrompt || options.prompt || '';
+    if (typeof userPrompt !== 'string') {
+      throw new RoomagenValidationError('Roomagen instructions must be text');
+    }
+    const labelInstructions = tool === 'SKETCH_TO_FLOOR_PLAN'
+      ? 'Create a clean 2D floor plan. Preserve the sketch layout and all legible room labels, dimensions, and units exactly, in their original language and corresponding locations. Render text clearly. Do not invent unreadable labels or missing measurements.'
+      : '';
+    const prompt = [labelInstructions, userPrompt.trim()].filter(Boolean).join('\n');
+    if (prompt) {
+      if (typeof prompt !== 'string' || prompt.length > 500) {
+        const available = labelInstructions ? 500 - labelInstructions.length - 1 : 500;
+        throw new RoomagenValidationError(`Roomagen instructions must be at most ${available} characters${labelInstructions ? ' to leave space for preserving sketch labels' : ''}`);
+      }
+      result.customPrompt = prompt;
+      result.tier = 'custom';
+    }
+    return result;
+  }
+
   /** Normalizes external Roomagen status strings to BuildSmart status enum */
   normalizeJobStatus(status: string): RoomagenJobStatus {
     const s = String(status || '').trim().toUpperCase();
@@ -171,17 +196,17 @@ export class RoomagenApiClient {
 
     const payload: Record<string, any> = {
       tool: slug,
-      imageUrl: params.imageUrl,
-      options: params.options || {},
+      image_url: params.imageUrl,
+      options: this.mapOptions(params.tool, params.options),
     };
 
     if (params.webhookUrl) {
-      payload.webhookUrl = params.webhookUrl;
+      const url = new URL(params.webhookUrl);
+      if (url.protocol === 'https:' && !['localhost', '127.0.0.1', '[::1]'].includes(url.hostname)) {
+        payload.webhook_url = params.webhookUrl;
+      }
     }
 
-    if (params.metadata) {
-      payload.metadata = params.metadata;
-    }
 
     const res = await this.request<any>('/jobs', {
       method: 'POST',
@@ -190,12 +215,12 @@ export class RoomagenApiClient {
 
     const data = res?.data || res;
     return {
-      id: String(data?.id || data?.jobId || ''),
+      id: String(data?.job_id || data?.id || data?.jobId || ''),
       status: String(data?.status || 'PENDING'),
-      outputUrl: data?.outputUrl || data?.resultUrl || null,
+      outputUrl: data?.result_urls?.[0] || data?.outputUrl || data?.resultUrl || null,
       error: data?.error || null,
       metadata: data?.metadata || {},
-      createdAt: data?.createdAt || new Date().toISOString(),
+      createdAt: data?.created_at || data?.createdAt || new Date().toISOString(),
     };
   }
 
@@ -213,13 +238,13 @@ export class RoomagenApiClient {
 
     const data = res?.data || res;
     return {
-      id: String(data?.id || jobId),
+      id: String(data?.job_id || data?.id || jobId),
       status: String(data?.status || 'PENDING'),
-      outputUrl: data?.outputUrl || data?.resultUrl || data?.output?.url || null,
+      outputUrl: data?.result_urls?.[0] || data?.outputUrl || data?.resultUrl || data?.output?.url || null,
       error: data?.error || null,
       metadata: data?.metadata || {},
-      createdAt: data?.createdAt,
-      completedAt: data?.completedAt,
+      createdAt: data?.created_at || data?.createdAt,
+      completedAt: data?.completed_at || data?.completedAt,
     };
   }
 

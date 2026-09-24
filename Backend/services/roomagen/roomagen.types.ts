@@ -75,7 +75,9 @@ export interface NormalizedJob {
 }
 
 export interface RoomagenWebhookPayload {
-  jobId: string;
+  jobId?: string;
+  job_id?: string;
+  result_urls?: string[];
   status: string;
   outputUrl?: string;
   error?: string;

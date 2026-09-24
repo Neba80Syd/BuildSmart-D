@@ -140,6 +140,7 @@ export class RoomagenLogger {
     maxRetries: number;
     body?: any;
   }): void {
+    if (params.method === 'GET' && process.env.ROOMAGEN_DEBUG !== 'true') return;
     const ts = getTimestamp();
     const attemptStr =
       params.attempt > 1
@@ -167,6 +168,7 @@ export class RoomagenLogger {
     durationMs: number;
     data?: any;
   }): void {
+    if (params.method === 'GET' && process.env.ROOMAGEN_DEBUG !== 'true') return;
     const ts = getTimestamp();
     console.log(
       `${colors.dim}[${ts}]${colors.reset} ${BADGE} ${colors.brightGreen}✅ HTTP ${params.status} OK${colors.reset} <- ${params.url} ${colors.dim}(${params.durationMs}ms)${colors.reset}`

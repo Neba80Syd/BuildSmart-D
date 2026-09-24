@@ -4,7 +4,6 @@
 
 import { dbClient } from '../../lib/db.ts';
 import { getGenerationProvider } from './roomagen.provider.ts';
-import { sketchSynthesizer } from './sketch-synthesizer.ts';
 import { roomagenLogger } from './roomagen.logger.ts';
 import type {
   CreateJobParams,
@@ -74,9 +73,6 @@ export class RoomagenService {
       options,
     });
 
-    // Analyze sketch to extract architectural typology and spaces
-    const analysis = await sketchSynthesizer.analyzeSketch(imageUrl, prompt, { ...options, inputAssetId });
-
     const jobRecord = await dbClient.roomagenJob.create({
       data: {
         id: internalJobId,
@@ -91,7 +87,6 @@ export class RoomagenService {
         prompt: prompt || null,
         options: options || {},
         metadata: {
-          analysis,
           ...(options?.metadata || {}),
         },
         provider: provider.name,
@@ -248,6 +243,7 @@ export class RoomagenService {
    * Prevents duplicate outputs or double state transitions if Roomagen delivers multiple webhooks.
    */
   async handleWebhook(payload: RoomagenWebhookPayload): Promise<{ processed: boolean; status: string }> {
+    payload = { ...payload, jobId: payload.job_id || payload.jobId, outputUrl: payload.result_urls?.[0] || payload.outputUrl };
     const providerJobId = payload.jobId || (payload as any).id;
     if (!providerJobId) {
       throw new RoomagenValidationError('Missing jobId in webhook payload');
