@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { getPrisma, dbClient } from '@/Backend/lib/db';
 import { requireAdmin, audit } from '@/Backend/lib/admin';
 import { completeWithdrawal, failWithdrawal } from '@/Backend/lib/wallet';
+import { campayProvider } from '@/Backend/lib/payment-provider';
 
 export const dynamic = 'force-dynamic';
 
@@ -47,7 +48,32 @@ export async function PATCH(req: NextRequest) {
   try {
     let result;
     if (action === 'complete') {
-      result = await completeWithdrawal(id, providerReference);
+      const prisma = await getPrisma();
+      let finalRef = providerReference;
+
+      // If no explicit manual reference provided, attempt automated disbursement via Campay
+      if (!finalRef && process.env.CAMPAY_API_TOKEN) {
+        const withdrawal = await prisma.withdrawal.findUnique({ where: { id } }).catch(() => null);
+        if (withdrawal?.destinationReference && withdrawal.amount > 0) {
+          try {
+            const destMethod = withdrawal.method === 'ORANGE_MONEY' ? 'ORANGE_MONEY' : withdrawal.method === 'BANK_TRANSFER' ? 'BANK_TRANSFER' : 'MTN_MOMO';
+            const payoutRes = await campayProvider.processPayout({
+              amount: withdrawal.amount,
+              destinationPhone: withdrawal.destinationReference,
+              destinationMethod: destMethod,
+              reference: withdrawal.id,
+              narration: `BuildSmart Payout #${withdrawal.id}`,
+            });
+            if (payoutRes.success && payoutRes.providerReference) {
+              finalRef = payoutRes.providerReference;
+            }
+          } catch (payoutErr: any) {
+            console.warn('[Admin:Withdrawal] Campay payout attempt notice:', payoutErr.message);
+          }
+        }
+      }
+
+      result = await completeWithdrawal(id, finalRef);
       await audit({
         actorId: auth.user.id,
         actorName: auth.user.name,

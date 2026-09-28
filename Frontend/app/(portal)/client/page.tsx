@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { PageHeader, Card, StatCard, StatusPill, Skeleton, EmptyState } from '@/Frontend/components/architect/ui';
 import { useApi } from '@/Frontend/components/architect/hooks';
+import { MarketplaceCatalog } from '@/Frontend/components/marketplace/MarketplaceCatalog';
 
 const fmt = (n: number) => Math.round(n || 0).toLocaleString();
 
@@ -155,6 +156,29 @@ export default function ClientDashboardPage() {
             )}
           </Card>
         </div>
+      </div>
+
+      {/* Integrated Marketplace with Categories */}
+      <div className="mt-10 pt-8 border-t border-outline-variant/60 dark:border-outline/60">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-2">
+          <div>
+            <h2 className="text-2xl md:text-3xl font-bold text-on-surface dark:text-inverse-on-surface">
+              Marketplace & Construction Materials
+            </h2>
+            <p className="text-body-sm text-on-surface-variant dark:text-surface-variant mt-0.5">
+              Source verified building materials directly from certified suppliers with 100% Escrow Protection.
+            </p>
+          </div>
+          <Link
+            href="/client/cart"
+            className="btn-secondary px-4 py-2 rounded-xl text-label-sm font-semibold inline-flex items-center gap-2 self-start sm:self-auto border border-outline-variant dark:border-outline shadow-sm hover:shadow"
+          >
+            <span className="material-symbols-outlined text-[18px]">shopping_cart</span>
+            View Cart
+          </Link>
+        </div>
+
+        <MarketplaceCatalog />
       </div>
     </div>
   );

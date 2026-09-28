@@ -87,8 +87,17 @@ export default function ArchitectDashboardPage() {
 
   const fetchDashboard = () => {
     fetch('/api/architect/dashboard')
-      .then((r) => (r.ok ? r.json() : Promise.reject(new Error('Failed to load dashboard'))))
-      .then(setData)
+      .then(async (r) => {
+        if (!r.ok) {
+          const body = await r.json().catch(() => ({}));
+          throw new Error(body?.error || 'Failed to load dashboard');
+        }
+        return r.json();
+      })
+      .then((d) => {
+        setData(d);
+        setError(null);
+      })
       .catch((e) => setError(e.message));
   };
 
@@ -96,7 +105,29 @@ export default function ArchitectDashboardPage() {
     fetchDashboard();
   }, []);
 
-  if (error) return <div className="p-margin-desktop text-error">{error}</div>;
+  if (error) {
+    return (
+      <div className="p-margin-mobile md:p-margin-desktop max-w-[1440px] mx-auto">
+        <Card className="text-center py-12 space-y-4">
+          <span className="material-symbols-outlined text-[48px] text-error">error</span>
+          <p className="text-body-md text-error font-medium">{error}</p>
+          <div>
+            <button
+              onClick={() => {
+                setError(null);
+                setData(null);
+                fetchDashboard();
+              }}
+              className="btn-primary px-4 py-2 rounded-lg text-label-md inline-flex items-center gap-2 cursor-pointer"
+            >
+              <span className="material-symbols-outlined text-[18px]">refresh</span>
+              Retry
+            </button>
+          </div>
+        </Card>
+      </div>
+    );
+  }
   if (!data) {
     return (
       <div className="p-margin-mobile md:p-margin-desktop space-y-6">

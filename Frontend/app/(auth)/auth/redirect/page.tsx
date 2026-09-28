@@ -21,6 +21,6 @@ export default async function AuthRedirectPage() {
       redirect('/admin');
     case 'CLIENT':
     default:
-      redirect('/dashboard');
+      redirect('/client');
   }
 }

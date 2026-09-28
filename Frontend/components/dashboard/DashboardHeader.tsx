@@ -24,6 +24,7 @@ const ROLE_ACTIONS: Record<Role, ActionItem[]> = {
     { label: 'Provide 3D Feedback', icon: 'rate_review', href: '/client/3d' },
     { label: 'View BOQ', icon: 'request_quote', href: '/client/boq' },
     { label: 'Browse Marketplace', icon: 'storefront', href: '/client/marketplace' },
+    { label: 'Shopping Cart', icon: 'shopping_cart', href: '/client/cart' },
     { label: 'View Orders', icon: 'receipt_long', href: '/client/orders' },
     { label: 'Make Payment', icon: 'payments', href: '/client/payments' },
     { label: 'Upload Document', icon: 'upload_file', href: '/client/documents' },
@@ -153,6 +154,7 @@ export function DashboardHeader({ initialRole }: { initialRole?: Role }) {
   const [openMenu, setOpenMenu] = useState<'actions' | 'profile' | null>(null);
   const [unread, setUnread] = useState(0);
   const [unreadMessages, setUnreadMessages] = useState(0);
+  const [cartCount, setCartCount] = useState(0);
   const [next3dLink, setNext3dLink] = useState<string | null>(null);
   const [initials, setInitials] = useState(() => (role === 'ARCHITECT' ? 'EV' : role === 'VENDOR' ? 'MH' : role === 'ADMIN' ? 'BA' : 'JE'));
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
@@ -184,7 +186,7 @@ export function DashboardHeader({ initialRole }: { initialRole?: Role }) {
     window.dispatchEvent(new Event('buildsmart:theme-changed'));
   };
 
-  // Fetch header status and notifications count
+  // Fetch header status, notifications, messages, and cart count
   const fetchStatus = () => {
     fetch(`/api/dashboard/header?role=${role}`)
       .then((r) => (r.ok ? r.json() : {}))
@@ -194,6 +196,9 @@ export function DashboardHeader({ initialRole }: { initialRole?: Role }) {
         }
         if (typeof d.unreadMessages === 'number') {
           setUnreadMessages(d.unreadMessages);
+        }
+        if (typeof d.cartCount === 'number') {
+          setCartCount(d.cartCount);
         }
         if (d.next3dLink !== undefined) {
           setNext3dLink(d.next3dLink ?? null);
@@ -220,14 +225,24 @@ export function DashboardHeader({ initialRole }: { initialRole?: Role }) {
     const onAvatarUpdated = (e: any) => {
       setAvatarUrl(e.detail?.avatarUrl ?? null);
     };
+    const onCartUpdated = (e: any) => {
+      if (typeof e?.detail?.cartCount === 'number') {
+        setCartCount(e.detail.cartCount);
+      } else {
+        fetchStatus();
+      }
+    };
+
     window.addEventListener('buildsmart:notifications-updated', onNotificationUpdate);
     window.addEventListener('buildsmart:avatar-updated', onAvatarUpdated);
+    window.addEventListener('buildsmart:cart-updated', onCartUpdated);
     window.addEventListener('focus', onNotificationUpdate);
 
     return () => {
       clearInterval(interval);
       window.removeEventListener('buildsmart:notifications-updated', onNotificationUpdate);
       window.removeEventListener('buildsmart:avatar-updated', onAvatarUpdated);
+      window.removeEventListener('buildsmart:cart-updated', onCartUpdated);
       window.removeEventListener('focus', onNotificationUpdate);
     };
   }, [pathname, role]);
@@ -352,6 +367,26 @@ export function DashboardHeader({ initialRole }: { initialRole?: Role }) {
             {dark ? 'light_mode' : 'dark_mode'}
           </span>
         </button>
+
+        {/* Shopping Cart with real-time badge count */}
+        <Link
+          href="/client/cart"
+          className="relative p-2 hover:bg-surface-container-high dark:hover:bg-surface-variant rounded-full transition-colors text-on-surface dark:text-inverse-on-surface flex items-center justify-center cursor-pointer group"
+          aria-label={cartCount > 0 ? `Shopping Cart (${cartCount} items)` : 'Shopping Cart'}
+          title={cartCount > 0 ? `${cartCount} item${cartCount > 1 ? 's' : ''} in cart` : 'Shopping Cart'}
+        >
+          <span className="material-symbols-outlined text-[22px] group-hover:scale-105 transition-transform">
+            shopping_cart
+          </span>
+          {cartCount > 0 && (
+            <span
+              className="absolute top-0.5 right-0.5 bg-amber-600 dark:bg-amber-500 text-white text-[10px] min-w-[18px] h-[18px] px-1 rounded-full flex items-center justify-center font-bold shadow-sm transition-all duration-200"
+              aria-hidden="true"
+            >
+              {cartCount > 99 ? '99+' : cartCount}
+            </span>
+          )}
+        </Link>
 
         {/* Notifications with real-time badge count */}
         <Link

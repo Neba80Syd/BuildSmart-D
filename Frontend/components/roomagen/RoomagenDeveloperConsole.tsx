@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   Terminal,
   Play,
@@ -136,12 +136,50 @@ export default function RoomagenDeveloperConsole({ initialProjectId }: { initial
   const fileInputRef = useRef<HTMLInputElement>(null);
   const timerIntervalRef = useRef<any>(null);
 
+  const fetchHealth = useCallback(async () => {
+    setHealthLoading(true);
+    try {
+      const res = await fetch('/api/roomagen/health');
+      const data = await res.json();
+      if (data.success) {
+        setHealth(data.data);
+      }
+    } catch {
+      // Ignored in offline
+    } finally {
+      setHealthLoading(false);
+    }
+  }, []);
+
+  const fetchSamples = useCallback(async () => {
+    try {
+      const res = await fetch('/api/roomagen/samples');
+      const data = await res.json();
+      if (data.success) {
+        setSamples(data.data);
+      }
+    } catch {}
+  }, []);
+
+  const fetchRecentJobs = useCallback(async () => {
+    setJobsLoading(true);
+    try {
+      const res = await fetch('/api/roomagen/jobs');
+      const data = await res.json();
+      if (data.success && data.data?.jobs) {
+        setRecentJobs(data.data.jobs);
+      }
+    } catch {} finally {
+      setJobsLoading(false);
+    }
+  }, []);
+
   // Initial Data Fetching
   useEffect(() => {
     fetchHealth();
     fetchSamples();
     fetchRecentJobs();
-  }, []);
+  }, [fetchHealth, fetchSamples, fetchRecentJobs]);
 
   // Execution Timer Effect
   useEffect(() => {
@@ -157,44 +195,6 @@ export default function RoomagenDeveloperConsole({ initialProjectId }: { initial
       if (timerIntervalRef.current) clearInterval(timerIntervalRef.current);
     };
   }, [executing, runningPipeline]);
-
-  const fetchHealth = async () => {
-    setHealthLoading(true);
-    try {
-      const res = await fetch('/api/roomagen/health');
-      const data = await res.json();
-      if (data.success) {
-        setHealth(data.data);
-      }
-    } catch {
-      // Ignored in offline
-    } finally {
-      setHealthLoading(false);
-    }
-  };
-
-  const fetchSamples = async () => {
-    try {
-      const res = await fetch('/api/roomagen/samples');
-      const data = await res.json();
-      if (data.success) {
-        setSamples(data.data);
-      }
-    } catch {}
-  };
-
-  const fetchRecentJobs = async () => {
-    setJobsLoading(true);
-    try {
-      const res = await fetch('/api/roomagen/jobs');
-      const data = await res.json();
-      if (data.success && data.data?.jobs) {
-        setRecentJobs(data.data.jobs);
-      }
-    } catch {} finally {
-      setJobsLoading(false);
-    }
-  };
 
   // Upload handler
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -1056,7 +1056,7 @@ print(response.json())`;
                       <Terminal className="w-12 h-12 mx-auto text-zinc-700" />
                       <p className="text-sm font-medium text-zinc-400">Ready for Execution</p>
                       <p className="text-xs text-zinc-500 max-w-xs mx-auto">
-                        Choose an architectural preset or upload a sketch, then click "Execute Roomagen API Call".
+                        Choose an architectural preset or upload a sketch, then click &quot;Execute Roomagen API Call&quot;.
                       </p>
                     </div>
                   )}

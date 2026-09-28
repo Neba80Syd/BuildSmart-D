@@ -90,19 +90,29 @@ export function VendorDepositModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-      <div className="bg-white dark:bg-surface-container border border-outline-variant dark:border-outline rounded-2xl max-w-lg w-full p-6 shadow-2xl relative animate-in fade-in zoom-in-95">
-        {/* Header */}
-        <div className="flex justify-between items-center pb-4 border-b border-outline-variant/60 dark:border-outline/40 mb-4">
+    <div 
+      onClick={(e) => {
+        if (e.target === e.currentTarget) handleClose();
+      }}
+      className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 overflow-y-auto"
+    >
+      <div 
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="vendor-deposit-title"
+        className="bg-white dark:bg-surface-container border border-outline-variant dark:border-outline rounded-2xl max-w-lg w-full shadow-2xl relative my-auto max-h-[calc(100dvh-2rem)] flex flex-col overflow-hidden animate-in fade-in zoom-in-95"
+      >
+        {/* Header - Fixed & Pinned */}
+        <div className="flex justify-between items-center px-6 py-4 border-b border-outline-variant/60 dark:border-outline/40 shrink-0 bg-white dark:bg-surface-container">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 flex items-center justify-center shrink-0">
               <span className="material-symbols-outlined text-[22px]">account_balance_wallet</span>
             </div>
             <div>
-              <h3 className="text-headline-sm font-semibold text-on-background dark:text-surface-container-lowest">
+              <h3 id="vendor-deposit-title" className="text-headline-sm font-semibold text-on-background dark:text-surface-container-lowest">
                 Deposit Funds to Wallet
               </h3>
-              <p className="text-body-sm text-on-surface-variant dark:text-surface-variant">
+              <p className="text-body-sm text-on-surface-variant dark:text-surface-variant line-clamp-1 sm:line-clamp-none">
                 Top up your Vendor Available Balance via Mobile Money or Bank Wire
               </p>
             </div>
@@ -110,7 +120,8 @@ export function VendorDepositModal({
           <button
             type="button"
             onClick={handleClose}
-            className="text-on-surface-variant hover:text-on-background p-1.5 rounded-lg hover:bg-surface-container-low transition-colors cursor-pointer"
+            className="text-on-surface-variant hover:text-on-background p-1.5 rounded-lg hover:bg-surface-container-low transition-colors cursor-pointer shrink-0 ml-2"
+            aria-label="Close deposit dialog"
           >
             <span className="material-symbols-outlined text-[20px]">close</span>
           </button>
@@ -118,7 +129,7 @@ export function VendorDepositModal({
 
         {/* Success State Receipt */}
         {successResult ? (
-          <div className="py-6 text-center space-y-4">
+          <div className="p-6 overflow-y-auto flex-1 overscroll-contain modal-scrollbar text-center space-y-4">
             <div className="w-16 h-16 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 mx-auto flex items-center justify-center">
               <span className="material-symbols-outlined text-[36px]">check_circle</span>
             </div>
@@ -163,7 +174,7 @@ export function VendorDepositModal({
             </button>
           </div>
         ) : (
-          <form onSubmit={handleDeposit} className="space-y-4">
+          <form onSubmit={handleDeposit} className="p-6 overflow-y-auto flex-1 overscroll-contain modal-scrollbar space-y-4">
             {/* Balance Overview */}
             <div className="p-3.5 rounded-xl bg-surface-container-low dark:bg-surface-dim border border-outline-variant/60 flex items-center justify-between">
               <div>
@@ -364,7 +375,7 @@ export function VendorDepositModal({
             </div>
 
             {/* Submit Button */}
-            <div className="pt-2">
+            <div className="pt-2 pb-1">
               <button
                 type="submit"
                 disabled={loading || !amount || Number(amount) < 500}

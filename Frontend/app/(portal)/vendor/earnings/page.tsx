@@ -535,21 +535,32 @@ export default function VendorEarningsPage() {
 
       {/* Withdrawal Modal */}
       {showWithdrawModal && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-surface-container border border-outline-variant dark:border-outline rounded-2xl max-w-lg w-full p-6 shadow-2xl relative">
-            <div className="flex justify-between items-center mb-5">
+        <div 
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setShowWithdrawModal(false);
+          }}
+          className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 overflow-y-auto"
+        >
+          <div 
+            role="dialog"
+            aria-modal="true"
+            className="bg-white dark:bg-surface-container border border-outline-variant dark:border-outline rounded-2xl max-w-lg w-full shadow-2xl relative my-auto max-h-[calc(100dvh-2rem)] flex flex-col overflow-hidden animate-in fade-in zoom-in-95"
+          >
+            <div className="flex justify-between items-center px-6 py-4 border-b border-outline-variant/60 dark:border-outline/40 shrink-0 bg-white dark:bg-surface-container">
               <h3 className="text-headline-sm font-semibold text-on-background dark:text-surface-container-lowest">
                 Withdrawal to Mobile Money / Bank
               </h3>
               <button
+                type="button"
                 onClick={() => setShowWithdrawModal(false)}
-                className="text-on-surface-variant hover:text-on-background"
+                className="text-on-surface-variant hover:text-on-background p-1.5 rounded-lg hover:bg-surface-container-low transition-colors cursor-pointer shrink-0 ml-2"
+                aria-label="Close withdrawal dialog"
               >
                 <span className="material-symbols-outlined">close</span>
               </button>
             </div>
 
-            <div className="space-y-4">
+            <div className="p-6 overflow-y-auto flex-1 overscroll-contain modal-scrollbar space-y-4">
               {/* Payment Channel Selector */}
               <div>
                 <label className="text-label-md text-on-surface-variant uppercase tracking-wider block mb-2">

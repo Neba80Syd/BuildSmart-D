@@ -78,20 +78,6 @@ export default function VendorMessagesPage() {
     }
   }, [activeRoomId]);
 
-  // Load Room History
-  const loadRoomHistory = useCallback(async (roomId: string) => {
-    try {
-      const res = await fetch(`/api/client/messages?roomId=${roomId}`);
-      if (!res.ok) return;
-      const data = await res.json();
-      if (Array.isArray(data.messages)) {
-        setMessages(data.messages);
-      }
-    } catch {
-      // Ignore
-    }
-  }, []);
-
   const handleNewMessage = useCallback((msg: any) => {
     setConversations((prev) =>
       prev.map((c) => {
@@ -137,6 +123,20 @@ export default function VendorMessagesPage() {
     onNewMessage: handleNewMessage,
     onConversationUpdated: handleConversationUpdated,
   });
+
+  // Load Room History
+  const loadRoomHistory = useCallback(async (roomId: string) => {
+    try {
+      const res = await fetch(`/api/client/messages?roomId=${roomId}`);
+      if (!res.ok) return;
+      const data = await res.json();
+      if (Array.isArray(data.messages)) {
+        setMessages(data.messages);
+      }
+    } catch {
+      // Ignore
+    }
+  }, [setMessages]);
 
   useEffect(() => {
     loadInquiries();

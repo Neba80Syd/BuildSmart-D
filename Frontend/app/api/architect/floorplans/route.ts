@@ -98,23 +98,23 @@ export async function PATCH(req: NextRequest) {
   const project = await ownsProject(user.id, existing.projectId);
   if (!project || project === 'forbidden') return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
 
-  // Publish a completed 3D floorplan to the client.
+  // Publish a completed 2D or 3D floorplan to the client.
   if (parsed.data.action === 'publish') {
-    if (existing.kind !== '3D') return NextResponse.json({ error: 'Only 3D floorplans can be published' }, { status: 400 });
+    const is3D = existing.kind === '3D';
     const plan = await dbClient.floorPlan.update({
       where: { id: existing.id },
       data: { status: 'PUBLISHED', reviewStatus: 'READY_FOR_REVIEW', publishedAt: new Date(), updatedAt: new Date() },
     });
-    await dbClient.activity.create({ data: { userId: user.id, projectId: existing.projectId, type: 'DESIGN', title: '3D floorplan published', body: `${existing.name} V${existing.version}` } });
-    await dbClient.activity.create({ data: { userId: project.ownerId, projectId: existing.projectId, type: 'DESIGN', title: '3D floorplan published', body: `Architect ${user.name} published ${existing.name} V${existing.version}.` } });
+    await dbClient.activity.create({ data: { userId: user.id, projectId: existing.projectId, type: 'DESIGN', title: `${existing.kind} floor plan published`, body: `${existing.name} V${existing.version}` } });
+    await dbClient.activity.create({ data: { userId: project.ownerId, projectId: existing.projectId, type: 'DESIGN', title: `${existing.kind} floor plan published`, body: `Architect ${user.name} published ${existing.name} V${existing.version}.` } });
     await dbClient.notification.create({
       data: {
         userId: project.ownerId,
-        type: '3D_FLOORPLAN',
-        title: 'Your 3D floorplan is ready to view',
-        body: `Architect ${user.name} published ${existing.name} V${existing.version} for ${project.name}. Your 3D floorplan is ready for review.`,
+        type: is3D ? '3D_FLOORPLAN' : 'DESIGN',
+        title: `Your ${existing.kind} floor plan is ready to view`,
+        body: `Architect ${user.name} published ${existing.name} V${existing.version} for ${project.name}. It is now ready for your review.`,
         read: 0,
-        link: `/client/3d?project=${existing.projectId}&plan=${existing.id}`,
+        link: is3D ? `/client/3d?project=${existing.projectId}&plan=${existing.id}` : `/client/floorplans?project=${existing.projectId}&plan=${existing.id}`,
         resourceId: existing.id,
       },
     });

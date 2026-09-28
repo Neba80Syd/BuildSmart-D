@@ -4,6 +4,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { PageHeader, Card, Field, inputClass, btnPrimary, btnGhost, btnDanger, EmptyState, Skeleton } from '@/Frontend/components/architect/ui';
 import { useApi, api } from '@/Frontend/components/architect/hooks';
+import { SendFloorPlansModal } from '@/Frontend/components/roomagen/SendFloorPlansModal';
+import { AiFloorPlanBoqModal } from '@/Frontend/components/roomagen/AiFloorPlanBoqModal';
 
 type Room = { id: string; name: string; x: number; y: number; w: number; h: number };
 const S = 40; // px per meter
@@ -58,6 +60,8 @@ export default function ArchitectFloorPlansPage() {
   const [histIdx, setHistIdx] = useState(-1);
   const [name, setName] = useState('Untitled Plan');
   const [zoom, setZoom] = useState(1);
+  const [sendModalOpen, setSendModalOpen] = useState(false);
+  const [boqModalPlan, setBoqModalPlan] = useState<any | null>(null);
   const dragRef = useRef<{ mode: 'move' | 'resize'; id: string; startX: number; startY: number; orig: Room } | null>(null);
 
   // Reset editor state whenever the active plan (or new-plan mode) changes.
@@ -165,6 +169,26 @@ export default function ArchitectFloorPlansPage() {
           <button className={btnGhost} onClick={() => save(true)}><span className="material-symbols-outlined text-[18px]">versioning</span>Save as Version</button>
           <button className={btnGhost} onClick={exportSvg}><span className="material-symbols-outlined text-[18px]">download</span>Export</button>
           <button className={btnPrimary} onClick={() => save(false)}><span className="material-symbols-outlined text-[18px]">save</span>Save</button>
+          <button
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-teal-600 hover:bg-teal-500 text-white font-medium text-xs shadow-sm transition-all"
+            onClick={() => setSendModalOpen(true)}
+            title="Send 2D/3D floor plans to client for review"
+          >
+            <span className="material-symbols-outlined text-[16px]">send</span>Send to Client
+          </button>
+          <button
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-medium text-xs shadow-sm transition-all"
+            onClick={() => {
+              if (activePlan) {
+                setBoqModalPlan(activePlan);
+              } else {
+                toast.info('Please save or select a floor plan to generate AI BOQ & Estimates');
+              }
+            }}
+            title="Analyze floor plan and generate preliminary BOQ & Material Estimation"
+          >
+            <span className="material-symbols-outlined text-[16px]">calculate</span>AI Estimate & BOQ
+          </button>
         </>}
       />
 
@@ -261,6 +285,24 @@ export default function ArchitectFloorPlansPage() {
           {!loadingProjects && projects.length === 0 && <EmptyState icon="architecture" title="No projects" body="Create a project first to save floor plans." />}
         </div>
       </div>
+
+      <SendFloorPlansModal
+        isOpen={sendModalOpen}
+        onClose={() => setSendModalOpen(false)}
+        projectId={activeProjectId}
+        projectName={projects.find((p) => p.id === activeProjectId)?.name}
+        onSentSuccessfully={() => refetch()}
+      />
+
+      <AiFloorPlanBoqModal
+        isOpen={!!boqModalPlan}
+        onClose={() => setBoqModalPlan(null)}
+        floorPlan={boqModalPlan}
+        projectId={activeProjectId}
+        onBoqSent={() => {
+          refetch();
+        }}
+      />
     </div>
   );
 }

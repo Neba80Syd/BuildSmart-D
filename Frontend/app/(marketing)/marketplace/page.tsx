@@ -78,14 +78,6 @@ export default function PublicMarketplacePage() {
   const addToCart = async (id: string) => {
     setAdding(id);
     try {
-      const session = await getSession();
-      if (!session) {
-        toast.info("Please sign in to add items to your cart", { description: "You can keep browsing the marketplace while signed out." });
-        setAdding(null);
-        router.push("/login");
-        return;
-      }
-      setAuthenticated(true);
       const res = await fetch("/api/cart", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -94,9 +86,14 @@ export default function PublicMarketplacePage() {
       const data = await res.json();
       if (res.ok) {
         toast.success("Added to cart");
-        setCartCount((data.items ?? []).reduce((s: number, i: any) => s + i.quantity, 0));
+        const count = typeof data.cartCount === 'number'
+          ? data.cartCount
+          : (data.items ?? []).reduce((s: number, i: any) => s + i.quantity, 0);
+        setCartCount(count);
+        window.dispatchEvent(new CustomEvent('buildsmart:cart-updated', { detail: { cartCount: count } }));
       } else {
         if (res.status === 401) {
+          toast.info("Please sign in to add items to your cart", { description: "You can keep browsing the marketplace while signed out." });
           router.push("/login");
         } else {
           toast.error(data.error ?? "Could not add to cart");

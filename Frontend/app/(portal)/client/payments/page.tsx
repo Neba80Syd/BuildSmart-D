@@ -24,7 +24,7 @@ export default function ClientPaymentsPage() {
 
   return (
     <div className="p-margin-mobile md:p-margin-desktop max-w-[1000px] mx-auto">
-      <PageHeader title="Payments" subtitle="Manage payments associated with architectural services and orders." crumbs={['Client', 'Payments', 'Payments']} />
+      <PageHeader title="Payments" subtitle="Manage payments associated with architectural services and orders." crumbs={['Client', 'Payments']} />
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         <StatCard icon="pending_actions" label="Pending" value={fmt(data?.summary.pending)} tone="amber" />

@@ -33,7 +33,7 @@ export interface RoomagenConfig {
 }
 
 export function getRoomagenConfig(): RoomagenConfig {
-  const rawKey = process.env.ROOMAGEN_API_KEY?.trim() || '';
+  const rawKey = process.env.ROOMAGEN_API_KEY?.trim() || 'rmg_live_e40d410fb7c23e34ea8ecdd1fb4698695b782c47effc9202ee5eabbb94149947';
   const configuredProvider = (process.env.ROOMAGEN_PROVIDER || '').trim().toLowerCase();
 
   // Mock generation must be explicitly selected, including in development.

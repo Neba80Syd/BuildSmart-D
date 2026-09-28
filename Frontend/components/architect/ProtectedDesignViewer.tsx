@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Shield, Lock, Unlock, Clock, AlertTriangle, CheckCircle2, Download, FileText, ArrowRight, RotateCcw, MessageSquare } from 'lucide-react';
+import { Shield, Lock, Unlock, Clock, AlertTriangle, CheckCircle2, Download, FileText, ArrowRight, RotateCcw, MessageSquare, CreditCard, Smartphone, ExternalLink, Loader2 } from 'lucide-react';
 
 interface ProtectedDesignViewerProps {
   designId: string;
@@ -46,6 +46,11 @@ export function ProtectedDesignViewer({
   const [timeLeft, setTimeLeft] = useState<string>('');
   const [showRevisionModal, setShowRevisionModal] = useState(false);
   const [showDisputeModal, setShowDisputeModal] = useState(false);
+  const [showFundingModal, setShowFundingModal] = useState(false);
+  const [fundingPhone, setFundingPhone] = useState('');
+  const [fundingMethod, setFundingMethod] = useState<'CAMPAY' | 'MTN_MOMO' | 'ORANGE_MONEY' | 'CARD'>('CAMPAY');
+  const [paymentPromptInfo, setPaymentPromptInfo] = useState<any>(null);
+  const [isVerifying, setIsVerifying] = useState(false);
   const [revisionNotes, setRevisionNotes] = useState('');
   const [disputeReason, setDisputeReason] = useState('Design does not match agreed requirements');
   const [disputeDescription, setDisputeDescription] = useState('');
@@ -176,29 +181,77 @@ export function ProtectedDesignViewer({
     }
   };
 
-  const handleTriggerFunding = async () => {
+  const handleOpenFunding = () => {
     if (onFundEscrow) {
-      await onFundEscrow();
+      onFundEscrow();
     } else {
-      setActionLoading(true);
-      try {
-        const res = await fetch(`/api/designs/${designId}/escrow/fund`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ amount, paymentMethod: 'MTN_MOMO' }),
-        });
-        const json = await res.json();
-        if (!json.success) throw new Error(json.error || 'Failed to fund escrow');
+      setShowFundingModal(true);
+    }
+  };
+
+  const executeFunding = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    setActionLoading(true);
+    try {
+      const res = await fetch(`/api/designs/${designId}/escrow/fund`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          amount,
+          paymentMethod: fundingMethod,
+          clientPhone: fundingPhone,
+          projectId,
+        }),
+      });
+      const json = await res.json();
+      if (!json.success) throw new Error(json.error || 'Failed to fund escrow');
+
+      if (json.payment?.redirectUrl) {
+        setPaymentPromptInfo(json.payment);
+        setToastMessage('Campay payment checkout link generated!');
+      } else if (json.payment?.ussdCode || json.payment?.instructions) {
+        setPaymentPromptInfo(json.payment);
+        pollPaymentStatus(json.payment?.providerReference || json.payment?.reference);
+      } else {
         setIsUnlocked(true);
         setEscrowStatus('ESCROWED');
+        setShowFundingModal(false);
         setToastMessage(`Payment of ${amount.toLocaleString()} ${currency} confirmed! Full design unlocked.`);
         setTimeout(() => setToastMessage(null), 5000);
-      } catch (err: any) {
-        alert(err.message || 'Payment initiation failed');
-      } finally {
-        setActionLoading(false);
       }
+    } catch (err: any) {
+      alert(err.message || 'Payment initiation failed');
+    } finally {
+      setActionLoading(false);
     }
+  };
+
+  const pollPaymentStatus = (ref: string) => {
+    if (!ref) return;
+    setIsVerifying(true);
+    let count = 0;
+    const interval = setInterval(async () => {
+      count++;
+      try {
+        const res = await fetch(`/api/payment/verify?reference=${encodeURIComponent(ref)}`);
+        const data = await res.json();
+        if (data.verified || data.status === 'SUCCESS') {
+          clearInterval(interval);
+          setIsVerifying(false);
+          setIsUnlocked(true);
+          setEscrowStatus('ESCROWED');
+          setShowFundingModal(false);
+          setToastMessage(`Payment verified via Campay! Design unlocked.`);
+          setTimeout(() => setToastMessage(null), 5000);
+        }
+      } catch {
+        // ignore polling errors
+      }
+      if (count >= 25) {
+        clearInterval(interval);
+        setIsVerifying(false);
+      }
+    }, 3500);
   };
 
   const watermarkStamp = `BUILDSMART • PROJECT #${projectId?.slice(-6)?.toUpperCase() || 'BS-1042'} • CLIENT: ${clientName.toUpperCase()} • ARCHITECT: ${architectName.toUpperCase()} • PREVIEW / UNPAID • NOT FINAL DELIVERABLE`;
@@ -254,7 +307,7 @@ export function ProtectedDesignViewer({
         {!isUnlocked && (
           <button
             type="button"
-            onClick={handleTriggerFunding}
+            onClick={handleOpenFunding}
             disabled={actionLoading}
             className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition-colors shadow-md active:scale-95 cursor-pointer"
           >
@@ -301,7 +354,7 @@ export function ProtectedDesignViewer({
               </p>
               <button
                 type="button"
-                onClick={handleTriggerFunding}
+                onClick={handleOpenFunding}
                 disabled={actionLoading}
                 className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-sm transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
               >
@@ -470,6 +523,245 @@ export function ProtectedDesignViewer({
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Campay Escrow Funding Modal */}
+      {showFundingModal && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl max-w-lg w-full p-6 text-white shadow-2xl animate-in fade-in zoom-in-95">
+            <div className="flex items-center justify-between pb-4 border-b border-slate-800">
+              <div className="flex items-center gap-2.5">
+                <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                  <Shield className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-white">Fund Escrow via Campay</h3>
+                  <p className="text-xs text-slate-400">Secure Payment for {projectName}</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setShowFundingModal(false);
+                  setPaymentPromptInfo(null);
+                }}
+                className="text-slate-400 hover:text-white transition-colors text-lg"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="my-4 p-4 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-between">
+              <div>
+                <span className="text-xs text-slate-400">Escrow Hold Amount</span>
+                <div className="text-xl font-bold text-amber-400 font-mono">
+                  {amount.toLocaleString()} {currency}
+                </div>
+              </div>
+              <span className="text-[11px] font-semibold uppercase px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
+                Buyer Protected
+              </span>
+            </div>
+
+            {/* If payment initiated and waiting for USSD or redirect */}
+            {paymentPromptInfo ? (
+              <div className="space-y-4">
+                {paymentPromptInfo.redirectUrl ? (
+                  <div className="p-4 rounded-xl bg-amber-950/40 border border-amber-500/30 text-left space-y-3">
+                    <div className="flex items-center gap-2 font-bold text-amber-300 text-sm">
+                      <CreditCard className="w-4 h-4 text-amber-400" />
+                      <span>Campay Hosted Checkout Ready</span>
+                    </div>
+                    <p className="text-xs text-slate-300 leading-relaxed">
+                      Please click below to complete payment through the secure Campay payment page.
+                    </p>
+                    <div className="flex flex-wrap gap-2 pt-1">
+                      <a
+                        href={paymentPromptInfo.redirectUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold inline-flex items-center gap-2 shadow-md"
+                      >
+                        <span>Open Payment Page</span>
+                        <ExternalLink className="w-3.5 h-3.5" />
+                      </a>
+                      <button
+                        type="button"
+                        onClick={() => pollPaymentStatus(paymentPromptInfo.providerReference || paymentPromptInfo.reference)}
+                        disabled={isVerifying}
+                        className="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold"
+                      >
+                        {isVerifying ? 'Checking...' : 'Check Status'}
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="p-4 rounded-xl bg-blue-950/40 border border-blue-500/30 text-left space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2 font-bold text-blue-300 text-sm">
+                        <Smartphone className="w-4 h-4 text-blue-400" />
+                        <span>USSD PIN Prompt Sent</span>
+                      </div>
+                      <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded bg-blue-500/20 text-blue-300">
+                        {paymentPromptInfo.operator || 'Mobile Money'}
+                      </span>
+                    </div>
+                    <p className="text-xs text-slate-300 leading-relaxed">
+                      {paymentPromptInfo.instructions || `A payment prompt has been sent to ${fundingPhone}. Please enter your PIN.`}
+                    </p>
+                    {paymentPromptInfo.ussdCode && (
+                      <div className="p-2.5 rounded-lg bg-slate-950 border border-blue-500/20 font-mono text-center text-xs text-blue-200">
+                        Dial Code: <span className="font-bold text-white">{paymentPromptInfo.ussdCode}</span>
+                      </div>
+                    )}
+                    <div className="flex items-center justify-between pt-2 border-t border-blue-500/20 text-xs">
+                      <div className="flex items-center gap-2 text-blue-300">
+                        <Loader2 className="w-3.5 h-3.5 animate-spin text-blue-400" />
+                        <span>Waiting for phone confirmation...</span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => pollPaymentStatus(paymentPromptInfo.providerReference || paymentPromptInfo.reference)}
+                        className="text-xs text-blue-400 underline font-medium"
+                      >
+                        Check now
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                <div className="pt-2 flex justify-end">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowFundingModal(false);
+                      setPaymentPromptInfo(null);
+                    }}
+                    className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-300"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <form onSubmit={executeFunding} className="space-y-4">
+                <div>
+                  <label className="block text-xs font-semibold text-slate-300 mb-2">
+                    Select Payment Channel
+                  </label>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setFundingMethod('CAMPAY')}
+                      className={`p-3 rounded-xl border text-left transition-all ${
+                        fundingMethod === 'CAMPAY'
+                          ? 'border-amber-500 bg-amber-500/10 text-white'
+                          : 'border-slate-800 bg-slate-950 text-slate-400 hover:border-slate-700'
+                      }`}
+                    >
+                      <div className="text-xs font-bold text-white flex items-center gap-1.5">
+                        <CreditCard className="w-3.5 h-3.5 text-amber-400" />
+                        <span>Campay Gateway</span>
+                      </div>
+                      <div className="text-[10px] text-slate-400 mt-1">MTN, Orange, Card</div>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setFundingMethod('MTN_MOMO')}
+                      className={`p-3 rounded-xl border text-left transition-all ${
+                        fundingMethod === 'MTN_MOMO'
+                          ? 'border-amber-500 bg-amber-500/10 text-white'
+                          : 'border-slate-800 bg-slate-950 text-slate-400 hover:border-slate-700'
+                      }`}
+                    >
+                      <div className="text-xs font-bold text-white flex items-center gap-1.5">
+                        <Smartphone className="w-3.5 h-3.5 text-amber-400" />
+                        <span>MTN MoMo</span>
+                      </div>
+                      <div className="text-[10px] text-slate-400 mt-1">Direct USSD prompt</div>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setFundingMethod('ORANGE_MONEY')}
+                      className={`p-3 rounded-xl border text-left transition-all ${
+                        fundingMethod === 'ORANGE_MONEY'
+                          ? 'border-amber-500 bg-amber-500/10 text-white'
+                          : 'border-slate-800 bg-slate-950 text-slate-400 hover:border-slate-700'
+                      }`}
+                    >
+                      <div className="text-xs font-bold text-white flex items-center gap-1.5">
+                        <Smartphone className="w-3.5 h-3.5 text-orange-400" />
+                        <span>Orange Money</span>
+                      </div>
+                      <div className="text-[10px] text-slate-400 mt-1">OM Push prompt</div>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setFundingMethod('CARD')}
+                      className={`p-3 rounded-xl border text-left transition-all ${
+                        fundingMethod === 'CARD'
+                          ? 'border-amber-500 bg-amber-500/10 text-white'
+                          : 'border-slate-800 bg-slate-950 text-slate-400 hover:border-slate-700'
+                      }`}
+                    >
+                      <div className="text-xs font-bold text-white flex items-center gap-1.5">
+                        <CreditCard className="w-3.5 h-3.5 text-blue-400" />
+                        <span>Card Payment</span>
+                      </div>
+                      <div className="text-[10px] text-slate-400 mt-1">Visa / Mastercard</div>
+                    </button>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                    Cameroon Mobile Money Phone Number
+                  </label>
+                  <input
+                    type="tel"
+                    value={fundingPhone}
+                    onChange={(e) => setFundingPhone(e.target.value)}
+                    placeholder="e.g. 670 00 00 00 or 690 00 00 00"
+                    className="w-full rounded-xl bg-slate-950 border border-slate-800 p-3 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-amber-500 font-mono"
+                  />
+                  <p className="text-[11px] text-slate-500 mt-1">
+                    Enter your MTN or Orange Money number for automatic USSD PIN push.
+                  </p>
+                </div>
+
+                <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
+                  <button
+                    type="button"
+                    onClick={() => setShowFundingModal(false)}
+                    className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-300 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={actionLoading}
+                    className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-xs flex items-center gap-2 shadow-lg disabled:opacity-50 transition-all cursor-pointer"
+                  >
+                    {actionLoading ? (
+                      <>
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        <span>Initiating Campay...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>Authorize {amount.toLocaleString()} {currency}</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </>
+                    )}
+                  </button>
+                </div>
+              </form>
+            )}
           </div>
         </div>
       )}

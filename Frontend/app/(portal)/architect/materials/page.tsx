@@ -21,15 +21,14 @@ export default function ArchitectMaterialsPage() {
   const filtered = products.filter((p) => (cat === 'ALL' || p.category === cat) && (p.name.toLowerCase().includes(q.toLowerCase())));
 
   const addToCart = async (p: any) => {
-    const session = await getSession();
-    if (!session) {
-      toast.info('Please sign in to add items to your cart');
-      router.push('/login');
-      return;
-    }
-    try { await api('POST', '/api/architect/cart', { productId: p.id, quantity: 1 }); toast.success('Added to cart'); }
-    catch (err: any) {
+    try {
+      const res: any = await api('POST', '/api/architect/cart', { productId: p.id, quantity: 1 });
+      toast.success('Added to cart');
+      const count = (res?.items ?? []).reduce((acc: number, item: any) => acc + (item.quantity || 1), 0);
+      window.dispatchEvent(new CustomEvent('buildsmart:cart-updated', { detail: { cartCount: count } }));
+    } catch (err: any) {
       if (/auth/i.test(err.message ?? '')) {
+        toast.info('Please sign in to add items to your cart');
         router.push('/login');
         return;
       }

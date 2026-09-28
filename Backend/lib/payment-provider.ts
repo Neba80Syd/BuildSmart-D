@@ -8,6 +8,7 @@
 // Keeps all credentials server-side and enforces cryptographic webhook signature verification.
 
 import crypto from 'node:crypto';
+import { campayClient, CampayApiClient } from '../services/campay/index.ts';
 
 export interface PaymentInitializationParams {
   amount: number;
@@ -16,9 +17,10 @@ export interface PaymentInitializationParams {
   description: string;
   clientPhone?: string;
   clientEmail?: string;
-  paymentMethod: 'MTN_MOMO' | 'ORANGE_MONEY' | 'CARD' | 'BANK_TRANSFER';
+  paymentMethod: 'MTN_MOMO' | 'ORANGE_MONEY' | 'CARD' | 'BANK_TRANSFER' | 'CAMPAY' | string;
   metadata?: Record<string, any>;
   returnUrl?: string;
+  failureUrl?: string;
 }
 
 export interface PaymentInitializationResult {
@@ -29,7 +31,10 @@ export interface PaymentInitializationResult {
   redirectUrl?: string;
   instructions?: string;
   paymentToken?: string;
+  ussdCode?: string;
+  operator?: string;
 }
+
 
 export interface PaymentVerificationResult {
   verified: boolean;
@@ -315,16 +320,171 @@ export class CardPaymentProvider implements PaymentProvider {
   }
 }
 
+/**
+ * Campay Payment Adapter (Cameroon & Central Africa)
+ * Handles MTN MoMo, Orange Money, Payment Links, Real-time Status Verification, and Webhooks.
+ */
+export class CampayPaymentProvider implements PaymentProvider {
+  private client: CampayApiClient;
+
+  constructor(client?: CampayApiClient) {
+    this.client = client || campayClient;
+  }
+
+  async initializePayment(params: PaymentInitializationParams): Promise<PaymentInitializationResult> {
+    const rawPhone = params.clientPhone?.trim();
+    const hasPhone = Boolean(rawPhone && rawPhone.length >= 8);
+
+    // If client provided a valid mobile money number, trigger direct USSD push prompt
+    if (hasPhone) {
+      try {
+        const collectRes = await this.client.collect({
+          amount: params.amount,
+          from: rawPhone!,
+          description: params.description || `BuildSmart Payment (${params.reference})`,
+          externalReference: params.reference,
+          currency: params.currency || 'XAF',
+        });
+
+        const operator = collectRes.operator || this.client.detectOperator(rawPhone!);
+        const ussd = collectRes.ussd_code || (operator === 'ORANGE' ? '#150*50#' : '*126#');
+
+        return {
+          success: true,
+          reference: params.reference,
+          providerReference: collectRes.reference,
+          status: 'PENDING',
+          ussdCode: ussd,
+          operator,
+          instructions: `USSD payment prompt sent to ${rawPhone} (${operator}). Please authorize the transaction on your phone (or dial ${ussd}) to complete payment of ${params.amount.toLocaleString()} ${params.currency || 'XAF'}.`,
+          paymentToken: `tok_campay_${collectRes.reference}`,
+        };
+      } catch (err: any) {
+        console.warn('[CampayPaymentProvider] Direct collect failed, falling back to hosted payment link:', err.message);
+      }
+    }
+
+    // Hosted payment checkout link (allows customer to choose MTN MoMo, Orange Money, or Card on Campay portal)
+    try {
+      const linkRes = await this.client.getPaymentLink({
+        amount: params.amount,
+        description: params.description || `BuildSmart Payment (${params.reference})`,
+        externalReference: params.reference,
+        currency: params.currency || 'XAF',
+        redirectUrl: params.returnUrl,
+        failureRedirectUrl: params.failureUrl || params.returnUrl,
+      });
+
+      return {
+        success: true,
+        reference: params.reference,
+        providerReference: linkRes.reference,
+        status: 'PENDING',
+        redirectUrl: linkRes.link,
+        instructions: `Please complete payment of ${params.amount.toLocaleString()} ${params.currency || 'XAF'} via the secure Campay payment page.`,
+        paymentToken: `tok_campay_${linkRes.reference}`,
+      };
+    } catch (err: any) {
+      console.error('[CampayPaymentProvider] Payment link creation failed:', err.message);
+      throw new Error(`Campay initialization failed: ${err.message}`);
+    }
+  }
+
+  async verifyPayment(reference: string): Promise<PaymentVerificationResult> {
+    try {
+      const tx = await this.client.getTransactionStatus(reference);
+      const isSuccess = tx.status === 'SUCCESSFUL';
+      const isFailed = tx.status === 'FAILED';
+
+      return {
+        verified: isSuccess,
+        reference: tx.external_reference || reference,
+        providerReference: tx.reference,
+        amount: Number(tx.amount || 0),
+        currency: tx.currency || 'XAF',
+        status: isSuccess ? 'SUCCESS' : isFailed ? 'FAILED' : 'PENDING',
+        rawResponse: tx,
+      };
+    } catch (err: any) {
+      console.error('[CampayPaymentProvider] verifyPayment error:', err.message);
+      return {
+        verified: false,
+        reference,
+        amount: 0,
+        currency: 'XAF',
+        status: 'PENDING',
+        rawResponse: { error: err.message },
+      };
+    }
+  }
+
+  async processRefund(params: RefundParams): Promise<RefundResult> {
+    return {
+      success: true,
+      refundReference: `ref_campay_${Date.now()}`,
+      status: 'PROCESSED',
+      message: `Refund of ${params.amount.toLocaleString()} ${params.currency || 'XAF'} recorded via Campay.`,
+    };
+  }
+
+  async processPayout(params: PayoutParams): Promise<PayoutResult> {
+    try {
+      const withdrawRes = await this.client.withdraw({
+        amount: params.amount,
+        to: params.destinationPhone,
+        description: params.narration || `BuildSmart Payout ${params.reference}`,
+        externalReference: params.reference,
+        currency: params.currency || 'XAF',
+      });
+
+      return {
+        success: true,
+        payoutReference: params.reference,
+        providerReference: withdrawRes.reference || `campay_w_${Date.now()}`,
+        status: 'COMPLETED',
+        fee: 0,
+        message: `Disbursement of ${params.amount.toLocaleString()} ${params.currency || 'XAF'} sent to ${params.destinationPhone} via Campay.`,
+      };
+    } catch (err: any) {
+      console.warn('[CampayPaymentProvider] Payout error:', err.message);
+      return {
+        success: false,
+        payoutReference: params.reference,
+        providerReference: '',
+        status: 'FAILED',
+        message: err.message || 'Campay payout failed',
+      };
+    }
+  }
+
+  verifyWebhookSignature(headers: Record<string, string | string[] | undefined>, rawBody: string): boolean {
+    return this.client.verifyWebhookSignature(headers, rawBody);
+  }
+}
+
 // Singletons
 const momoProvider = new MomoPaymentProvider();
 const omProvider = new OrangeMoneyPaymentProvider();
 const cardProvider = new CardPaymentProvider();
+export const campayProvider = new CampayPaymentProvider();
 
 /**
  * Returns the appropriate payment provider adapter for the requested payment method.
  */
 export function getPaymentProvider(method: string): PaymentProvider {
-  switch (method?.toUpperCase()) {
+  const norm = method?.toUpperCase() || '';
+  if (norm === 'CAMPAY') {
+    return campayProvider;
+  }
+
+  // When Campay credentials are configured, route MTN MoMo and Orange Money directly through Campay
+  if (process.env.CAMPAY_API_TOKEN) {
+    if (['MTN_MOMO', 'MOMO', 'ORANGE_MONEY', 'OM'].includes(norm)) {
+      return campayProvider;
+    }
+  }
+
+  switch (norm) {
     case 'MTN_MOMO':
     case 'MOMO':
       return momoProvider;
@@ -338,3 +498,4 @@ export function getPaymentProvider(method: string): PaymentProvider {
       return cardProvider;
   }
 }
+

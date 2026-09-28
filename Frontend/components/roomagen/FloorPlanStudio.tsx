@@ -12,6 +12,8 @@ import {
 } from '@/Frontend/components/architect/ui';
 import { ImageComparisonSlider } from './ImageComparisonSlider';
 import { ProcessingStages } from './ProcessingStages';
+import { SendFloorPlansModal } from './SendFloorPlansModal';
+import { AiFloorPlanBoqModal } from './AiFloorPlanBoqModal';
 
 export type RoomagenTool = 'SKETCH_TO_FLOOR_PLAN' | 'FLOOR_PLAN_TO_3D' | 'FLOOR_PLAN_COLORIZE';
 
@@ -38,6 +40,8 @@ export function FloorPlanStudio({
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
   const [selectedTool, setSelectedTool] = useState<RoomagenTool>('SKETCH_TO_FLOOR_PLAN');
   const [savingPlan, setSavingPlan] = useState<boolean>(false);
+  const [showSendModal, setShowSendModal] = useState<boolean>(false);
+  const [boqModalPlan, setBoqModalPlan] = useState<any | null>(null);
 
   // History / Versions
   const [history, setHistory] = useState<any[]>([]);
@@ -300,6 +304,18 @@ export function FloorPlanStudio({
                 </option>
               ))}
             </select>
+
+            {projectId && (
+              <button
+                type="button"
+                onClick={() => setShowSendModal(true)}
+                className="px-3.5 py-2 text-xs font-semibold bg-teal-600 hover:bg-teal-500 text-white rounded-lg flex items-center gap-1.5 shadow-sm transition-colors shrink-0"
+                title="Send generated 2D/3D floor plans to client for visualization"
+              >
+                <span className="material-symbols-outlined text-[16px]">send</span>
+                <span>Send to Client</span>
+              </button>
+            )}
           </div>
         )}
       </div>
@@ -540,6 +556,36 @@ export function FloorPlanStudio({
                       </button>
                     )}
 
+                    {projectId && (
+                      <button
+                        type="button"
+                        onClick={() => setShowSendModal(true)}
+                        className="btnPrimary !bg-teal-600 hover:!bg-teal-500 text-white flex items-center gap-1.5 shadow-md shadow-teal-600/20"
+                        title="Send 2D & 3D floor plans to client for review and visualization"
+                      >
+                        <span className="material-symbols-outlined text-[18px]">send</span>
+                        Send to Client
+                      </button>
+                    )}
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setBoqModalPlan({
+                          id: currentJob.id,
+                          name: `${currentJob.tool === 'FLOOR_PLAN_TO_3D' ? '3D Visualization' : 'AI Floor Plan'} V${currentJob.version || 1}`,
+                          kind: currentJob.tool === 'FLOOR_PLAN_TO_3D' ? '3D' : '2D',
+                          version: currentJob.version || 1,
+                          previewUrl: currentJob.outputAssetUrl,
+                        });
+                      }}
+                      className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-50 dark:bg-teal-950/40 border border-teal-500/40 text-teal-800 dark:text-teal-200 hover:bg-teal-100 dark:hover:bg-teal-900/40 flex items-center gap-1.5 transition-colors shadow-xs"
+                      title="Analyze floor plan and generate preliminary BOQ and material estimation"
+                    >
+                      <span className="material-symbols-outlined text-[16px] text-teal-600">calculate</span>
+                      AI Estimate & BOQ
+                    </button>
+
                     {currentJob.tool === 'SKETCH_TO_FLOOR_PLAN' && (
                       <button
                         onClick={() => {
@@ -587,9 +633,22 @@ export function FloorPlanStudio({
                   <span className="material-symbols-outlined text-[20px] text-primary">history</span>
                   Generation History ({history.length})
                 </h3>
-                <button type="button" onClick={() => fetchHistory(projectId)} disabled={loadingHistory} className={btnGhost}>
-                  {loadingHistory ? <Spinner size={16} /> : 'Refresh'}
-                </button>
+                <div className="flex items-center gap-2">
+                  {projectId && history.length > 0 && (
+                    <button
+                      type="button"
+                      onClick={() => setShowSendModal(true)}
+                      className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-teal-600 hover:bg-teal-500 text-white flex items-center gap-1.5 shadow-sm transition-colors"
+                      title="Send selected 2D/3D floor plans to client"
+                    >
+                      <span className="material-symbols-outlined text-[16px]">send</span>
+                      Send to Client
+                    </button>
+                  )}
+                  <button type="button" onClick={() => fetchHistory(projectId)} disabled={loadingHistory} className={btnGhost}>
+                    {loadingHistory ? <Spinner size={16} /> : 'Refresh'}
+                  </button>
+                </div>
               </div>
 
               {historyError && <p role="alert" className="text-sm text-red-600">{historyError}</p>}
@@ -648,6 +707,44 @@ export function FloorPlanStudio({
           )}
         </div>
       </div>
+
+      {/* Send Floor Plans to Client Modal */}
+      <SendFloorPlansModal
+        isOpen={showSendModal}
+        onClose={() => setShowSendModal(false)}
+        projectId={projectId}
+        projectName={projects.find((p) => p.id === projectId)?.name}
+        initialPlans={
+          currentJob && currentJob.status === 'COMPLETED'
+            ? [
+                {
+                  id: currentJob.id,
+                  name: `${currentJob.tool === 'FLOOR_PLAN_TO_3D' ? '3D Visualization' : '2D Floor Plan'} v${currentJob.version || 1}`,
+                  kind: currentJob.tool === 'FLOOR_PLAN_TO_3D' ? '3D' : '2D',
+                  version: currentJob.version,
+                  previewUrl: currentJob.outputAssetUrl,
+                  isJob: true,
+                  jobId: currentJob.id,
+                  tool: currentJob.tool,
+                },
+              ]
+            : []
+        }
+        onSentSuccessfully={() => {
+          fetchHistory(projectId);
+        }}
+      />
+
+      {/* AI Floor Plan BOQ & Material Estimation Modal */}
+      {boqModalPlan && (
+        <AiFloorPlanBoqModal
+          isOpen={Boolean(boqModalPlan)}
+          onClose={() => setBoqModalPlan(null)}
+          floorPlan={boqModalPlan}
+          projectId={projectId}
+          projectName={projects.find((p) => p.id === projectId)?.name}
+        />
+      )}
     </div>
   );
 }

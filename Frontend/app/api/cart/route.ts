@@ -20,11 +20,12 @@ async function getOrCreateCart(userId: string) {
 
 export async function GET() {
   const user = await getSessionUser();
-  if (!user) return NextResponse.json({ authenticated: false, cart: null, items: [] });
+  if (!user) return NextResponse.json({ authenticated: false, cart: null, items: [], cartCount: 0 });
 
   const cart = await getOrCreateCart(user.id);
   const items = await dbClient.cartItem.findMany({ where: { cartId: cart.id } });
-  return NextResponse.json({ authenticated: true, cart, items });
+  const cartCount = items.reduce((acc: number, item: any) => acc + (item.quantity || 1), 0);
+  return NextResponse.json({ authenticated: true, cart, items, cartCount });
 }
 
 const AddSchema = z.object({
@@ -58,7 +59,8 @@ export async function POST(req: NextRequest) {
   }
 
   const items = await dbClient.cartItem.findMany({ where: { cartId: cart.id } });
-  return NextResponse.json({ success: true, authenticated: true, items });
+  const cartCount = items.reduce((acc: number, item: any) => acc + (item.quantity || 1), 0);
+  return NextResponse.json({ success: true, authenticated: true, items, cartCount });
 }
 
 const PatchSchema = z.object({
@@ -84,7 +86,8 @@ export async function PATCH(req: NextRequest) {
   }
 
   const items = await dbClient.cartItem.findMany({ where: { cartId: cart.id } });
-  return NextResponse.json({ success: true, authenticated: true, items });
+  const cartCount = items.reduce((acc: number, item: any) => acc + (item.quantity || 1), 0);
+  return NextResponse.json({ success: true, authenticated: true, items, cartCount });
 }
 
 export async function DELETE(req: NextRequest) {
@@ -103,5 +106,6 @@ export async function DELETE(req: NextRequest) {
   }
 
   const items = await dbClient.cartItem.findMany({ where: { cartId: cart.id } });
-  return NextResponse.json({ success: true, authenticated: true, items });
+  const cartCount = items.reduce((acc: number, item: any) => acc + (item.quantity || 1), 0);
+  return NextResponse.json({ success: true, authenticated: true, items, cartCount });
 }

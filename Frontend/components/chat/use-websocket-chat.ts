@@ -44,6 +44,7 @@ export function useWebSocketChat(options: UseWebSocketChatOptions) {
   const reconnectAttemptsRef = useRef<number>(0);
   const activeRoomIdRef = useRef<string | null>(roomId ?? null);
   const isMountedRef = useRef<boolean>(true);
+  const connectRef = useRef<() => void>(() => {});
 
   // Keep all dynamic options and callbacks in a ref to prevent connect recreation and infinite loops
   const optionsRef = useRef<UseWebSocketChatOptions>(options);
@@ -51,7 +52,9 @@ export function useWebSocketChat(options: UseWebSocketChatOptions) {
     optionsRef.current = options;
   });
 
-  activeRoomIdRef.current = roomId ?? null;
+  useEffect(() => {
+    activeRoomIdRef.current = roomId ?? null;
+  }, [roomId]);
 
   // Resolve WS URL
   const getWsUrl = useCallback(() => {
@@ -232,7 +235,7 @@ export function useWebSocketChat(options: UseWebSocketChatOptions) {
         const delay = Math.min(1000 * Math.pow(1.5, reconnectAttemptsRef.current), 10000);
         reconnectAttemptsRef.current += 1;
         reconnectTimeoutRef.current = setTimeout(() => {
-          if (isMountedRef.current) connect();
+          if (isMountedRef.current) connectRef.current();
         }, delay);
       };
 
@@ -243,6 +246,10 @@ export function useWebSocketChat(options: UseWebSocketChatOptions) {
       setStatus((prev) => (prev === 'disconnected' ? prev : 'disconnected'));
     }
   }, [getWsUrl]);
+
+  useEffect(() => {
+    connectRef.current = connect;
+  }, [connect]);
 
   // Main lifecycle: only connects once on mount and cleans up on unmount
   useEffect(() => {

@@ -37,6 +37,17 @@ async function main() {
   const byEmail = await dbClient.user.findUnique({ where: { email: 'elena@buildsmart.ai' } });
   check('user.findUnique by email', byEmail?.id === 'u_architect', byEmail);
 
+  // Clean up any leftovers from prior aborted runs
+  const stale = await dbClient.user.findUnique({ where: { email: 'smoke@test.io' } }).catch(() => null);
+  if (stale?.id) {
+    await dbClient.userProfile.deleteMany({ where: { userId: stale.id } }).catch(() => {});
+    await dbClient.architectProfile.deleteMany({ where: { userId: stale.id } }).catch(() => {});
+    await dbClient.vendorProfile.deleteMany({ where: { userId: stale.id } }).catch(() => {});
+    await dbClient.subscription.deleteMany({ where: { userId: stale.id } }).catch(() => {});
+    await dbClient.cart.deleteMany({ where: { userId: stale.id } }).catch(() => {});
+    await dbClient.user.delete({ where: { id: stale.id } }).catch(() => {});
+  }
+
   const nu = await dbClient.user.create({ data: { email: 'smoke@test.io', name: 'Smoke User', role: 'CLIENT', passwordHash: 'x' } });
   check('user.create returns id + defaults', !!nu.id && nu.emailVerified === false, nu);
   const nu2 = await dbClient.user.findUnique({ where: { id: nu.id } });
@@ -204,6 +215,14 @@ async function main() {
   check('document.create respects given id', ndoc?.id === 'doc_smoke', ndoc?.id);
   const ndocDel = await dbClient.document.delete({ where: { id: 'doc_smoke' } });
   check('document.delete', ndocDel === true, ndocDel);
+
+  // Clean up test user
+  await dbClient.userProfile.deleteMany({ where: { userId: nu.id } }).catch(() => {});
+  await dbClient.architectProfile.deleteMany({ where: { userId: nu.id } }).catch(() => {});
+  await dbClient.vendorProfile.deleteMany({ where: { userId: nu.id } }).catch(() => {});
+  await dbClient.subscription.deleteMany({ where: { userId: nu.id } }).catch(() => {});
+  await dbClient.cart.deleteMany({ where: { userId: nu.id } }).catch(() => {});
+  await dbClient.user.delete({ where: { id: nu.id } }).catch(() => {});
 
   console.log(failures === 0 ? '\nALL CHECKS PASSED' : `\n${failures} CHECK(S) FAILED`);
   process.exit(failures === 0 ? 0 : 1);

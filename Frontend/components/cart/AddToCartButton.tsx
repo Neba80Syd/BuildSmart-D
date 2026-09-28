@@ -12,12 +12,6 @@ export function AddToCartButton({ productId, quantity = 1 }: { productId: string
   const add = async () => {
     setAdding(true);
     try {
-      const session = await getSession();
-      if (!session) {
-        toast.info('Please sign in to add items to your cart');
-        router.push('/login');
-        return;
-      }
       const res = await fetch('/api/cart', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -29,6 +23,10 @@ export function AddToCartButton({ productId, quantity = 1 }: { productId: string
         router.push('/login');
       } else if (res.ok) {
         toast.success('Added to cart');
+        const count = typeof data.cartCount === 'number'
+          ? data.cartCount
+          : (data.items ?? []).reduce((acc: number, item: any) => acc + (item.quantity || 1), 0);
+        window.dispatchEvent(new CustomEvent('buildsmart:cart-updated', { detail: { cartCount: count } }));
       } else {
         toast.error(data.error ?? 'Could not add to cart');
       }

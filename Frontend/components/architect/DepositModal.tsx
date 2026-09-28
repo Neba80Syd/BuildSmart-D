@@ -100,23 +100,34 @@ export function DepositModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-lg w-full p-6 text-white shadow-2xl animate-in fade-in zoom-in-95">
-        {/* Header */}
-        <div className="flex items-center justify-between pb-4 border-b border-slate-800">
+    <div 
+      onClick={(e) => {
+        if (e.target === e.currentTarget) handleClose();
+      }}
+      className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto"
+    >
+      <div 
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="architect-deposit-title"
+        className="bg-slate-900 border border-slate-800 rounded-3xl max-w-lg w-full text-white shadow-2xl relative my-auto max-h-[calc(100dvh-2rem)] flex flex-col overflow-hidden animate-in fade-in zoom-in-95"
+      >
+        {/* Header - Fixed & Pinned */}
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800 shrink-0 bg-slate-900">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
               <ArrowDownLeft className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-white">Deposit Funds</h3>
-              <p className="text-xs text-slate-400">Add funds instantly to your Architect Available Balance</p>
+              <h3 id="architect-deposit-title" className="text-lg font-bold text-white">Deposit Funds</h3>
+              <p className="text-xs text-slate-400 line-clamp-1 sm:line-clamp-none">Add funds instantly to your Architect Available Balance</p>
             </div>
           </div>
           <button
             type="button"
             onClick={handleClose}
-            className="p-1.5 rounded-xl hover:bg-slate-800 text-slate-400 hover:text-white transition-colors cursor-pointer"
+            className="p-1.5 rounded-xl hover:bg-slate-800 text-slate-400 hover:text-white transition-colors cursor-pointer shrink-0 ml-2"
+            aria-label="Close deposit dialog"
           >
             <X className="w-5 h-5" />
           </button>
@@ -124,7 +135,7 @@ export function DepositModal({
 
         {/* Success State Receipt */}
         {successResult ? (
-          <div className="py-6 text-center space-y-4">
+          <div className="p-6 overflow-y-auto flex-1 overscroll-contain modal-scrollbar text-center space-y-4">
             <div className="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 mx-auto flex items-center justify-center">
               <CheckCircle2 className="w-9 h-9" />
             </div>
@@ -171,7 +182,7 @@ export function DepositModal({
             </button>
           </div>
         ) : (
-          <form onSubmit={handleDeposit} className="space-y-4 pt-4">
+          <form onSubmit={handleDeposit} className="p-6 overflow-y-auto flex-1 overscroll-contain modal-scrollbar space-y-4">
             {/* Current Balance Display */}
             <div className="p-3 rounded-2xl bg-slate-950 border border-slate-800 flex items-center justify-between">
               <div>
@@ -377,7 +388,7 @@ export function DepositModal({
             </div>
 
             {/* Submit Button */}
-            <div className="pt-2">
+            <div className="pt-2 pb-1">
               <button
                 type="submit"
                 disabled={loading || !amount || Number(amount) < 500}

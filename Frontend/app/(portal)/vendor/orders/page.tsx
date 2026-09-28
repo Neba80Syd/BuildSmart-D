@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { Fragment, useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { StatusPill } from '@/Frontend/components/vendor/charts';
 
@@ -212,8 +212,8 @@ export default function VendorOrdersPage() {
             </thead>
             <tbody className="text-body-sm text-on-surface dark:text-surface-container-lowest divide-y divide-outline-variant/60 dark:divide-outline/40">
               {filtered.slice(0, 50).map((o) => (
-                <>
-                  <tr key={o.id} className="hover:bg-surface-container-low/50 transition-colors">
+                <Fragment key={o.id}>
+                  <tr className="hover:bg-surface-container-low/50 transition-colors">
                     <td className="py-3.5 px-6">
                       <button
                         onClick={() => setOpenId(openId === o.id ? null : o.id)}
@@ -348,7 +348,7 @@ export default function VendorOrdersPage() {
                       </td>
                     </tr>
                   )}
-                </>
+                </Fragment>
               ))}
               {filtered.length === 0 && (
                 <tr>

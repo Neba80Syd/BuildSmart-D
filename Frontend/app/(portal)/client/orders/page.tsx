@@ -432,7 +432,7 @@ export default function ClientOrdersPage() {
             </div>
 
             <p className="text-body-sm text-on-surface-variant mb-4">
-              Opening a dispute places a financial hold on the vendor's payment for Order #{disputeTarget.id.slice(0, 8)}. A BuildSmart dispute mediator will review evidence submitted by both parties.
+              Opening a dispute places a financial hold on the vendor&apos;s payment for Order #{disputeTarget.id.slice(0, 8)}. A BuildSmart dispute mediator will review evidence submitted by both parties.
             </p>
 
             <div className="space-y-4">

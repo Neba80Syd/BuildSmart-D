@@ -45,7 +45,7 @@ export default function LoginPage() {
         role === 'ARCHITECT' ? '/architect'
         : role === 'VENDOR' ? '/vendor'
         : role === 'ADMIN' ? '/admin'
-        : '/dashboard';
+        : '/client';
       router.push(home);
       router.refresh();
     } catch {
@@ -125,7 +125,7 @@ export default function LoginPage() {
             Preview a dashboard (no sign-in)
           </p>
           <div className="grid grid-cols-2 gap-2">
-            <Link href="/dashboard" className="text-center px-3 py-2 rounded border border-[#315C4C]/40 text-[#315C4C] font-medium text-sm hover:bg-[#315C4C] hover:text-white transition-colors">Client</Link>
+            <Link href="/client" className="text-center px-3 py-2 rounded border border-[#315C4C]/40 text-[#315C4C] font-medium text-sm hover:bg-[#315C4C] hover:text-white transition-colors">Client</Link>
             <Link href="/architect" className="text-center px-3 py-2 rounded border border-[#315C4C]/40 text-[#315C4C] font-medium text-sm hover:bg-[#315C4C] hover:text-white transition-colors">Architect</Link>
             <Link href="/vendor" className="text-center px-3 py-2 rounded border border-[#315C4C]/40 text-[#315C4C] font-medium text-sm hover:bg-[#315C4C] hover:text-white transition-colors">Vendor</Link>
             <Link href="/admin" className="text-center px-3 py-2 rounded border border-[#315C4C]/40 text-[#315C4C] font-medium text-sm hover:bg-[#315C4C] hover:text-white transition-colors">Admin</Link>

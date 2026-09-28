@@ -1374,30 +1374,42 @@ function makeModel(key: string) {
       const { delegate } = await delegateFor(key);
       let set = normalize(data);
       if (UPDATED_AT_MODELS.has(key)) set = { ...set, updatedAt: set.updatedAt ?? new Date() };
+      let effectiveWhere = where;
+      if (where && !where.id) {
+        try {
+          return await delegate.update({ where, data: set });
+        } catch (e: any) {
+          if (isNotFound(e)) return null;
+          const found = await delegate.findFirst({ where }).catch(() => null);
+          if (!found) return null;
+          effectiveWhere = { id: found.id };
+        }
+      }
       try {
-        return await delegate.update({ where, data: set });
+        return await delegate.update({ where: effectiveWhere, data: set });
       } catch (e: any) {
         if (isNotFound(e)) return null;
         if (key === 'order' && /escrowStatus|confirmationDeadline/i.test(e?.message ?? '')) {
           const { escrowStatus, confirmationDeadline, ...safeSet } = set;
           const updated = Object.keys(safeSet).length > 0
-            ? await delegate.update({ where, data: safeSet })
-            : await delegate.findUnique({ where });
+            ? await delegate.update({ where: effectiveWhere, data: safeSet })
+            : await delegate.findUnique({ where: effectiveWhere });
           const pool = getPgPool();
+          const targetId = effectiveWhere.id ?? where?.id;
           if (escrowStatus !== undefined && confirmationDeadline !== undefined) {
             await pool.query(
               `UPDATE "orders" SET "escrow_status" = $1, "confirmation_deadline" = $2 WHERE "id" = $3`,
-              [escrowStatus, confirmationDeadline, where.id]
+              [escrowStatus, confirmationDeadline, targetId]
             ).catch(() => {});
           } else if (escrowStatus !== undefined) {
             await pool.query(
               `UPDATE "orders" SET "escrow_status" = $1 WHERE "id" = $2`,
-              [escrowStatus, where.id]
+              [escrowStatus, targetId]
             ).catch(() => {});
           } else if (confirmationDeadline !== undefined) {
             await pool.query(
               `UPDATE "orders" SET "confirmation_deadline" = $1 WHERE "id" = $2`,
-              [confirmationDeadline, where.id]
+              [confirmationDeadline, targetId]
             ).catch(() => {});
           }
           return { ...updated, escrowStatus, confirmationDeadline };
@@ -1416,8 +1428,20 @@ function makeModel(key: string) {
     },
     async delete({ where }: any) {
       const { delegate } = await delegateFor(key);
+      let effectiveWhere = where;
+      if (where && !where.id) {
+        try {
+          await delegate.delete({ where });
+          return true;
+        } catch (e: any) {
+          if (isNotFound(e)) return false;
+          const found = await delegate.findFirst({ where }).catch(() => null);
+          if (!found) return false;
+          effectiveWhere = { id: found.id };
+        }
+      }
       try {
-        await delegate.delete({ where });
+        await delegate.delete({ where: effectiveWhere });
         return true;
       } catch (e) {
         if (isNotFound(e)) return false;
@@ -1475,7 +1499,25 @@ function buildDbClient(): Record<string, ModelApi> {
     }
     return items.map((i: any) => {
       const product = productMap[i.productId] || {};
-      return { ...i, name: product.name, price: product.price, unit: product.unit };
+      const cat = (product.category || "").toLowerCase();
+      const pName = (product.name || "").toLowerCase();
+      let fallbackImg = "/images/product-cement.png";
+      if (cat.includes("steel") || pName.includes("rebar") || pName.includes("steel")) fallbackImg = "/images/product-rebar.png";
+      else if (cat.includes("tile") || pName.includes("tile")) fallbackImg = "/images/product-tiles.png";
+      else if (cat.includes("roof") || pName.includes("roof")) fallbackImg = "/images/product-roofing.png";
+      else if (pName.includes("beam")) fallbackImg = "/images/product-steel-beam.png";
+      else if (pName.includes("angle")) fallbackImg = "/images/product-angle-iron.png";
+
+      return {
+        ...i,
+        name: product.name,
+        price: product.price,
+        unit: product.unit,
+        category: product.category,
+        vendorId: product.vendorId,
+        imageUrl: product.imageUrl || fallbackImg,
+        description: product.description,
+      };
     });
   };
 

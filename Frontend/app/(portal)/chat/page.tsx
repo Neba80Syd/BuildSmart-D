@@ -21,6 +21,23 @@ export default function ChatPage() {
   const bottomRef = useRef<HTMLDivElement>(null);
   const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // WebSocket Chat hook
+  const {
+    status,
+    isLive,
+    messages,
+    setMessages,
+    sendMessage: wsSendMessage,
+    sendTyping,
+    typingUsers,
+    onlineUsers,
+  } = useWebSocketChat({
+    userId: currentUser.id,
+    userName: currentUser.name,
+    userRole: currentUser.role,
+    roomId: room?.id ?? null,
+  });
+
   // Initial HTTP fetch to resolve current preview user and primary room
   const loadInitial = useCallback(async () => {
     try {
@@ -40,24 +57,7 @@ export default function ChatPage() {
     } catch {
       // Fallback
     }
-  }, []);
-
-  // WebSocket Chat hook
-  const {
-    status,
-    isLive,
-    messages,
-    setMessages,
-    sendMessage: wsSendMessage,
-    sendTyping,
-    typingUsers,
-    onlineUsers,
-  } = useWebSocketChat({
-    userId: currentUser.id,
-    userName: currentUser.name,
-    userRole: currentUser.role,
-    roomId: room?.id ?? null,
-  });
+  }, [setMessages]);
 
   useEffect(() => {
     loadInitial();

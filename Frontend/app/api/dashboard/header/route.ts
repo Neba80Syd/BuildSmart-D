@@ -98,6 +98,18 @@ export async function GET(req: NextRequest) {
         link: n.link || null,
       }));
 
+    // 4. Cart item count (for Client and marketplace users)
+    let cartCount = 0;
+    try {
+      const cart: any = await dbClient.cart.findUnique({ where: { userId: user.id } });
+      if (cart) {
+        const cartItems: any[] = await dbClient.cartItem.findMany({ where: { cartId: cart.id } });
+        cartCount = cartItems.reduce((acc, item) => acc + (item.quantity || 1), 0);
+      }
+    } catch {
+      cartCount = 0;
+    }
+
     return NextResponse.json({
       user: {
         id: user.id,
@@ -110,6 +122,7 @@ export async function GET(req: NextRequest) {
       },
       unreadNotifications,
       unreadMessages,
+      cartCount,
       new3dReady,
       next3dLink,
       recentNotifications,

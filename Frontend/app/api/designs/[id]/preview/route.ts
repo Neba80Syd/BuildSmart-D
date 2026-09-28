@@ -13,7 +13,7 @@ export async function GET(
     const user = await resolveUser();
 
     // Check for design or floorplan
-    let design: any = await dbClient.design.findUnique({ where: { id } }).catch(() => null);
+    const design: any = await dbClient.design.findUnique({ where: { id } }).catch(() => null);
     let floorPlan: any = null;
 
     if (!design) {

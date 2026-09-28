@@ -14,7 +14,17 @@ export async function POST(req: NextRequest) {
     });
 
     const body = JSON.parse(rawBody || '{}');
-    const providerType = body.provider || body.channel || 'CARD';
+
+    // Detect provider type: identify Campay from webhook payload fields or headers
+    const isCampay = Boolean(
+      body.endpoint ||
+      body.operator ||
+      body.operator_reference ||
+      body.signature ||
+      (typeof headersObj['authorization'] === 'string' && headersObj['authorization'].includes('Token')) ||
+      headersObj['x-campay-signature']
+    );
+    const providerType = isCampay ? 'CAMPAY' : (body.provider || body.channel || 'CARD');
     const provider = getPaymentProvider(providerType);
 
     // Cryptographic signature check
@@ -23,21 +33,51 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid webhook signature' }, { status: 401 });
     }
 
-    const { reference, providerReference, status, amount, metadata, eventType } = body;
+    const reference = body.external_reference || body.reference;
+    const providerReference = body.reference || body.providerReference;
+    const rawStatus = String(body.status || body.eventType || '').toUpperCase();
+    const amount = Number(body.amount || body.app_amount || 0);
+    const metadata = body.metadata || {};
 
-    // Process event
-    if (eventType === 'PAYMENT_SUCCESS' || status === 'SUCCESS' || status === 'COMPLETED') {
-      // Check if reference maps to an existing escrow
+    const isSuccess = ['SUCCESSFUL', 'SUCCESS', 'COMPLETED', 'PAYMENT_SUCCESS'].includes(rawStatus);
+
+    // Process successful payment event
+    if (isSuccess) {
+      // 1. Update any corresponding Payment record in database
+      const matchingPayment: any = await dbClient.payment.findFirst({
+        where: {
+          OR: [
+            { id: reference },
+            { id: providerReference },
+            { description: { contains: reference } },
+            { description: { contains: providerReference } },
+          ],
+        },
+      }).catch(() => null);
+
+      if (matchingPayment && matchingPayment.status !== 'SUCCEEDED') {
+        await dbClient.payment.update({
+          where: { id: matchingPayment.id },
+          data: { status: 'SUCCEEDED' },
+        }).catch(() => null);
+      }
+
+      // 2. Check if reference maps to an existing escrow transaction
       const existing = await dbClient.escrowTransaction.findFirst({
-        where: { paymentId: providerReference || reference },
+        where: {
+          OR: [
+            { paymentId: providerReference },
+            { paymentId: reference },
+          ],
+        },
       });
 
       if (existing) {
         // Idempotent: already funded
-        return NextResponse.json({ success: true, message: 'Already processed' });
+        return NextResponse.json({ success: true, message: 'Already processed', escrowId: existing.id });
       }
 
-      // If this was a design payment webhook with designId in metadata:
+      // 3. If this was an architectural design payment:
       if (metadata?.designId && metadata?.architectId && metadata?.clientId) {
         await initiateDesignEscrow({
           designId: metadata.designId,
@@ -51,7 +91,7 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    return NextResponse.json({ success: true, message: 'Webhook processed successfully' });
+    return NextResponse.json({ success: true, message: 'Campay webhook processed successfully' });
   } catch (err: any) {
     console.error('[buildsmart:webhook] Error processing webhook:', err);
     return NextResponse.json({ error: err.message || 'Webhook processing failed' }, { status: 500 });

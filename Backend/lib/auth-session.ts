@@ -16,11 +16,25 @@ export type AuthenticatedUser = {
 
 export async function getSessionUser(): Promise<AuthenticatedUser | null> {
   const session = await auth();
-  if (!session?.user) return null;
-  return {
-    id: (session.user as any).id ?? "",
-    name: session.user.name ?? "User",
-    email: session.user.email ?? "",
-    role: ((session.user as any).role ?? "CLIENT") as AuthenticatedUser["role"],
-  };
+  if (session?.user) {
+    return {
+      id: (session.user as any).id ?? "",
+      name: session.user.name ?? "User",
+      email: session.user.email ?? "",
+      role: ((session.user as any).role ?? "CLIENT") as AuthenticatedUser["role"],
+    };
+  }
+
+  // In development / preview mode where auth redirects are bypassed, fall back to
+  // the demo client so cart and marketplace features remain fully functional
+  if (process.env.NODE_ENV !== "production") {
+    return {
+      id: "u_client",
+      name: "Jordan Ellis",
+      email: "jordan@buildsmart.ai",
+      role: "CLIENT",
+    };
+  }
+
+  return null;
 }

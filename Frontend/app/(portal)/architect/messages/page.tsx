@@ -48,26 +48,6 @@ export default function ArchitectMessagesPage() {
     }
   }, [activeRoomId]);
 
-  // Load message history for active room
-  const loadRoomHistory = useCallback(async (roomId: string) => {
-    try {
-      const res = await fetch(`/api/architect/messages?roomId=${roomId}`);
-      if (!res.ok) return;
-      const data = await res.json();
-      if (Array.isArray(data.messages)) {
-        setMessages(data.messages);
-      }
-      // Mark as read
-      await fetch('/api/architect/messages', {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ roomId }),
-      }).catch(() => {});
-    } catch {
-      // Ignore
-    }
-  }, []);
-
   const handleNewMessage = useCallback((msg: any) => {
     setConversations((prev) =>
       prev.map((c) => {
@@ -113,6 +93,26 @@ export default function ArchitectMessagesPage() {
     onNewMessage: handleNewMessage,
     onConversationUpdated: handleConversationUpdated,
   });
+
+  // Load message history for active room
+  const loadRoomHistory = useCallback(async (roomId: string) => {
+    try {
+      const res = await fetch(`/api/architect/messages?roomId=${roomId}`);
+      if (!res.ok) return;
+      const data = await res.json();
+      if (Array.isArray(data.messages)) {
+        setMessages(data.messages);
+      }
+      // Mark as read
+      await fetch('/api/architect/messages', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ roomId }),
+      }).catch(() => {});
+    } catch {
+      // Ignore
+    }
+  }, [setMessages]);
 
   useEffect(() => {
     loadConversations();

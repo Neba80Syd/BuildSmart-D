@@ -20,10 +20,10 @@ export async function GET() {
     .map((d) => ({ kind: 'design', id: d.id, name: d.name, version: d.version, projectId: d.projectId, projectName: projName(d.projectId), status: d.status, thumbnail: d.thumbnail, updatedAt: d.updatedAt }));
 
   const plans: any[] = [];
-  for (const pid of projectIds) plans.push(...(await dbClient.floorPlan.findMany({ where: { projectId: pid, kind: '3D' } })));
+  for (const pid of projectIds) plans.push(...(await dbClient.floorPlan.findMany({ where: { projectId: pid } })));
   const reviewablePlans = plans
     .filter((p) => p.status === 'PUBLISHED' && ['READY_FOR_REVIEW', 'UPDATED_READY', 'VIEWED', 'FEEDBACK_SUBMITTED'].includes(p.reviewStatus))
-    .map((p) => ({ kind: 'floorplan', id: p.id, name: p.name, version: p.version, projectId: p.projectId, projectName: projName(p.projectId), status: p.reviewStatus, publishedAt: p.publishedAt }));
+    .map((p) => ({ kind: 'floorplan', id: p.id, name: p.name, planKind: p.kind, version: p.version, projectId: p.projectId, projectName: projName(p.projectId), status: p.reviewStatus, publishedAt: p.publishedAt }));
 
   // Feedback + architect responses for the client's 3D floorplans.
   const feedback: any[] = [];
@@ -98,8 +98,8 @@ export async function POST(req: NextRequest) {
 
   // floorplan approval — tied to the exact published version (this row).
   const plan: any = await dbClient.floorPlan.findUnique({ where: { id } });
-  if (!plan || plan.kind !== '3D') return NextResponse.json({ error: 'Not a 3D floorplan' }, { status: 404 });
-  if (plan.status !== 'PUBLISHED') return NextResponse.json({ error: 'This 3D floorplan is not published yet' }, { status: 400 });
+  if (!plan) return NextResponse.json({ error: 'Floor plan not found' }, { status: 404 });
+  if (plan.status !== 'PUBLISHED') return NextResponse.json({ error: 'This floor plan is not published yet' }, { status: 400 });
   const project: any = await dbClient.project.findUnique({ where: { id: plan.projectId } });
   if (!project || project.ownerId !== user.id) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
 
@@ -115,8 +115,8 @@ export async function POST(req: NextRequest) {
         console.warn('[buildsmart:approvals] Floorplan escrow release note:', e.message);
       });
     }
-    await dbClient.activity.create({ data: { userId: user.id, projectId: plan.projectId, type: 'DESIGN', title: '3D floorplan approved', body: `${plan.name} (V${plan.version})` } });
-    await dbClient.notification.create({ data: { userId: project.architectId, type: '3D_FLOORPLAN', title: '3D floorplan approved', body: `${user.name} approved ${plan.name} V${plan.version}.`, read: 0 } });
+    await dbClient.activity.create({ data: { userId: user.id, projectId: plan.projectId, type: 'DESIGN', title: `${plan.kind} floor plan approved`, body: `${plan.name} (V${plan.version})` } });
+    await dbClient.notification.create({ data: { userId: project.architectId, type: 'DESIGN', title: `${plan.kind} floor plan approved`, body: `${user.name} approved ${plan.name} V${plan.version}.`, read: 0 } });
     return NextResponse.json({ success: true, updated });
   }
   if (action === 'request_changes') {
@@ -134,12 +134,12 @@ export async function POST(req: NextRequest) {
         console.warn('[buildsmart:approvals] Floorplan revision quota note:', e.message);
       });
     }
-    await dbClient.activity.create({ data: { userId: user.id, projectId: plan.projectId, type: 'DESIGN', title: '3D revision requested', body: comments || plan.name } });
-    await dbClient.notification.create({ data: { userId: project.architectId, type: '3D_FLOORPLAN', title: '3D revision requested', body: `${user.name} requested changes to ${plan.name}.${comments ? ` — ${comments}` : ''}`, read: 0 } });
+    await dbClient.activity.create({ data: { userId: user.id, projectId: plan.projectId, type: 'DESIGN', title: `${plan.kind} revision requested`, body: comments || plan.name } });
+    await dbClient.notification.create({ data: { userId: project.architectId, type: 'DESIGN', title: `${plan.kind} revision requested`, body: `${user.name} requested changes to ${plan.name}.${comments ? ` — ${comments}` : ''}`, read: 0 } });
     return NextResponse.json({ success: true, updated });
   }
   if (action === 'ask_question') {
-    await dbClient.notification.create({ data: { userId: project.architectId, type: '3D_FLOORPLAN', title: '3D floorplan question', body: `${user.name}: ${comments ?? ''}`, read: 0 } });
+    await dbClient.notification.create({ data: { userId: project.architectId, type: 'DESIGN', title: `${plan.kind} floor plan question`, body: `${user.name}: ${comments ?? ''}`, read: 0 } });
     return NextResponse.json({ success: true });
   }
   return NextResponse.json({ success: true });

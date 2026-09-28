@@ -712,3 +712,31 @@
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+/* Custom sleek modal scrollbar */
+.modal-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(140, 150, 145, 0.4) transparent;
+}
+.modal-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+.modal-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.modal-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(140, 150, 145, 0.35);
+  border-radius: 9999px;
+}
+.modal-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(140, 150, 145, 0.6);
+}
+.dark .modal-scrollbar {
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+.dark .modal-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+}
+.dark .modal-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.35);
+}

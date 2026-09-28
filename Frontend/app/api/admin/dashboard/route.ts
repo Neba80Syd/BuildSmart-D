@@ -31,10 +31,11 @@ function series(rows: any[], getDate: (r: any) => Date | null, range: number, ag
 }
 
 export async function GET(req: NextRequest) {
-  const auth = await requireAdmin();
-  if (auth.error) return auth.error;
+  try {
+    const auth = await requireAdmin();
+    if (auth.error) return auth.error;
 
-  const range = Number(new URL(req.url).searchParams.get('range') ?? 30) || 30;
+    const range = Number(new URL(req.url).searchParams.get('range') ?? 30) || 30;
 
   const users: any[] = await dbClient.user.findMany();
   const architects: any[] = await dbClient.architectProfile.findMany();
@@ -109,11 +110,18 @@ export async function GET(req: NextRequest) {
     .sort((a, b) => new Date(b.at).getTime() - new Date(a.at).getTime())
     .slice(0, 12);
 
-  return NextResponse.json({
-    kpis,
-    charts,
-    recentActivity: feed,
-    notifications: notifications.slice(0, 6),
-    verificationPending: pendingVerifications,
-  });
+    return NextResponse.json({
+      kpis,
+      charts,
+      recentActivity: feed,
+      notifications: notifications.slice(0, 6),
+      verificationPending: pendingVerifications,
+    });
+  } catch (error) {
+    console.error('[Admin Dashboard GET Error]:', error);
+    return NextResponse.json(
+      { error: 'Failed to retrieve admin dashboard data' },
+      { status: 500 }
+    );
+  }
 }

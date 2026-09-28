@@ -28,10 +28,10 @@ export function PageHeader({ title, subtitle, crumbs, actions }: { title: string
         {crumbs && crumbs.length > 0 && (
           <nav className="flex items-center gap-1 text-label-md text-on-surface-variant dark:text-surface-variant mb-2" aria-label="Breadcrumb">
             <span>BuildSmart AI</span>
-            {crumbs.map((c) => (
-              <span key={c} className="flex items-center gap-1">
+            {crumbs.map((c, idx) => (
+              <span key={`${c}-${idx}`} className="flex items-center gap-1">
                 <span className="material-symbols-outlined text-[14px]">chevron_right</span>
-                <span className={c === crumbs[crumbs.length - 1] ? 'text-primary dark:text-primary-fixed-dim font-semibold' : ''}>{c}</span>
+                <span className={idx === crumbs.length - 1 ? 'text-primary dark:text-primary-fixed-dim font-semibold' : ''}>{c}</span>
               </span>
             ))}
           </nav>

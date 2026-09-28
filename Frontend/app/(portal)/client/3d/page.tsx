@@ -22,6 +22,9 @@ export default function Client3DPage() {
   const [planId, setPlanId] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [form, setForm] = useState({ floor: 'Ground Floor', area: '', category: 'General Feedback', description: '', priority: 'NORMAL' });
+  const [viewerZoom, setViewerZoom] = useState(1);
+  const [showInputComparison, setShowInputComparison] = useState(false);
+  const [renderMode, setRenderMode] = useState<'perspective' | 'mesh'>('perspective');
 
   const projects: any[] = data?.projects ?? [];
   const plans: any[] = (data?.floorPlans ?? []).filter((p: any) => p.kind === '3D');
@@ -41,6 +44,8 @@ export default function Client3DPage() {
   }, []);
 
   const rooms: any[] = activePlan?.status === 'PUBLISHED' && Array.isArray(activePlan?.data?.rooms) ? activePlan.data.rooms : [];
+  const imageUrl = activePlan?.data?.imageUrl || (activePlan?.svgData && (activePlan.svgData.startsWith('/') || activePlan.svgData.startsWith('http') || activePlan.svgData.startsWith('data:')) ? activePlan.svgData : null);
+  const inputUrl = activePlan?.data?.inputUrl;
 
   const submitFeedback = async () => {
     if (!form.description.trim()) return toast.error('Please describe your feedback');
@@ -106,12 +111,96 @@ export default function Client3DPage() {
                 onApprove={approve}
                 onRequestRevision={requestChanges}
               >
-                <div className="h-[460px] bg-surface-container-low dark:bg-surface-variant/30 relative">
+                <div className="h-[480px] bg-surface-container-low dark:bg-surface-variant/30 relative overflow-hidden">
                   {isGenerating ? (
                     <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-on-surface-variant dark:text-surface-variant">
                       <span className="material-symbols-outlined text-[56px] animate-spin">progress_activity</span>
                       <p className="text-body-sm">Your architect is still preparing the 3D floorplan.</p>
                       <p className="text-label-md">You will receive a notification when it is ready for review.</p>
+                    </div>
+                  ) : activePlan?.status === 'PUBLISHED' && (rooms.length > 0 && renderMode === 'mesh') ? (
+                    <div className="w-full h-full relative">
+                      {imageUrl && (
+                        <div className="absolute top-3 left-3 z-10">
+                          <button
+                            type="button"
+                            onClick={() => setRenderMode('perspective')}
+                            className="px-2.5 py-1 rounded-lg bg-surface/90 dark:bg-surface-container/90 text-on-surface text-label-sm font-medium border border-outline-variant/60 shadow-sm hover:bg-surface-container-low"
+                          >
+                            Switch to 3D Neural Render
+                          </button>
+                        </div>
+                      )}
+                      <BuildingScene rooms={rooms} height={3} color="#b8c4be" />
+                    </div>
+                  ) : activePlan?.status === 'PUBLISHED' && imageUrl ? (
+                    <div className="w-full h-full relative flex flex-col items-center justify-center bg-black/5 dark:bg-black/20">
+                      {/* Floating toolbar */}
+                      <div className="absolute top-3 left-3 right-3 z-10 flex flex-wrap items-center justify-between gap-2 pointer-events-none">
+                        <div className="pointer-events-auto flex items-center gap-2">
+                          <span className="px-2.5 py-1 rounded-full text-label-sm font-medium bg-secondary-container/90 dark:bg-primary-container/80 text-primary dark:text-primary-fixed-dim backdrop-blur-sm shadow-sm flex items-center gap-1.5">
+                            <span className="material-symbols-outlined text-[15px]">view_in_ar</span>
+                            Roomagen 3D Perspective Render
+                          </span>
+                          {rooms.length > 0 && (
+                            <button
+                              type="button"
+                              onClick={() => setRenderMode('mesh')}
+                              className="px-2.5 py-1 rounded-lg bg-surface/90 dark:bg-surface-container/90 text-on-surface text-label-sm font-medium border border-outline-variant/60 shadow-sm hover:bg-surface-container-low"
+                            >
+                              Switch to 3D Mesh
+                            </button>
+                          )}
+                        </div>
+
+                        <div className="pointer-events-auto flex items-center gap-1.5 bg-surface/90 dark:bg-surface-container/90 backdrop-blur-sm p-1 rounded-lg shadow-sm border border-outline-variant/60">
+                          {inputUrl && (
+                            <button
+                              type="button"
+                              onClick={() => setShowInputComparison((v) => !v)}
+                              className={`px-2 py-1 rounded text-label-sm font-medium transition-colors ${showInputComparison ? 'bg-primary text-white' : 'hover:bg-surface-container-low text-on-surface'}`}
+                              title="Toggle 2D source vs 3D render comparison"
+                            >
+                              {showInputComparison ? 'Show 3D Render' : 'Compare 2D Blueprint'}
+                            </button>
+                          )}
+                          <button
+                            type="button"
+                            onClick={() => setViewerZoom((z) => Math.max(0.6, z - 0.2))}
+                            className="p-1 rounded hover:bg-surface-container-low text-on-surface"
+                            title="Zoom out"
+                          >
+                            <span className="material-symbols-outlined text-[18px]">zoom_out</span>
+                          </button>
+                          <span className="text-label-sm font-mono px-1 text-on-surface">{Math.round(viewerZoom * 100)}%</span>
+                          <button
+                            type="button"
+                            onClick={() => setViewerZoom((z) => Math.min(2.5, z + 0.2))}
+                            className="p-1 rounded hover:bg-surface-container-low text-on-surface"
+                            title="Zoom in"
+                          >
+                            <span className="material-symbols-outlined text-[18px]">zoom_in</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setViewerZoom(1)}
+                            className="p-1 rounded hover:bg-surface-container-low text-on-surface"
+                            title="Reset zoom"
+                          >
+                            <span className="material-symbols-outlined text-[18px]">restart_alt</span>
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Display image */}
+                      <div className="w-full h-full flex items-center justify-center overflow-auto p-4">
+                        <img
+                          src={showInputComparison && inputUrl ? inputUrl : imageUrl}
+                          alt={activePlan.name}
+                          className="max-h-full max-w-full object-contain rounded-lg shadow-md transition-transform duration-200"
+                          style={{ transform: `scale(${viewerZoom})` }}
+                        />
+                      </div>
                     </div>
                   ) : activePlan?.status === 'PUBLISHED' && rooms.length > 0 ? (
                     <BuildingScene rooms={rooms} height={3} color="#b8c4be" />

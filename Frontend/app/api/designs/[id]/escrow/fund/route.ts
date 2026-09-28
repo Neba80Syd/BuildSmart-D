@@ -9,7 +9,7 @@ export const dynamic = 'force-dynamic';
 
 const FundSchema = z.object({
   amount: z.number().positive(),
-  paymentMethod: z.enum(['MTN_MOMO', 'ORANGE_MONEY', 'CARD', 'BANK_TRANSFER']).default('MTN_MOMO'),
+  paymentMethod: z.enum(['MTN_MOMO', 'ORANGE_MONEY', 'CARD', 'BANK_TRANSFER', 'CAMPAY']).default('CAMPAY'),
   clientPhone: z.string().optional(),
   milestoneId: z.string().optional(),
   architectId: z.string().optional(),
@@ -33,7 +33,7 @@ export async function POST(
     const { amount, paymentMethod, clientPhone, milestoneId } = parsed.data;
 
     // Resolve design / project / architect
-    let design: any = await dbClient.design.findUnique({ where: { id } }).catch(() => null);
+    const design: any = await dbClient.design.findUnique({ where: { id } }).catch(() => null);
     let floorPlan: any = null;
     if (!design) {
       floorPlan = await dbClient.floorPlan.findUnique({ where: { id } }).catch(() => null);

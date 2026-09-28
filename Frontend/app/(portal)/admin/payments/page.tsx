@@ -21,6 +21,7 @@ export default function AdminPaymentsPage() {
   }, [q, status, kind]);
 
   const { data, loading, error, refetch } = useApi<any>(`/api/admin/payments${query ? `?${query}` : ''}`);
+  const { data: campayStatus } = useApi<any>('/api/payment/campay');
 
   const refund = async (paymentId: string) => {
     setBusy(paymentId + 'refund');
@@ -40,6 +41,43 @@ export default function AdminPaymentsPage() {
   return (
     <div className="p-margin-mobile md:p-margin-desktop max-w-[1440px] mx-auto">
       <PageHeader title="Transactions" subtitle="Unified ledger of payments and architect transactions" crumbs={['Admin', 'Finance', 'Transactions']} />
+
+      {campayStatus?.success && (
+        <Card className="mb-6 bg-gradient-to-r from-emerald-500/10 via-primary/5 to-transparent border-emerald-500/30">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold">
+                <span className="material-symbols-outlined">payments</span>
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <h3 className="text-label-md font-bold text-on-background dark:text-surface-container-lowest">
+                    Campay Mobile Money Gateway
+                  </h3>
+                  <span className={`text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full ${
+                    campayStatus.environment === 'demo'
+                      ? 'bg-amber-500/20 text-amber-700 dark:text-amber-400 border border-amber-500/30'
+                      : 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30'
+                  }`}>
+                    {campayStatus.environment === 'demo' ? 'Sandbox / Demo' : 'Live Production'}
+                  </span>
+                </div>
+                <p className="text-body-xs text-on-surface-variant dark:text-surface-variant mt-0.5">
+                  Connected to {campayStatus.baseUrl} • Direct MTN MoMo, Orange Money & Card Collections
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-4 text-right">
+              <div>
+                <span className="text-body-xs text-on-surface-variant dark:text-surface-variant block">Campay Balance</span>
+                <span className="font-mono-technical font-bold text-on-background dark:text-surface-container-lowest text-label-lg">
+                  {campayStatus.balance?.total_balance ?? 0} {campayStatus.balance?.currency || 'XAF'}
+                </span>
+              </div>
+            </div>
+          </div>
+        </Card>
+      )}
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <StatCard icon="payments" label="Gross" value={money(s.gross)} tone="green" />

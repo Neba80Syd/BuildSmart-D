@@ -27,15 +27,15 @@ const SHARED: NavItem[] = [
 
 const NAV: Record<string, NavItem[]> = {
   CLIENT: [
-    { label: 'Dashboard', icon: 'dashboard', href: '/dashboard' },
+    { label: 'Dashboard', icon: 'dashboard', href: '/client' },
     { label: 'Design Studio', icon: 'architecture', href: '/ai-design' },
     { label: '3D Visualizer', icon: 'view_in_ar', href: '/viewer' },
     { label: 'Material Estimation', icon: 'request_quote', href: '/estimation' },
     { label: 'Source Materials', icon: 'sync_alt', href: '/sourcing' },
-    { label: 'Marketplace', icon: 'storefront', href: '/marketplace-portal' },
-    { label: 'Projects', icon: 'folder_open', href: '/projects' },
+    { label: 'Marketplace', icon: 'storefront', href: '/client/marketplace' },
+    { label: 'Projects', icon: 'folder_open', href: '/client/projects' },
     { label: 'Notifications', icon: 'notifications', href: '/client/notifications' },
-    { label: 'Profile', icon: 'person', href: '/profile?as=client' },
+    { label: 'Profile', icon: 'person', href: '/client/profile' },
     { label: 'Subscription', icon: 'workspace_premium', href: '/subscription' },
     ...SHARED,
   ],
@@ -204,6 +204,7 @@ const CLIENT_GROUPS: NavGroup[] = [
     items: [
       { label: 'Estimates & BOQs', icon: 'request_quote', href: '/client/boq' },
       { label: 'Marketplace', icon: 'storefront', href: '/client/marketplace' },
+      { label: 'Shopping Cart', icon: 'shopping_cart', href: '/client/cart' },
       { label: 'Orders', icon: 'receipt_long', href: '/client/orders' },
     ],
   },
@@ -367,7 +368,7 @@ export function Sidebar({ role }: { role?: string }) {
 
   const derived = deriveRole(pathname);
   const activeRole = derived !== 'CLIENT' ? derived : (role ?? 'CLIENT');
-  const isClientConsole = activeRole === 'CLIENT' && pathname.startsWith('/client');
+  const isClientConsole = activeRole === 'CLIENT';
 
   // Fetch verification status & unread counts
   useEffect(() => {
