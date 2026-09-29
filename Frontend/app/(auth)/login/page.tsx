@@ -40,13 +40,29 @@ export default function LoginPage() {
       // Resolve the role after a successful sign-in and route to the correct
       // dashboard. /api/me is populated by the auth session established above.
       const me = await fetch('/api/me').then((r) => r.json());
-      const role = me?.role ?? 'CLIENT';
+      const role = (me?.role ?? 'CLIENT').toUpperCase();
       const home =
         role === 'ARCHITECT' ? '/architect'
         : role === 'VENDOR' ? '/vendor'
         : role === 'ADMIN' ? '/admin'
         : '/client';
-      router.push(home);
+
+      // Verify callbackUrl matches the user's role workspace
+      const searchParams = new URLSearchParams(window.location.search);
+      const callbackUrl = searchParams.get('callbackUrl');
+      let target = home;
+      if (callbackUrl && callbackUrl.startsWith('/')) {
+        const isTargetAllowed =
+          (role === 'ARCHITECT' && callbackUrl.startsWith('/architect')) ||
+          (role === 'CLIENT' && callbackUrl.startsWith('/client')) ||
+          (role === 'VENDOR' && callbackUrl.startsWith('/vendor')) ||
+          (role === 'ADMIN' && callbackUrl.startsWith('/admin'));
+        if (isTargetAllowed) {
+          target = callbackUrl;
+        }
+      }
+
+      router.push(target);
       router.refresh();
     } catch {
       setError('Unable to sign in. Please try again.');

@@ -93,13 +93,6 @@ const PROFILE_MENUS: Record<Role, ActionItem[]> = {
   ],
 };
 
-function deriveRoleFromPath(pathname: string): Role {
-  if (pathname.startsWith('/architect')) return 'ARCHITECT';
-  if (pathname.startsWith('/vendor')) return 'VENDOR';
-  if (pathname.startsWith('/admin')) return 'ADMIN';
-  return 'CLIENT';
-}
-
 function getHomeHref(role: Role): string {
   switch (role) {
     case 'ARCHITECT':
@@ -144,8 +137,7 @@ function getMessagesHref(role: Role): string {
 export function DashboardHeader({ initialRole }: { initialRole?: Role }) {
   const router = useRouter();
   const pathname = usePathname();
-  const derived = deriveRoleFromPath(pathname);
-  const role = derived !== 'CLIENT' ? derived : (pathname.startsWith('/client') ? 'CLIENT' : (initialRole ?? 'CLIENT'));
+  const role = (initialRole ?? 'CLIENT').toUpperCase() as Role;
   const homeHref = getHomeHref(role);
   const notificationsHref = getNotificationsHref(role);
   const messagesHref = getMessagesHref(role);

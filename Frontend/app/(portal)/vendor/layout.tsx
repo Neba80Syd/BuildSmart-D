@@ -1,7 +1,7 @@
 import { auth } from '@/Backend/lib/auth';
 import { redirect } from 'next/navigation';
 
-export default async function ClientLayout({
+export default async function VendorLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -9,14 +9,14 @@ export default async function ClientLayout({
   const session = await auth();
 
   if (!session?.user) {
-    redirect('/login?callbackUrl=/client');
+    redirect('/login?callbackUrl=/vendor');
   }
 
   const role = ((session.user as any)?.role || '').toUpperCase();
 
-  if (role !== 'CLIENT') {
+  if (role !== 'VENDOR') {
+    if (role === 'CLIENT') redirect('/client');
     if (role === 'ARCHITECT') redirect('/architect');
-    if (role === 'VENDOR') redirect('/vendor');
     if (role === 'ADMIN') redirect('/admin');
     redirect('/client');
   }

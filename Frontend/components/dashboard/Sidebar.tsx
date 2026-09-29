@@ -324,13 +324,6 @@ const CTA: Record<string, { label: string; href: string }> = {
   ADMIN: { label: 'Review Queue', href: '/admin/verification' },
 };
 
-function deriveRole(pathname: string): string {
-  if (pathname.startsWith('/architect')) return 'ARCHITECT';
-  if (pathname.startsWith('/vendor')) return 'VENDOR';
-  if (pathname.startsWith('/admin')) return 'ADMIN';
-  return 'CLIENT';
-}
-
 const ARCHITECT_LOCKED_LABELS = new Set([
   'Projects',
   'Design Requests',
@@ -366,8 +359,7 @@ export function Sidebar({ role }: { role?: string }) {
   const [new3d, setNew3d] = useState(0);
   const [verificationStatus, setVerificationStatus] = useState<string>('VERIFIED');
 
-  const derived = deriveRole(pathname);
-  const activeRole = derived !== 'CLIENT' ? derived : (role ?? 'CLIENT');
+  const activeRole = (role ?? 'CLIENT').toUpperCase();
   const isClientConsole = activeRole === 'CLIENT';
 
   // Fetch verification status & unread counts

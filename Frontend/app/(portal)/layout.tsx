@@ -2,6 +2,7 @@ import { auth } from '@/Backend/lib/auth';
 import { Sidebar } from '@/Frontend/components/dashboard/Sidebar';
 import { DashboardHeader } from '@/Frontend/components/dashboard/DashboardHeader';
 import CopilotFab from '@/Frontend/components/architect/CopilotFab';
+import { redirect } from 'next/navigation';
 
 export default async function PortalLayout({
   children,
@@ -9,10 +10,15 @@ export default async function PortalLayout({
   children: React.ReactNode;
 }) {
   const session = await auth();
-  // PREVIEW MODE: do not redirect when unauthenticated — the Sidebar derives a
-  // role from the current path so every dashboard remains viewable. Re-add the
-  // `redirect('/login')` guard when authentication is re-enabled.
-  const role = (session?.user as any)?.role; // undefined in preview → derived from path
+  if (!session?.user) {
+    redirect('/login');
+  }
+
+  const role = ((session.user as any)?.role || 'CLIENT').toUpperCase() as
+    | 'CLIENT'
+    | 'ARCHITECT'
+    | 'VENDOR'
+    | 'ADMIN';
 
   return (
     <div className="min-h-screen bg-[#FAFAF8] dark:bg-[#17201e]">
@@ -21,7 +27,7 @@ export default async function PortalLayout({
         <DashboardHeader initialRole={role} />
         {children}
       </main>
-      <CopilotFab />
+      {role === 'ARCHITECT' && <CopilotFab />}
     </div>
   );
 }

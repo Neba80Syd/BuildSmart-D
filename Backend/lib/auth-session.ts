@@ -25,16 +25,6 @@ export async function getSessionUser(): Promise<AuthenticatedUser | null> {
     };
   }
 
-  // In development / preview mode where auth redirects are bypassed, fall back to
-  // the demo client so cart and marketplace features remain fully functional
-  if (process.env.NODE_ENV !== "production") {
-    return {
-      id: "u_client",
-      name: "Jordan Ellis",
-      email: "jordan@buildsmart.ai",
-      role: "CLIENT",
-    };
-  }
-
   return null;
 }
+

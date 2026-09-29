@@ -17,7 +17,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   // Auth.js requires a secret to sign/verify JWTs. In dev/preview the changeable
   // dev secret below keeps sign-in working without an .env file; production
   // deployments should still set AUTH_SECRET explicitly.
-  secret: process.env.AUTH_SECRET || "buildsmart-ai-dev-secret-change-me-in-production",
+  secret: process.env.AUTH_SECRET || "buildsmart-ai-local-dev-secret-key-32-chars-long-secure",
   session: { strategy: "jwt" },
   basePath: "/api/auth",
   pages: {

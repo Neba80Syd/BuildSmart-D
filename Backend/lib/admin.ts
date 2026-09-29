@@ -5,7 +5,7 @@
 
 import { NextResponse } from 'next/server';
 import { dbClient } from '@/Backend/lib/db';
-import { resolveUser } from '@/Backend/lib/preview';
+import { auth } from '@/Backend/lib/auth';
 
 export const parseJson = (v: any, fallback: any) => {
   if (v == null) return fallback;
@@ -51,9 +51,13 @@ const ROLE_DESCRIPTIONS: Record<string, string> = {
 
 /** Authenticate + authorize an ADMIN session; return the user or a 403 response. */
 export async function requireAdmin() {
-  const user = await resolveUser('ADMIN');
-  const adminUser = user.role === 'ADMIN' ? user : { id: 'u_admin', name: 'BuildSmart Admin', email: 'admin@demo.com', role: 'ADMIN' as const };
-  if ((adminUser as any).status === 'SUSPENDED' || (adminUser as any).status === 'DEACTIVATED') {
+  const session = await auth();
+  const role = ((session?.user as any)?.role || '').toUpperCase();
+  if (!session?.user || role !== 'ADMIN') {
+    return { error: NextResponse.json({ error: 'Unauthorized: Admin access required' }, { status: 403 }) };
+  }
+  const adminUser = session.user as any;
+  if (adminUser.status === 'SUSPENDED' || adminUser.status === 'DEACTIVATED') {
     return { error: NextResponse.json({ error: 'Account disabled' }, { status: 403 }) };
   }
   return { user: adminUser };
