@@ -1,0 +1,435 @@
+<!DOCTYPE html><html class="light" lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Vendor Dashboard - BuildSmart AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-primary-container": "#a4d2be",
+                      "on-primary": "#ffffff",
+                      "surface-variant": "#d8e5e0",
+                      "secondary": "#416658",
+                      "surface-container-high": "#deebe6",
+                      "secondary-fixed-dim": "#a7cfbe",
+                      "surface-container": "#e4f1eb",
+                      "on-secondary": "#ffffff",
+                      "on-error": "#ffffff",
+                      "on-tertiary": "#ffffff",
+                      "primary-fixed": "#beedd8",
+                      "secondary-fixed": "#c3ecda",
+                      "surface": "#effcf7",
+                      "tertiary-fixed-dim": "#bfc9c5",
+                      "on-primary-fixed": "#002116",
+                      "on-primary-fixed-variant": "#234e3f",
+                      "surface-container-highest": "#d8e5e0",
+                      "surface-bright": "#effcf7",
+                      "tertiary": "#353f3c",
+                      "on-tertiary-container": "#c1cbc7",
+                      "surface-container-lowest": "#ffffff",
+                      "inverse-on-surface": "#e7f4ee",
+                      "on-secondary-fixed": "#002117",
+                      "surface-dim": "#d0ddd8",
+                      "error": "#ba1a1a",
+                      "outline-variant": "#c0c8c3",
+                      "on-tertiary-fixed-variant": "#3f4946",
+                      "outline": "#717974",
+                      "on-error-container": "#93000a",
+                      "inverse-primary": "#a2d0bc",
+                      "surface-tint": "#3c6756",
+                      "on-secondary-container": "#456a5c",
+                      "inverse-surface": "#27332f",
+                      "tertiary-fixed": "#dbe5e1",
+                      "on-surface-variant": "#414944",
+                      "on-secondary-fixed-variant": "#294e41",
+                      "secondary-container": "#c0e9d7",
+                      "primary": "#184436",
+                      "surface-container-low": "#eaf7f1",
+                      "primary-fixed-dim": "#a2d0bc",
+                      "on-tertiary-fixed": "#141d1b",
+                      "on-background": "#131e1b",
+                      "tertiary-container": "#4c5653",
+                      "primary-container": "#315c4c",
+                      "error-container": "#ffdad6",
+                      "on-surface": "#131e1b",
+                      "background": "#effcf7"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "margin-desktop": "48px",
+                      "base": "8px",
+                      "gutter": "24px",
+                      "lg": "24px",
+                      "xl": "40px",
+                      "xs": "4px",
+                      "md": "16px",
+                      "sm": "8px",
+                      "max-width": "1440px",
+                      "margin-mobile": "16px"
+              },
+              "fontFamily": {
+                      "headline-lg": [
+                              "Inter"
+                      ],
+                      "display": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Inter"
+                      ],
+                      "label-md": [
+                              "Inter"
+                      ],
+                      "headline-sm": [
+                              "Inter"
+                      ],
+                      "body-sm": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "mono-technical": [
+                              "Inter"
+                      ],
+                      "headline-lg-mobile": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-md": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-sm": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-sm": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "mono-technical": [
+                              "13px",
+                              {
+                                      "lineHeight": "18px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        body {
+            @apply bg-[#FAFAF8] dark:bg-inverse-surface;
+        }
+      </style>
+</head>
+<body class="font-body-md text-on-surface dark:text-surface-container-lowest antialiased overflow-x-hidden bg-[#FAFAF8]">
+<!-- TopAppBar -->
+<header class="bg-[#FAFAF8] dark:bg-surface-dim docked full-width top sticky border-b border-outline-variant dark:border-outline flat no shadows focus-within:ring-2 focus-within:ring-primary/10 flex justify-between items-center h-16 px-margin-desktop ml-64 z-50 top-0">
+<div class="flex items-center gap-4">
+<span class="font-headline-sm text-headline-sm font-bold text-primary dark:text-primary-fixed-dim">BuildSmart AI</span>
+<div class="h-4 w-px bg-outline-variant"></div>
+<nav class="hidden md:flex gap-6">
+<a class="font-label-md text-label-md text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors" href="#">Drafts</a>
+<a class="font-label-md text-label-md text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors" href="#">Archive</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined cursor-pointer hover:text-primary transition-colors text-on-surface-variant dark:text-surface-variant" data-icon="light_mode" id="theme-toggle">light_mode</button>
+<span class="material-symbols-outlined cursor-pointer hover:text-primary transition-colors text-on-surface-variant dark:text-surface-variant" data-icon="notifications">notifications</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-primary transition-colors text-on-surface-variant dark:text-surface-variant" data-icon="apps">apps</span>
+<button class="bg-primary-container text-on-primary-container font-label-md text-label-md px-4 py-2 rounded uppercase tracking-wider hover:bg-secondary-container transition-colors">Upgrade</button>
+<img alt="User Profile" class="w-8 h-8 rounded-full border border-outline-variant object-cover" data-alt="A clean, professional headshot of an individual in a modern architectural office setting, bright natural light, crisp white background, suitable for a corporate profile avatar, light mode aesthetic, sharp focus, neutral tones with a hint of dark green in the attire." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAIGXmnNsljBpvtEK2Mn8YqA-TGc0qhNiscYBvmwdoPIDYfmRGijGdqQbxIm4u7xymxuWTs0shKtZra3K7Oy7dpChZghD3hrfqZolm7wdQdGtIZEeRmdcfeWzqUVMkJqYNuyG_Q6u3r6JSGRtLVYpyLU9De4Z-JI1aUUH0coRUrsWq9bJMNA4Rt7670AsoVUQav-L0fk2lYbah25p_M4Y5jNPCJHZELfFkyqVwoj2KsL2zOf9LZIvt4jw">
+</div>
+</header>
+<!-- SideNavBar -->
+<aside class="bg-[#FAFAF8] dark:bg-inverse-surface text-primary dark:text-primary-fixed-dim font-body-md text-body-md h-screen w-64 fixed left-0 top-0 border-r border-outline-variant dark:border-outline flat no shadows flex flex-col h-full py-md px-sm z-40">
+<div class="flex items-center gap-3 px-3 mb-8 mt-4">
+<div class="w-10 h-10 bg-primary-container rounded flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-primary-container" style="font-variation-settings: 'FILL' 1;">architecture</span>
+</div>
+<div>
+<h2 class="font-headline-sm text-headline-sm font-bold text-primary dark:text-primary-fixed-dim leading-tight">BuildSmart AI</h2>
+<p class="font-label-md text-label-md text-on-surface-variant dark:text-surface-variant">Professional Suite</p>
+</div>
+</div>
+<button class="mb-6 mx-2 bg-primary-container text-on-primary-container font-label-md text-label-md px-4 py-3 rounded-lg uppercase tracking-wider hover:bg-secondary-container transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">add</span>
+            New Project
+        </button>
+<nav class="flex-1 overflow-y-auto space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-primary dark:text-primary-fixed-dim font-bold bg-secondary-container dark:bg-primary-container rounded-lg scale-98 active:opacity-80 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors duration-200 rounded-lg scale-98 active:opacity-80 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+                Products
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors duration-200 rounded-lg scale-98 active:opacity-80 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+                Inventory
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors duration-200 rounded-lg scale-98 active:opacity-80 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+                Orders
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors duration-200 rounded-lg scale-98 active:opacity-80 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+                Customers
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors duration-200 rounded-lg scale-98 active:opacity-80 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="verified">verified</span>
+                Verification
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors duration-200 rounded-lg scale-98 active:opacity-80 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="monitoring">monitoring</span>
+                Analytics
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors duration-200 rounded-lg scale-98 active:opacity-80 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+                Settings
+            </a>
+</nav>
+<div class="mt-auto pt-4 border-t border-outline-variant dark:border-outline space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors duration-200 rounded-lg scale-98 active:opacity-80 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+                Support
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors duration-200 rounded-lg scale-98 active:opacity-80 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+                Sign Out
+            </a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="bg-[#FAFAF8] dark:bg-inverse-surface ml-64 p-margin-desktop min-h-[calc(100vh-64px)]">
+<!-- Page Header -->
+<div class="flex items-center justify-between mb-8">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-on-background dark:text-surface-container-lowest mb-1">Vendor Dashboard</h1>
+<p class="font-body-md text-body-md text-on-surface-variant dark:text-surface-variant">Manage your architectural supply operations.</p>
+</div>
+<div class="flex items-center gap-2 bg-[#FAFAF8] dark:bg-primary-container text-[#2F6B50] dark:text-on-primary-container px-4 py-2 rounded-full border border-outline-variant dark:border-primary-container"><span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">verified</span><span class="font-label-md text-label-md uppercase tracking-wider">Verified Vendor</span></div>
+</div>
+<!-- Stats Grid (Bento Style) -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter mb-xl">
+<!-- Stat 1 -->
+<div class="dark:bg-surface-container border border-outline-variant dark:border-outline rounded-xl p-6 hover:shadow-[0_4px_12px_rgba(23,32,30,0.05)] transition-shadow bg-white">
+<div class="flex items-start justify-between mb-4">
+<span class="font-label-md text-label-md text-on-surface-variant dark:text-surface-variant uppercase tracking-wider">Total Sales</span>
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed-dim">payments</span>
+</div>
+<div class="font-display text-display text-on-background dark:text-surface-container-lowest">5.8M</div>
+<div class="font-mono-technical text-mono-technical text-on-surface-variant dark:text-surface-variant mt-1">XAF This Month</div>
+</div>
+<!-- Stat 2 -->
+<div class="dark:bg-surface-container border border-outline-variant dark:border-outline rounded-xl p-6 hover:shadow-[0_4px_12px_rgba(23,32,30,0.05)] transition-shadow bg-white">
+<div class="flex items-start justify-between mb-4">
+<span class="font-label-md text-label-md text-on-surface-variant dark:text-surface-variant uppercase tracking-wider">Active Orders</span>
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed-dim">local_shipping</span>
+</div>
+<div class="font-display text-display text-on-background dark:text-surface-container-lowest">12</div>
+<div class="font-mono-technical text-mono-technical text-on-surface-variant dark:text-surface-variant mt-1">Requires Fulfillment</div>
+</div>
+<!-- Stat 3 -->
+<div class="dark:bg-surface-container border border-[#ba1a1a]/30 dark:border-error rounded-xl p-6 hover:shadow-[0_4px_12px_rgba(23,32,30,0.05)] transition-shadow relative overflow-hidden bg-white">
+<div class="absolute top-0 right-0 w-16 h-16 bg-[#ba1a1a]/5 dark:bg-error/10 rounded-bl-full"></div>
+<div class="flex items-start justify-between mb-4 relative z-10">
+<span class="font-label-md text-label-md text-on-surface-variant dark:text-surface-variant uppercase tracking-wider">Out of Stock</span>
+<span class="material-symbols-outlined text-error dark:text-error-container">warning</span>
+</div>
+<div class="font-display text-display text-error dark:text-error-container relative z-10">2</div>
+<div class="font-mono-technical text-mono-technical text-on-surface-variant dark:text-surface-variant mt-1 relative z-10">Immediate Action Needed</div>
+</div>
+<!-- Stat 4 -->
+<div class="dark:bg-surface-container border border-outline-variant dark:border-outline rounded-xl p-6 hover:shadow-[0_4px_12px_rgba(23,32,30,0.05)] transition-shadow bg-white">
+<div class="flex items-start justify-between mb-4">
+<span class="font-label-md text-label-md text-on-surface-variant dark:text-surface-variant uppercase tracking-wider">Total Customers</span>
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed-dim">groups</span>
+</div>
+<div class="font-display text-display text-on-background dark:text-surface-container-lowest">85</div>
+<div class="font-mono-technical text-mono-technical text-[#2F6B50] dark:text-primary-fixed mt-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">trending_up</span> +12% from last month
+                </div>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
+<!-- Recent Orders (Spans 2 cols) -->
+<div class="lg:col-span-2 dark:bg-surface-container border border-outline-variant dark:border-outline rounded-xl flex flex-col bg-white">
+<div class="p-6 border-b border-outline-variant dark:border-outline flex justify-between items-center">
+<h2 class="font-headline-sm text-headline-sm text-on-background dark:text-surface-container-lowest font-semibold">Recent Orders</h2>
+<button class="font-label-md text-label-md text-primary dark:text-primary-fixed-dim uppercase tracking-wider hover:underline">View All</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-outline-variant dark:border-outline bg-surface-container-low dark:bg-surface-dim">
+<th class="py-4 px-6 font-label-md text-label-md text-on-surface-variant dark:text-surface-variant uppercase tracking-wider">Order ID</th>
+<th class="py-4 px-6 font-label-md text-label-md text-on-surface-variant dark:text-surface-variant uppercase tracking-wider">Customer</th>
+<th class="py-4 px-6 font-label-md text-label-md text-on-surface-variant dark:text-surface-variant uppercase tracking-wider">Amount (XAF)</th>
+<th class="py-4 px-6 font-label-md text-label-md text-on-surface-variant dark:text-surface-variant uppercase tracking-wider">Status</th>
+</tr>
+</thead>
+<tbody class="font-body-sm text-body-sm text-on-surface dark:text-surface-container-lowest">
+<tr class="border-b border-outline-variant dark:border-outline hover:bg-surface-container-low dark:hover:bg-surface-dim transition-colors">
+<td class="py-4 px-6 font-mono-technical text-primary dark:text-primary-fixed-dim">ORD-2023-089</td>
+<td class="py-4 px-6">Lomami Construction Ltd.</td>
+<td class="py-4 px-6 font-mono-technical">450,000</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#A66A00]/10 text-[#A66A00] dark:bg-[#FFB951]/20 dark:text-[#FFB951]">Processing</span>
+</td>
+</tr>
+<tr class="border-b border-outline-variant dark:border-outline hover:bg-surface-container-low dark:hover:bg-surface-dim transition-colors">
+<td class="py-4 px-6 font-mono-technical text-primary dark:text-primary-fixed-dim">ORD-2023-088</td>
+<td class="py-4 px-6">Kivuvu Architects</td>
+<td class="py-4 px-6 font-mono-technical">1,200,000</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-surface-variant text-on-surface-variant dark:bg-surface-variant dark:text-on-surface-variant">Shipped</span>
+</td>
+</tr>
+<tr class="border-b border-outline-variant dark:border-outline hover:bg-surface-container-low dark:hover:bg-surface-dim transition-colors">
+<td class="py-4 px-6 font-mono-technical text-primary dark:text-primary-fixed-dim">ORD-2023-087</td>
+<td class="py-4 px-6">Independent Builder (J. Doe)</td>
+<td class="py-4 px-6 font-mono-technical">85,000</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#2F6B50]/10 text-[#2F6B50] dark:bg-primary-container dark:text-on-primary-container">Delivered</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low dark:hover:bg-surface-dim transition-colors">
+<td class="py-4 px-6 font-mono-technical text-primary dark:text-primary-fixed-dim">ORD-2023-086</td>
+<td class="py-4 px-6">Kinshasa Urban Dev</td>
+<td class="py-4 px-6 font-mono-technical">3,500,000</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#2F6B50]/10 text-[#2F6B50] dark:bg-primary-container dark:text-on-primary-container">Delivered</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Inventory Alerts -->
+<div class="dark:bg-surface-container border border-outline-variant dark:border-outline rounded-xl p-6 flex flex-col bg-white">
+<div class="flex justify-between items-center mb-6">
+<h2 class="font-headline-sm text-headline-sm text-on-background dark:text-surface-container-lowest font-semibold">Inventory Alerts</h2>
+<span class="material-symbols-outlined text-on-surface-variant dark:text-surface-variant">inventory</span>
+</div>
+<div class="space-y-4 flex-1">
+<!-- Alert Item 1 -->
+<div class="p-4 border border-[#ba1a1a]/30 dark:border-error/50 bg-[#ba1a1a]/5 dark:bg-error/10 rounded-lg flex items-start gap-3">
+<span class="material-symbols-outlined text-error dark:text-error-container mt-0.5" style="font-variation-settings: 'FILL' 1;">warning</span>
+<div>
+<h3 class="font-body-md text-body-md font-semibold text-on-background dark:text-surface-container-lowest">Portland Cement Type I</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant dark:text-surface-variant mt-1">Stock level critical. Only 15 bags remaining.</p>
+<button class="mt-3 font-label-md text-label-md text-primary dark:text-primary-fixed-dim uppercase tracking-wider hover:underline">Restock Now</button>
+</div>
+</div>
+<!-- Alert Item 2 -->
+<div class="p-4 border border-[#ba1a1a]/30 dark:border-error/50 bg-[#ba1a1a]/5 dark:bg-error/10 rounded-lg flex items-start gap-3">
+<span class="material-symbols-outlined text-error dark:text-error-container mt-0.5" style="font-variation-settings: 'FILL' 1;">warning</span>
+<div>
+<h3 class="font-body-md text-body-md font-semibold text-on-background dark:text-surface-container-lowest">Rebar 12mm</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant dark:text-surface-variant mt-1">Out of stock. 3 pending orders waiting.</p>
+<button class="mt-3 font-label-md text-label-md text-primary dark:text-primary-fixed-dim uppercase tracking-wider hover:underline">Update Lead Time</button>
+</div>
+</div>
+<!-- Warning Item -->
+<div class="p-4 border border-[#A66A00]/30 dark:border-[#FFB951]/50 bg-[#A66A00]/5 dark:bg-[#FFB951]/10 rounded-lg flex items-start gap-3 mt-auto">
+<span class="material-symbols-outlined text-[#A66A00] dark:text-[#FFB951] mt-0.5" style="font-variation-settings: 'FILL' 1;">info</span>
+<div>
+<h3 class="font-body-md text-body-md font-semibold text-on-background dark:text-surface-container-lowest">Structural Timber</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant dark:text-surface-variant mt-1">Running low (40 units). Consider reordering soon.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<script>
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const htmlElement = document.documentElement;
+
+    themeToggleBtn.addEventListener('click', () => {
+        htmlElement.classList.toggle('dark');
+        htmlElement.classList.toggle('light');
+        if (htmlElement.classList.contains('dark')) {
+            themeToggleBtn.textContent = 'dark_mode';
+        } else {
+            themeToggleBtn.textContent = 'light_mode';
+        }
+    });
+</script>
+
+
+</body></html>

@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BuildSmart AI - AI Design Studio</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-container": "#315c4c",
+                    "on-background": "#131e1b",
+                    "surface-container": "#e4f1eb",
+                    "on-tertiary-fixed": "#141d1b",
+                    "primary-fixed-dim": "#a2d0bc",
+                    "tertiary": "#353f3c",
+                    "secondary-fixed": "#c3ecda",
+                    "tertiary-container": "#4c5653",
+                    "tertiary-fixed-dim": "#bfc9c5",
+                    "surface-container-lowest": "#ffffff",
+                    "inverse-surface": "#27332f",
+                    "secondary-fixed-dim": "#a7cfbe",
+                    "inverse-on-surface": "#e7f4ee",
+                    "on-primary-fixed-variant": "#234e3f",
+                    "on-secondary-container": "#456a5c",
+                    "surface-container-highest": "#d8e5e0",
+                    "outline": "#717974",
+                    "background": "#effcf7",
+                    "surface-tint": "#3c6756",
+                    "outline-variant": "#c0c8c3",
+                    "surface-container-high": "#deebe6",
+                    "surface-variant": "#d8e5e0",
+                    "on-surface-variant": "#414944",
+                    "on-secondary": "#ffffff",
+                    "tertiary-fixed": "#dbe5e1",
+                    "surface-dim": "#d0ddd8",
+                    "surface-container-low": "#eaf7f1",
+                    "surface-bright": "#effcf7",
+                    "on-primary-fixed": "#002116",
+                    "primary": "#184436",
+                    "on-tertiary-fixed-variant": "#3f4946",
+                    "on-surface": "#131e1b",
+                    "on-tertiary-container": "#c1cbc7",
+                    "on-error-container": "#93000a",
+                    "secondary": "#416658",
+                    "inverse-primary": "#a2d0bc",
+                    "on-secondary-fixed": "#002117",
+                    "secondary-container": "#c0e9d7",
+                    "on-error": "#ffffff",
+                    "primary-fixed": "#beedd8",
+                    "error-container": "#ffdad6",
+                    "surface": "#effcf7",
+                    "on-primary": "#ffffff",
+                    "on-secondary-fixed-variant": "#294e41",
+                    "on-primary-container": "#a4d2be",
+                    "on-tertiary": "#ffffff",
+                    "error": "#ba1a1a"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "md": "16px",
+                    "gutter": "24px",
+                    "margin-desktop": "48px",
+                    "sm": "8px",
+                    "lg": "24px",
+                    "margin-mobile": "16px",
+                    "max-width": "1440px",
+                    "xl": "40px",
+                    "xs": "4px",
+                    "base": "8px"
+            },
+            "fontFamily": {
+                    "label-md": [
+                            "Inter"
+                    ],
+                    "body-sm": [
+                            "Inter"
+                    ],
+                    "display": [
+                            "Inter"
+                    ],
+                    "headline-lg-mobile": [
+                            "Inter"
+                    ],
+                    "body-lg": [
+                            "Inter"
+                    ],
+                    "headline-md": [
+                            "Inter"
+                    ],
+                    "headline-lg": [
+                            "Inter"
+                    ],
+                    "body-md": [
+                            "Inter"
+                    ],
+                    "headline-sm": [
+                            "Inter"
+                    ],
+                    "mono-technical": [
+                            "Inter"
+                    ]
+            },
+            "fontSize": {
+                    "label-md": [
+                            "12px",
+                            {
+                                    "lineHeight": "16px",
+                                    "letterSpacing": "0.05em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "body-sm": [
+                            "14px",
+                            {
+                                    "lineHeight": "20px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "display": [
+                            "48px",
+                            {
+                                    "lineHeight": "56px",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "headline-lg-mobile": [
+                            "24px",
+                            {
+                                    "lineHeight": "32px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "body-lg": [
+                            "18px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "headline-md": [
+                            "24px",
+                            {
+                                    "lineHeight": "32px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "headline-lg": [
+                            "32px",
+                            {
+                                    "lineHeight": "40px",
+                                    "letterSpacing": "-0.01em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "body-md": [
+                            "16px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "headline-sm": [
+                            "20px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "mono-technical": [
+                            "13px",
+                            {
+                                    "lineHeight": "18px",
+                                    "fontWeight": "500"
+                            }
+                    ]
+            }
+    },
+        },
+      }
+    </script>
+<style>
+        .blueprint-grid {
+            background-color: #fafaf8;
+            background-image: 
+                linear-gradient(#dde2e0 1px, transparent 1px),
+                linear-gradient(90deg, #dde2e0 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+        
+        .dark .blueprint-grid {
+            background-color: #131e1b;
+            background-image: 
+                linear-gradient(#27332f 1px, transparent 1px),
+                linear-gradient(90deg, #27332f 1px, transparent 1px);
+        }
+
+        /* Custom scrollbar for webkit */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f6f7f7; 
+        }
+        .dark ::-webkit-scrollbar-track {
+            background: #131e1b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #dde2e0; 
+            border-radius: 4px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #27332f;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #c0c8c3; 
+        }
+        .dark ::-webkit-scrollbar-thumb:hover {
+            background: #3f4946;
+        }
+    </style>
+<script>
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+            const icon = document.getElementById('theme-icon');
+            if (document.documentElement.classList.contains('dark')) {
+                icon.innerText = 'light_mode';
+            } else {
+                icon.innerText = 'dark_mode';
+            }
+        }
+    </script>
+</head>
+<body class="bg-[#FAFAF8] dark:bg-inverse-surface text-on-background dark:text-inverse-on-surface h-full flex flex-col font-body-md overflow-hidden antialiased">
+<!-- TopNavBar -->
+<header class="bg-white dark:bg-inverse-surface w-full sticky top-0 z-50 border-b border-outline-variant dark:border-outline-variant/30 flat no shadows">
+<div class="flex justify-between items-center h-16 px-gutter max-w-max-width mx-auto">
+<div class="flex items-center gap-xl">
+<div class="font-headline-md text-headline-md font-bold text-primary dark:text-inverse-primary cursor-pointer transition-all duration-200">
+                    BuildSmart AI
+                </div>
+<!-- Desktop Navigation -->
+<nav class="hidden md:flex gap-lg font-body-md text-body-md">
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-inverse-primary transition-colors cursor-pointer transition-all duration-200" href="#">Platform</a>
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-inverse-primary transition-colors cursor-pointer transition-all duration-200" href="#">Marketplace</a>
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-inverse-primary transition-colors cursor-pointer transition-all duration-200" href="#">Enterprise</a>
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-inverse-primary transition-colors cursor-pointer transition-all duration-200" href="#">Pricing</a>
+</nav>
+</div>
+<div class="flex items-center gap-md">
+<button class="text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-inverse-primary transition-colors cursor-pointer flex items-center" onclick="toggleTheme()" title="Toggle Theme">
+<span class="material-symbols-outlined text-[24px]" id="theme-icon">dark_mode</span>
+</button>
+<span class="material-symbols-outlined text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-inverse-primary transition-colors cursor-pointer" data-icon="search">search</span>
+<span class="h-6 w-[1px] bg-outline-variant dark:bg-outline-variant/30 mx-2"></span>
+<button class="font-label-md text-label-md text-primary dark:text-inverse-primary hover:text-primary-container dark:hover:text-primary-fixed transition-colors">Sign In</button>
+</div>
+</div>
+</header>
+<!-- Main Workspace Area -->
+<div class="flex flex-1 overflow-hidden">
+<!-- SideNavBar - Integrated as Left Panel in this context -->
+<aside class="bg-white dark:bg-inverse-surface h-full w-64 flex-shrink-0 border-r border-outline-variant dark:border-outline-variant/30 flat no shadows flex flex-col py-md overflow-y-auto hidden md:flex">
+<div class="px-gutter mb-lg">
+<div class="font-headline-sm text-headline-sm font-bold text-primary dark:text-inverse-primary mb-1">Project Alpha</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant dark:text-outline-variant">Lead Architect</div>
+</div>
+<nav class="flex flex-col gap-1 flex-1">
+<a class="text-on-surface-variant dark:text-outline-variant hover:bg-surface-variant hover:bg-surface-container-high dark:hover:bg-tertiary-container transition-colors flex items-center gap-3 px-4 py-3 mx-2 my-1 transition-all duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="bg-primary-container dark:bg-primary-fixed-dim text-on-primary-container dark:text-on-primary-fixed font-semibold rounded-lg flex items-center gap-3 px-4 py-3 mx-2 my-1 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="architecture">architecture</span>
+<span class="font-label-md text-label-md">Design Studio</span>
+</a>
+<a class="text-on-surface-variant dark:text-outline-variant hover:bg-surface-variant hover:bg-surface-container-high dark:hover:bg-tertiary-container transition-colors flex items-center gap-3 px-4 py-3 mx-2 my-1 transition-all duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="edit_square">edit_square</span>
+<span class="font-label-md text-label-md">Floor Plans</span>
+</a>
+<a class="text-on-surface-variant dark:text-outline-variant hover:bg-surface-variant hover:bg-surface-container-high dark:hover:bg-tertiary-container transition-colors flex items-center gap-3 px-4 py-3 mx-2 my-1 transition-all duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="view_in_ar">view_in_ar</span>
+<span class="font-label-md text-label-md">3D Visualizer</span>
+</a>
+<a class="text-on-surface-variant dark:text-outline-variant hover:bg-surface-variant hover:bg-surface-container-high dark:hover:bg-tertiary-container transition-colors flex items-center gap-3 px-4 py-3 mx-2 my-1 transition-all duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="storefront">storefront</span>
+<span class="font-label-md text-label-md">Marketplace</span>
+</a>
+<a class="text-on-surface-variant dark:text-outline-variant hover:bg-surface-variant hover:bg-surface-container-high dark:hover:bg-tertiary-container transition-colors flex items-center gap-3 px-4 py-3 mx-2 my-1 transition-all duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="folder_open">folder_open</span>
+<span class="font-label-md text-label-md">Projects</span>
+</a>
+<a class="text-on-surface-variant dark:text-outline-variant hover:bg-surface-variant hover:bg-surface-container-high dark:hover:bg-tertiary-container transition-colors flex items-center gap-3 px-4 py-3 mx-2 my-1 transition-all duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</nav>
+<div class="px-gutter mt-auto pt-lg border-t border-outline-variant dark:border-outline-variant/30">
+<button class="w-full bg-[#184436] dark:bg-inverse-primary hover:bg-[#264B3E] dark:hover:bg-primary-fixed-dim text-white dark:text-on-primary-fixed font-label-md text-label-md py-2 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors mb-md">
+<span class="material-symbols-outlined text-[18px]" data-icon="add">add</span>
+                    New Project
+                </button>
+<div class="flex flex-col gap-1">
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-inverse-primary transition-colors flex items-center gap-3 px-2 py-2" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="help">help</span>
+<span class="font-label-md text-label-md">Help Center</span>
+</a>
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-inverse-primary transition-colors flex items-center gap-3 px-2 py-2" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="logout">logout</span>
+<span class="font-label-md text-label-md">Logout</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- Center Canvas - AI Design Studio Area -->
+<main class="flex-1 flex flex-col min-w-0 bg-[#FAFAF8] dark:bg-on-background relative">
+<!-- Studio Toolbar -->
+<div class="h-14 border-b border-outline-variant dark:border-outline-variant/30 flex items-center justify-between px-md bg-white dark:bg-inverse-surface z-10">
+<div class="flex items-center gap-sm">
+<div class="font-label-md text-label-md text-on-surface dark:text-inverse-on-surface bg-surface-container-low dark:bg-tertiary-container px-3 py-1.5 rounded border border-outline-variant dark:border-outline-variant/30">
+                        Draft 4: Modern Residential
+                    </div>
+<span class="text-outline-variant px-2">|</span>
+<button class="text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-inverse-primary transition-colors flex items-center gap-1" title="Undo">
+<span class="material-symbols-outlined text-[20px]">undo</span>
+</button>
+<button class="text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-inverse-primary transition-colors flex items-center gap-1" title="Redo">
+<span class="material-symbols-outlined text-[20px]">redo</span>
+</button>
+</div>
+<div class="flex items-center gap-md">
+<button class="border border-[#17201E] dark:border-outline-variant/30 text-[#17201E] dark:text-inverse-on-surface hover:bg-[#F6F7F7] dark:hover:bg-tertiary-container font-label-md text-label-md py-1.5 px-4 rounded transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">save</span>
+                        Save
+                    </button>
+<button class="border border-[#17201E] dark:border-outline-variant/30 text-[#17201E] dark:text-inverse-on-surface hover:bg-[#F6F7F7] dark:hover:bg-tertiary-container font-label-md text-label-md py-1.5 px-4 rounded transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">download</span>
+                        Export
+                    </button>
+</div>
+</div>
+<!-- Canvas Area -->
+<div class="flex-1 relative blueprint-grid overflow-hidden flex items-center justify-center">
+<!-- Floating Action Center -->
+<div class="absolute bottom-lg left-1/2 transform -translate-x-1/2 z-20 flex gap-md">
+<button class="bg-[#315C4C] dark:bg-inverse-primary hover:bg-[#264B3E] dark:hover:bg-primary-fixed-dim text-white dark:text-on-primary-fixed font-label-md text-label-md py-3 px-6 rounded-full shadow-[0_4px_12px_rgba(23,32,30,0.1)] transition-all flex items-center gap-2">
+<span class="material-symbols-outlined" data-weight="fill">auto_awesome</span>
+                        Generate AI Layout
+                    </button>
+</div>
+<!-- Abstract Blueprint Visualization (Placeholder for AI output) -->
+<div class="w-3/4 h-3/4 border-2 border-primary/20 dark:border-inverse-primary/20 bg-white/50 dark:bg-inverse-surface/50 backdrop-blur-sm rounded-xl relative shadow-sm flex items-center justify-center">
+<div class="text-center text-outline dark:text-outline-variant">
+<span class="material-symbols-outlined text-4xl mb-2 opacity-50">architecture</span>
+<p class="font-mono-technical text-mono-technical">AI generated layout will appear here.</p>
+<p class="font-body-sm text-body-sm mt-1">Configure requirements in the panels to begin.</p>
+</div>
+<!-- Example technical annotations -->
+<div class="absolute top-4 left-4 font-mono-technical text-xs text-primary/70 dark:text-inverse-primary/70">SCALE: 1:100</div>
+<div class="absolute bottom-4 right-4 font-mono-technical text-xs text-primary/70 dark:text-inverse-primary/70">N ↑</div>
+</div>
+</div>
+</main>
+<!-- Right Panel - AI Assistant & Properties -->
+<aside class="w-80 border-l border-outline-variant dark:border-outline-variant/30 bg-white dark:bg-inverse-surface h-full flex flex-col flex-shrink-0 hidden lg:flex">
+<!-- Panel Tabs -->
+<div class="flex border-b border-outline-variant dark:border-outline-variant/30 h-14">
+<button class="flex-1 font-label-md text-label-md border-b-2 border-primary dark:border-inverse-primary text-primary dark:text-inverse-primary bg-surface-container-low/50 dark:bg-tertiary-container/50 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+                    Requirements
+                </button>
+<button class="flex-1 font-label-md text-label-md text-on-surface-variant dark:text-outline-variant hover:bg-surface-variant/50 dark:hover:bg-tertiary-container/30 transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">forum</span>
+                    AI Assistant
+                </button>
+</div>
+<!-- Form Content -->
+<div class="flex-1 overflow-y-auto p-md space-y-lg">
+<div class="space-y-sm">
+<label class="block font-label-md text-label-md text-[#17201E] dark:text-inverse-on-surface">Building Type</label>
+<select class="w-full bg-white dark:bg-tertiary border border-[#DDE2E0] dark:border-outline-variant/30 rounded-lg px-3 py-2 font-body-sm text-body-sm text-on-surface dark:text-inverse-on-surface focus:outline-none focus:border-[#315C4C] dark:focus:border-inverse-primary focus:ring-2 focus:ring-[#315C4C]/10 dark:focus:ring-inverse-primary/10 transition-all">
+<option>Residential</option>
+<option>Commercial</option>
+<option>Industrial</option>
+<option>Mixed Use</option>
+</select>
+</div>
+<div class="grid grid-cols-2 gap-md">
+<div class="space-y-sm">
+<label class="block font-label-md text-label-md text-[#17201E] dark:text-inverse-on-surface">Floors</label>
+<input class="w-full bg-white dark:bg-tertiary border border-[#DDE2E0] dark:border-outline-variant/30 rounded-lg px-3 py-2 font-body-sm text-body-sm text-on-surface dark:text-inverse-on-surface focus:outline-none focus:border-[#315C4C] dark:focus:border-inverse-primary focus:ring-2 focus:ring-[#315C4C]/10 dark:focus:ring-inverse-primary/10 transition-all" max="100" min="1" type="number" value="2"/>
+</div>
+<div class="space-y-sm">
+<label class="block font-label-md text-label-md text-[#17201E] dark:text-inverse-on-surface">Total SqFt</label>
+<input class="w-full bg-white dark:bg-tertiary border border-[#DDE2E0] dark:border-outline-variant/30 rounded-lg px-3 py-2 font-body-sm text-body-sm text-on-surface dark:text-inverse-on-surface focus:outline-none focus:border-[#315C4C] dark:focus:border-inverse-primary focus:ring-2 focus:ring-[#315C4C]/10 dark:focus:ring-inverse-primary/10 transition-all" placeholder="e.g. 2500" type="text"/>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-md">
+<div class="space-y-sm">
+<label class="block font-label-md text-label-md text-[#17201E] dark:text-inverse-on-surface">Bedrooms</label>
+<select class="w-full bg-white dark:bg-tertiary border border-[#DDE2E0] dark:border-outline-variant/30 rounded-lg px-3 py-2 font-body-sm text-body-sm text-on-surface dark:text-inverse-on-surface focus:outline-none focus:border-[#315C4C] dark:focus:border-inverse-primary focus:ring-2 focus:ring-[#315C4C]/10 dark:focus:ring-inverse-primary/10 transition-all">
+<option>1</option>
+<option>2</option>
+<option selected="">3</option>
+<option>4</option>
+<option>5+</option>
+</select>
+</div>
+<div class="space-y-sm">
+<label class="block font-label-md text-label-md text-[#17201E] dark:text-inverse-on-surface">Bathrooms</label>
+<select class="w-full bg-white dark:bg-tertiary border border-[#DDE2E0] dark:border-outline-variant/30 rounded-lg px-3 py-2 font-body-sm text-body-sm text-on-surface dark:text-inverse-on-surface focus:outline-none focus:border-[#315C4C] dark:focus:border-inverse-primary focus:ring-2 focus:ring-[#315C4C]/10 dark:focus:ring-inverse-primary/10 transition-all">
+<option>1</option>
+<option>1.5</option>
+<option selected="">2</option>
+<option>2.5</option>
+<option>3+</option>
+</select>
+</div>
+</div>
+<div class="space-y-sm">
+<label class="block font-label-md text-label-md text-[#17201E] dark:text-inverse-on-surface">Architectural Style</label>
+<select class="w-full bg-white dark:bg-tertiary border border-[#DDE2E0] dark:border-outline-variant/30 rounded-lg px-3 py-2 font-body-sm text-body-sm text-on-surface dark:text-inverse-on-surface focus:outline-none focus:border-[#315C4C] dark:focus:border-inverse-primary focus:ring-2 focus:ring-[#315C4C]/10 dark:focus:ring-inverse-primary/10 transition-all">
+<option>Modern Minimalist</option>
+<option>Contemporary</option>
+<option>Industrial Loft</option>
+<option>Mid-Century Modern</option>
+<option>Traditional Craftsman</option>
+</select>
+</div>
+<div class="space-y-sm">
+<label class="block font-label-md text-label-md text-[#17201E] dark:text-inverse-on-surface">Budget Range</label>
+<input class="w-full accent-[#315C4C] dark:accent-inverse-primary" max="5" min="1" type="range"/>
+<div class="flex justify-between font-mono-technical text-xs text-outline-variant">
+<span>Economy</span>
+<span>Premium</span>
+<span>Luxury</span>
+</div>
+</div>
+<hr class="border-outline-variant dark:border-outline-variant/30 my-md"/>
+<!-- Real-time Stats Box -->
+<div class="bg-surface-container-low dark:bg-tertiary-container border border-outline-variant dark:border-outline-variant/30 rounded-lg p-3">
+<h4 class="font-label-md text-label-md text-on-surface dark:text-inverse-on-surface mb-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">analytics</span>
+                        Estimates
+                    </h4>
+<div class="space-y-2 font-mono-technical text-mono-technical">
+<div class="flex justify-between">
+<span class="text-on-surface-variant dark:text-outline-variant">Est. Material Cost:</span>
+<span class="text-on-surface dark:text-inverse-on-surface font-semibold">Pending</span>
+</div>
+<div class="flex justify-between">
+<span class="text-on-surface-variant dark:text-outline-variant">Timeline:</span>
+<span class="text-on-surface dark:text-inverse-on-surface font-semibold">Pending</span>
+</div>
+</div>
+</div>
+</div>
+</aside>
+</div>
+</body></html>

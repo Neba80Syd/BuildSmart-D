@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en" style=""><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BuildSmart AI - Admin Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-primary-container": "#a4d2be",
+                      "on-primary": "#ffffff",
+                      "surface-variant": "#d8e5e0",
+                      "secondary": "#416658",
+                      "surface-container-high": "#deebe6",
+                      "secondary-fixed-dim": "#a7cfbe",
+                      "surface-container": "#e4f1eb",
+                      "on-secondary": "#ffffff",
+                      "on-error": "#ffffff",
+                      "on-tertiary": "#ffffff",
+                      "primary-fixed": "#beedd8",
+                      "secondary-fixed": "#c3ecda",
+                      "surface": "#effcf7",
+                      "tertiary-fixed-dim": "#bfc9c5",
+                      "on-primary-fixed": "#002116",
+                      "on-primary-fixed-variant": "#234e3f",
+                      "surface-container-highest": "#d8e5e0",
+                      "surface-bright": "#effcf7",
+                      "tertiary": "#353f3c",
+                      "on-tertiary-container": "#c1cbc7",
+                      "surface-container-lowest": "#ffffff",
+                      "inverse-on-surface": "#e7f4ee",
+                      "on-secondary-fixed": "#002117",
+                      "surface-dim": "#d0ddd8",
+                      "error": "#ba1a1a",
+                      "outline-variant": "#c0c8c3",
+                      "on-tertiary-fixed-variant": "#3f4946",
+                      "outline": "#717974",
+                      "on-error-container": "#93000a",
+                      "inverse-primary": "#a2d0bc",
+                      "surface-tint": "#3c6756",
+                      "on-secondary-container": "#456a5c",
+                      "inverse-surface": "#27332f",
+                      "tertiary-fixed": "#dbe5e1",
+                      "on-surface-variant": "#414944",
+                      "on-secondary-fixed-variant": "#294e41",
+                      "secondary-container": "#c0e9d7",
+                      "primary": "#184436",
+                      "surface-container-low": "#eaf7f1",
+                      "primary-fixed-dim": "#a2d0bc",
+                      "on-tertiary-fixed": "#141d1b",
+                      "on-background": "#131e1b",
+                      "tertiary-container": "#4c5653",
+                      "primary-container": "#315c4c",
+                      "error-container": "#ffdad6",
+                      "on-surface": "#131e1b",
+                      "background": "#effcf7"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "margin-desktop": "48px",
+                      "base": "8px",
+                      "gutter": "24px",
+                      "lg": "24px",
+                      "xl": "40px",
+                      "xs": "4px",
+                      "md": "16px",
+                      "sm": "8px",
+                      "max-width": "1440px",
+                      "margin-mobile": "16px"
+              },
+              "fontFamily": {
+                      "headline-lg": [
+                              "Inter"
+                      ],
+                      "display": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Inter"
+                      ],
+                      "label-md": [
+                              "Inter"
+                      ],
+                      "headline-sm": [
+                              "Inter"
+                      ],
+                      "body-sm": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "mono-technical": [
+                              "Inter"
+                      ],
+                      "headline-lg-mobile": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-md": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-sm": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-sm": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "mono-technical": [
+                              "13px",
+                              {
+                                      "lineHeight": "18px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        .material-symbols-outlined {
+          font-variation-settings:
+          'FILL' 0,
+          'wght' 400,
+          'GRAD' 0,
+          'opsz' 24
+        }
+        .material-symbols-outlined[data-weight="fill"] {
+            font-variation-settings: 'FILL' 1;
+        }
+      </style>
+<script>
+    function toggleTheme() {
+        const html = document.documentElement;
+        if (html.classList.contains('dark')) {
+            html.classList.remove('dark');
+            html.classList.add('light');
+            localStorage.setItem('theme', 'light');
+        } else {
+            html.classList.remove('light');
+            html.classList.add('dark');
+            localStorage.setItem('theme', 'dark');
+        }
+    }
+    
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+      document.documentElement.classList.remove('light');
+    }
+</script>
+</head>
+<body class="bg-[#FAFAF8] dark:bg-[#111827] text-on-surface dark:text-[#F3F4F6] font-body-md min-h-screen transition-colors">
+<!-- TopAppBar -->
+<header class="bg-[#FAFAF8] dark:bg-[#1F2937] border-b border-outline-variant dark:border-[#374151] flex justify-between items-center h-16 px-margin-desktop ml-64 sticky top-0 z-50 transition-colors">
+<div class="flex items-center gap-gutter">
+<div class="font-headline-sm text-headline-sm font-bold text-primary dark:text-[#34D399]">BuildSmart AI</div>
+<nav class="hidden md:flex gap-lg font-label-md text-label-md">
+<a class="text-primary dark:text-[#34D399] border-b-2 border-primary dark:border-[#34D399] py-4" href="#">Drafts</a>
+<a class="text-on-surface-variant dark:text-[#9CA3AF] hover:text-primary dark:hover:text-[#34D399] transition-colors py-4" href="#">Archive</a>
+</nav>
+</div>
+<div class="flex items-center gap-md">
+<div class="focus-within:ring-2 focus-within:ring-primary/10 relative">
+<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-outline dark:text-[#9CA3AF]">search</span>
+<input class="pl-xl pr-sm py-sm rounded-DEFAULT border border-outline-variant dark:border-[#374151] bg-surface-container-lowest dark:bg-[#111827] dark:text-white focus:border-primary dark:focus:border-[#34D399] focus:outline-none font-body-sm text-body-sm w-64 transition-colors" placeholder="Search..." type="text"/>
+</div>
+<button class="text-on-surface-variant dark:text-[#9CA3AF] hover:text-primary dark:hover:text-[#34D399] transition-colors flex items-center justify-center w-10 h-10 rounded-full hover:bg-surface-container-high dark:hover:bg-[#374151]" onclick="toggleTheme()">
+<span class="material-symbols-outlined dark:hidden">dark_mode</span>
+<span class="material-symbols-outlined hidden dark:block">light_mode</span>
+</button>
+<button class="text-on-surface-variant dark:text-[#9CA3AF] hover:text-primary dark:hover:text-[#34D399] transition-colors flex items-center justify-center w-10 h-10 rounded-full hover:bg-surface-container-high dark:hover:bg-[#374151]">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="text-on-surface-variant dark:text-[#9CA3AF] hover:text-primary dark:hover:text-[#34D399] transition-colors flex items-center justify-center w-10 h-10 rounded-full hover:bg-surface-container-high dark:hover:bg-[#374151]">
+<span class="material-symbols-outlined" data-icon="apps">apps</span>
+</button>
+<button class="bg-primary-container dark:bg-[#059669] text-on-primary px-lg py-sm rounded-DEFAULT font-label-md text-label-md hover:bg-[#264B3E] dark:hover:bg-[#047857] transition-colors">Upgrade</button>
+<div class="w-8 h-8 rounded-full overflow-hidden bg-surface-container-high dark:bg-[#374151] border border-outline-variant dark:border-[#4B5563] ml-sm">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="A close up, professional headshot of a person looking directly at the camera. The background is a slightly blurred, modern architectural office setting with high key, soft white lighting. The color palette features natural skin tones, white clothing, and subtle architectural greens and grays in the background. The mood is confident and professional." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBYX9KwMbfCBxbJfgYLmjxmRAiOZ_8GoFWwtIE_nezB7eslqGxztxW5x7AqT6HyuYsfDshjdftXjKevMyXJxhnL4UtvwxS3FLsbqVik5Xygb3QuocshAPb3smj0uaYMzbVQGz7hoDKX2e_6YiIK-YRhbDjhNbZqRfBZ-3YhNksURSpDRkyWZWmyXtF0Lzc_Xo7x0NEXFF1QVaTwZBpJsu7QBOjIn3Vi2FeCafjSLZTILXGQnw1InS80bQ"/>
+</div>
+</div>
+</header>
+<!-- SideNavBar -->
+<aside class="bg-surface-container-low dark:bg-[#1F2937] h-screen w-64 fixed left-0 top-0 border-r border-outline-variant dark:border-[#374151] flex flex-col py-md px-sm z-40 bg-surface-container-lowest transition-colors">
+<div class="px-sm mb-xl mt-sm flex items-center gap-sm">
+<div class="w-10 h-10 rounded-DEFAULT bg-primary dark:bg-[#059669] flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined" data-weight="fill">domain</span>
+</div>
+<div>
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary dark:text-[#34D399]">BuildSmart AI</h1>
+<p class="font-label-md text-label-md text-on-surface-variant dark:text-[#9CA3AF]">Professional Suite</p>
+</div>
+</div>
+<button class="bg-primary-container dark:bg-[#059669] text-on-primary px-lg py-sm rounded-DEFAULT font-label-md text-label-md w-full mb-lg hover:bg-[#264B3E] dark:hover:bg-[#047857] transition-colors shadow-[0_4px_12px_rgba(23,32,30,0.05)] dark:shadow-none">New Project</button>
+<nav class="flex-1 flex flex-col gap-xs overflow-y-auto font-body-md text-body-md">
+<a class="flex items-center gap-sm px-md py-sm text-primary dark:text-[#10B981] font-bold bg-secondary-container dark:bg-[#064E3B]/40 rounded-lg scale-98 active:opacity-80 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                Overview
+            </a>
+<a class="flex items-center gap-sm px-md py-sm text-on-surface-variant dark:text-[#D1D5DB] hover:text-primary dark:hover:text-[#34D399] hover:bg-surface-container-high dark:hover:bg-[#374151] transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+                Users
+            </a>
+<a class="flex items-center justify-between px-md py-sm text-on-surface-variant dark:text-[#D1D5DB] hover:text-primary dark:hover:text-[#34D399] hover:bg-surface-container-high dark:hover:bg-[#374151] transition-colors duration-200 rounded-lg" href="#">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined" data-icon="fact_check">fact_check</span>
+                    Verification Queue
+                </div>
+<span class="bg-[#B42318]/10 dark:bg-[#EF4444]/20 text-[#B42318] dark:text-[#F87171] px-2 py-0.5 rounded-full font-label-md text-label-md">8</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm text-on-surface-variant dark:text-[#D1D5DB] hover:text-primary dark:hover:text-[#34D399] hover:bg-surface-container-high dark:hover:bg-[#374151] transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="architecture">architecture</span>
+                Projects
+            </a>
+<a class="flex items-center gap-sm px-md py-sm text-on-surface-variant dark:text-[#D1D5DB] hover:text-primary dark:hover:text-[#34D399] hover:bg-surface-container-high dark:hover:bg-[#374151] transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="storefront">storefront</span>
+                Marketplace
+            </a>
+<a class="flex items-center gap-sm px-md py-sm text-on-surface-variant dark:text-[#D1D5DB] hover:text-primary dark:hover:text-[#34D399] hover:bg-surface-container-high dark:hover:bg-[#374151] transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+                Revenue
+            </a>
+<a class="flex items-center gap-sm px-md py-sm text-on-surface-variant dark:text-[#D1D5DB] hover:text-primary dark:hover:text-[#34D399] hover:bg-surface-container-high dark:hover:bg-[#374151] transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="monitoring">monitoring</span>
+                Reports
+            </a>
+<a class="flex items-center gap-sm px-md py-sm text-on-surface-variant dark:text-[#D1D5DB] hover:text-primary dark:hover:text-[#34D399] hover:bg-surface-container-high dark:hover:bg-[#374151] transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="list_alt">list_alt</span>
+                System Logs
+            </a>
+<a class="flex items-center gap-sm px-md py-sm text-on-surface-variant dark:text-[#D1D5DB] hover:text-primary dark:hover:text-[#34D399] hover:bg-surface-container-high dark:hover:bg-[#374151] transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+                Settings
+            </a>
+</nav>
+<div class="mt-auto pt-md border-t border-outline-variant dark:border-[#374151] flex flex-col gap-xs font-body-md text-body-md">
+<a class="flex items-center gap-sm px-md py-sm text-on-surface-variant dark:text-[#D1D5DB] hover:text-primary dark:hover:text-[#34D399] hover:bg-surface-container-high dark:hover:bg-[#374151] transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+                Support
+            </a>
+<a class="flex items-center gap-sm px-md py-sm text-on-surface-variant dark:text-[#D1D5DB] hover:text-primary dark:hover:text-[#34D399] hover:bg-surface-container-high dark:hover:bg-[#374151] transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+                Sign Out
+            </a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 p-margin-desktop max-w-max-width mx-auto space-y-xl">
+<header class="flex justify-between items-end">
+<div>
+<h2 class="font-display text-display text-primary dark:text-[#34D399]">Admin Dashboard</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant dark:text-[#9CA3AF] mt-xs">System overview and critical operations.</p>
+</div>
+<div class="flex gap-sm">
+<button class="bg-[#FAFAF8] dark:bg-[#374151] text-[#17201E] dark:text-[#F3F4F6] border border-[#DDE2E0] dark:border-[#4B5563] px-lg py-sm rounded-DEFAULT font-label-md text-label-md hover:bg-[#F6F7F7] dark:hover:bg-[#4B5563] transition-colors flex items-center gap-xs">
+<span class="material-symbols-outlined text-[18px]">download</span>
+                    Export Data
+                </button>
+</div>
+</header>
+<!-- Stats Grid -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
+<div class="bg-surface-container-lowest dark:bg-[#1F2937] border border-[#DDE2E0] dark:border-[#374151] rounded-xl p-lg hover:shadow-[0_4px_12px_rgba(23,32,30,0.05)] dark:hover:shadow-none transition-shadow">
+<div class="flex justify-between items-start mb-md">
+<div class="w-10 h-10 rounded-full bg-primary-fixed/20 dark:bg-[#059669]/20 flex items-center justify-center text-primary-container dark:text-[#34D399]">
+<span class="material-symbols-outlined">payments</span>
+</div>
+<span class="bg-[#2F6B50]/10 dark:bg-[#34D399]/20 text-[#2F6B50] dark:text-[#34D399] px-2 py-1 rounded-full font-label-md text-label-md flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px]">trending_up</span> +12%
+                    </span>
+</div>
+<p class="font-label-md text-label-md text-on-surface-variant dark:text-[#9CA3AF] uppercase tracking-wider mb-xs">Total Revenue</p>
+<p class="font-headline-lg text-headline-lg text-on-surface dark:text-[#F9FAFB]">24.5M XAF</p>
+</div>
+<div class="bg-surface-container-lowest dark:bg-[#1F2937] border border-[#DDE2E0] dark:border-[#374151] rounded-xl p-lg hover:shadow-[0_4px_12px_rgba(23,32,30,0.05)] dark:hover:shadow-none transition-shadow">
+<div class="flex justify-between items-start mb-md">
+<div class="w-10 h-10 rounded-full bg-[#A66A00]/20 dark:bg-[#F59E0B]/20 flex items-center justify-center text-[#A66A00] dark:text-[#FBBF24]">
+<span class="material-symbols-outlined">fact_check</span>
+</div>
+<span class="bg-[#B42318]/10 dark:bg-[#EF4444]/20 text-[#B42318] dark:text-[#F87171] px-2 py-1 rounded-full font-label-md text-label-md flex items-center gap-xs">
+                        Action Required
+                    </span>
+</div>
+<p class="font-label-md text-label-md text-on-surface-variant dark:text-[#9CA3AF] uppercase tracking-wider mb-xs">Pending Verifications</p>
+<p class="font-headline-lg text-headline-lg text-on-surface dark:text-[#F9FAFB]">8</p>
+</div>
+<div class="bg-surface-container-lowest dark:bg-[#1F2937] border border-[#DDE2E0] dark:border-[#374151] rounded-xl p-lg hover:shadow-[0_4px_12px_rgba(23,32,30,0.05)] dark:hover:shadow-none transition-shadow">
+<div class="flex justify-between items-start mb-md">
+<div class="w-10 h-10 rounded-full bg-secondary-fixed/20 dark:bg-[#10B981]/20 flex items-center justify-center text-secondary dark:text-[#10B981]">
+<span class="material-symbols-outlined">group</span>
+</div>
+</div>
+<p class="font-label-md text-label-md text-on-surface-variant dark:text-[#9CA3AF] uppercase tracking-wider mb-xs">Active Users</p>
+<p class="font-headline-lg text-headline-lg text-on-surface dark:text-[#F9FAFB]">1.2k</p>
+</div>
+<div class="bg-surface-container-lowest dark:bg-[#1F2937] border border-[#DDE2E0] dark:border-[#374151] rounded-xl p-lg hover:shadow-[0_4px_12px_rgba(23,32,30,0.05)] dark:hover:shadow-none transition-shadow">
+<div class="flex justify-between items-start mb-md">
+<div class="w-10 h-10 rounded-full bg-[#2F6B50]/20 dark:bg-[#34D399]/20 flex items-center justify-center text-[#2F6B50] dark:text-[#34D399]">
+<span class="material-symbols-outlined">dns</span>
+</div>
+<span class="bg-[#2F6B50]/10 dark:bg-[#34D399]/20 text-[#2F6B50] dark:text-[#34D399] px-2 py-1 rounded-full font-label-md text-label-md flex items-center gap-xs">
+                        Stable
+                    </span>
+</div>
+<p class="font-label-md text-label-md text-on-surface-variant dark:text-[#9CA3AF] uppercase tracking-wider mb-xs">System Health</p>
+<p class="font-headline-lg text-headline-lg text-on-surface dark:text-[#F9FAFB]">99.9%</p>
+</div>
+</section>
+</main>
+</body></html>

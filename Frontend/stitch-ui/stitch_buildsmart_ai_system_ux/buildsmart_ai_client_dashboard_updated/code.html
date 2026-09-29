@@ -1,0 +1,430 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>BuildSmart AI - Client Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-container": "#315c4c",
+                        "on-background": "#131e1b",
+                        "surface-container": "#e4f1eb",
+                        "on-tertiary-fixed": "#141d1b",
+                        "primary-fixed-dim": "#a2d0bc",
+                        "tertiary": "#353f3c",
+                        "secondary-fixed": "#c3ecda",
+                        "tertiary-container": "#4c5653",
+                        "tertiary-fixed-dim": "#bfc9c5",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-surface": "#27332f",
+                        "secondary-fixed-dim": "#a7cfbe",
+                        "inverse-on-surface": "#e7f4ee",
+                        "on-primary-fixed-variant": "#234e3f",
+                        "on-secondary-container": "#456a5c",
+                        "surface-container-highest": "#d8e5e0",
+                        "outline": "#717974",
+                        "background": "#FAFAF8",
+                        "surface-tint": "#3c6756",
+                        "outline-variant": "#c0c8c3",
+                        "surface-container-high": "#deebe6",
+                        "surface-variant": "#d8e5e0",
+                        "on-surface-variant": "#414944",
+                        "on-secondary": "#ffffff",
+                        "tertiary-fixed": "#dbe5e1",
+                        "surface-dim": "#d0ddd8",
+                        "surface-container-low": "#eaf7f1",
+                        "surface-bright": "#effcf7",
+                        "on-primary-fixed": "#002116",
+                        "primary": "#184436",
+                        "on-tertiary-fixed-variant": "#3f4946",
+                        "on-surface": "#131e1b",
+                        "on-tertiary-container": "#c1cbc7",
+                        "on-error-container": "#93000a",
+                        "secondary": "#416658",
+                        "inverse-primary": "#a2d0bc",
+                        "on-secondary-fixed": "#002117",
+                        "secondary-container": "#c0e9d7",
+                        "on-error": "#ffffff",
+                        "primary-fixed": "#beedd8",
+                        "error-container": "#ffdad6",
+                        "surface": "#effcf7",
+                        "on-primary": "#ffffff",
+                        "on-secondary-fixed-variant": "#294e41",
+                        "on-primary-container": "#a4d2be",
+                        "on-tertiary": "#ffffff",
+                        "error": "#ba1a1a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "md": "16px",
+                        "gutter": "24px",
+                        "margin-desktop": "48px",
+                        "sm": "8px",
+                        "lg": "24px",
+                        "margin-mobile": "16px",
+                        "max-width": "1440px",
+                        "xl": "40px",
+                        "xs": "4px",
+                        "base": "8px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "display": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "mono-technical": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "display": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "mono-technical": ["13px", { "lineHeight": "18px", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .technical-grid {
+            background-size: 24px 24px;
+            background-image: 
+                linear-gradient(to right, rgba(192, 200, 195, 0.2) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(192, 200, 195, 0.2) 1px, transparent 1px);
+        }
+
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-background dark:bg-inverse-surface text-on-background dark:text-inverse-on-surface font-body-md min-h-screen flex selection:bg-primary-container selection:text-on-primary">
+<!-- Theme Toggle Button -->
+<button class="fixed top-4 right-4 z-50 p-2 rounded-full bg-surface-container-highest dark:bg-surface-variant text-on-surface dark:text-inverse-surface border border-outline-variant dark:border-outline shadow-sm hover:shadow transition-all flex items-center justify-center" id="themeToggle">
+<span class="material-symbols-outlined dark:hidden">dark_mode</span>
+<span class="material-symbols-outlined hidden dark:block">light_mode</span>
+</button>
+<!-- Fixed Sidebar JSON injected here conceptually -> Built manually for layout context -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-white dark:bg-inverse-surface border-r border-outline-variant dark:border-tertiary flex flex-col py-md z-40 hidden md:flex">
+<div class="px-4 mb-8 flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-on-primary font-headline-sm">BS</div>
+<div>
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary dark:text-inverse-primary">BuildSmart AI</h1>
+</div>
+</div>
+<nav class="flex-1 overflow-y-auto">
+<ul class="space-y-1">
+<!-- Dashboard - Active -->
+<li class="">
+<a class="flex items-center gap-3 px-4 py-3 mx-2 my-1 transition-all duration-200 bg-primary-container text-on-primary-container font-semibold rounded-lg font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+                        Dashboard
+                    </a>
+</li>
+<!-- Other links inactive -->
+<li class="">
+<a class="flex items-center gap-3 px-4 py-3 mx-2 my-1 transition-all duration-200 text-on-surface-variant dark:text-outline-variant hover:bg-surface-variant hover:bg-surface-container-high dark:hover:bg-tertiary-container rounded-lg font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">architecture</span>
+                        Design Studio
+                    </a>
+</li>
+<li class="">
+<a class="flex items-center gap-3 px-4 py-3 mx-2 my-1 transition-all duration-200 text-on-surface-variant dark:text-outline-variant hover:bg-surface-variant hover:bg-surface-container-high dark:hover:bg-tertiary-container rounded-lg font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">edit_square</span>
+                        Floor Plans
+                    </a>
+</li>
+<li class="">
+<a class="flex items-center gap-3 px-4 py-3 mx-2 my-1 transition-all duration-200 text-on-surface-variant dark:text-outline-variant hover:bg-surface-variant hover:bg-surface-container-high dark:hover:bg-tertiary-container rounded-lg font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">view_in_ar</span>
+                        3D Visualizer
+                    </a>
+</li>
+<li class="">
+<a class="flex items-center gap-3 px-4 py-3 mx-2 my-1 transition-all duration-200 text-on-surface-variant dark:text-outline-variant hover:bg-surface-variant hover:bg-surface-container-high dark:hover:bg-tertiary-container rounded-lg font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">storefront</span>
+                        Marketplace
+                    </a>
+</li>
+<li class="">
+<a class="flex items-center gap-3 px-4 py-3 mx-2 my-1 transition-all duration-200 text-on-surface-variant dark:text-outline-variant hover:bg-surface-variant hover:bg-surface-container-high dark:hover:bg-tertiary-container rounded-lg font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">folder_open</span>
+                        Projects
+                    </a>
+</li>
+<li class="">
+<a class="flex items-center gap-3 px-4 py-3 mx-2 my-1 transition-all duration-200 text-on-surface-variant dark:text-outline-variant hover:bg-surface-variant hover:bg-surface-container-high dark:hover:bg-tertiary-container rounded-lg font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">settings</span>
+                        Settings
+                    </a>
+</li>
+</ul>
+</nav>
+<div class="px-4 mt-auto">
+<button class="w-full bg-primary text-on-primary hover:bg-[#264B3E] transition-colors py-2 px-4 rounded-lg font-label-md text-label-md flex items-center justify-center gap-2 mb-4">
+<span class="material-symbols-outlined">add</span>
+                New Project
+            </button>
+<ul class="border-t border-outline-variant dark:border-tertiary pt-4 space-y-1">
+<li class="">
+<a class="flex items-center gap-3 px-4 py-2 mx-2 transition-all duration-200 text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-high dark:hover:bg-tertiary-container rounded-lg font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">help</span>
+                        Help Center
+                    </a>
+</li>
+<li class="">
+<a class="flex items-center gap-3 px-4 py-2 mx-2 transition-all duration-200 text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-high dark:hover:bg-tertiary-container rounded-lg font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">logout</span>
+                        Logout
+                    </a>
+</li>
+</ul>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 md:ml-64 relative min-h-screen bg-background dark:bg-[#101413]">
+<!-- Top App Bar for Mobile (Hidden on Desktop) -->
+<header class="md:hidden sticky top-0 z-30 bg-surface-container-lowest dark:bg-inverse-surface border-b border-outline-variant dark:border-tertiary px-margin-mobile h-16 flex items-center justify-between z-50">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-on-primary font-headline-sm text-sm">BS</div>
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary dark:text-inverse-primary">BuildSmart AI</h1>
+</div>
+<button class="text-on-surface dark:text-inverse-on-surface">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</header>
+<div class="max-w-max-width mx-auto p-margin-mobile md:p-margin-desktop grid grid-cols-1 lg:grid-cols-12 gap-lg lg:gap-gutter">
+<!-- Main Content Area -->
+<div class="lg:col-span-8 xl:col-span-9 flex flex-col gap-xl">
+<!-- Header Section -->
+<section class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-surface-container-lowest dark:bg-tertiary dark:border-tertiary p-lg rounded-xl border border-outline-variant shadow-[0_4px_12px_rgba(23,32,30,0.05)] relative overflow-hidden">
+<div class="relative z-10">
+<h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-background dark:text-white mb-1">Welcome back, Architect.</h2>
+<p class="font-body-md text-body-md text-on-surface-variant dark:text-outline-variant">Here is the structural overview of your ongoing projects.</p>
+</div>
+<button class="relative z-10 bg-primary text-on-primary hover:bg-[#264B3E] transition-colors py-3 px-6 rounded-lg font-label-md text-label-md flex items-center gap-2 whitespace-nowrap">
+<span class="material-symbols-outlined text-sm">add</span>
+                        New Project
+                    </button>
+<!-- Decorative subtle geometric overlay -->
+<div class="absolute right-0 top-0 w-64 h-full opacity-10 dark:opacity-20 pointer-events-none" style="background: repeating-linear-gradient(45deg, #184436, #184436 2px, transparent 2px, transparent 10px);"></div>
+</section>
+<!-- Stat Cards Bento Grid -->
+<section class="grid grid-cols-2 md:grid-cols-4 gap-4">
+<div class="bg-surface-container-lowest dark:bg-[#1a211f] border border-outline-variant dark:border-tertiary rounded-xl p-4 hover:shadow-[0_4px_12px_rgba(23,32,30,0.05)] transition-shadow cursor-pointer">
+<div class="flex items-center gap-2 text-on-surface-variant dark:text-outline-variant mb-2">
+<span class="material-symbols-outlined text-sm">folder_open</span>
+<h3 class="font-label-md text-label-md">ACTIVE PROJECTS</h3>
+</div>
+<p class="font-display text-display text-primary dark:text-inverse-primary">3</p>
+</div>
+<div class="bg-surface-container-lowest dark:bg-[#1a211f] border border-outline-variant dark:border-tertiary rounded-xl p-4 hover:shadow-[0_4px_12px_rgba(23,32,30,0.05)] transition-shadow cursor-pointer">
+<div class="flex items-center gap-2 text-on-surface-variant dark:text-outline-variant mb-2">
+<span class="material-symbols-outlined text-sm">request_quote</span>
+<h3 class="font-label-md text-label-md">PENDING ESTIMATES</h3>
+</div>
+<p class="font-display text-display text-on-background dark:text-white">2</p>
+</div>
+<div class="bg-surface-container-lowest dark:bg-[#1a211f] border border-outline-variant dark:border-tertiary rounded-xl p-4 hover:shadow-[0_4px_12px_rgba(23,32,30,0.05)] transition-shadow cursor-pointer">
+<div class="flex items-center gap-2 text-on-surface-variant dark:text-outline-variant mb-2">
+<span class="material-symbols-outlined text-sm">forum</span>
+<h3 class="font-label-md text-label-md">MESSAGES</h3>
+</div>
+<div class="flex items-baseline gap-2">
+<p class="font-display text-display text-on-background dark:text-white">5</p>
+<span class="inline-flex items-center rounded-full bg-[#eaf7f1] dark:bg-primary-container px-2 py-0.5 font-label-md text-label-md text-[#2F6B50] dark:text-on-primary-container">NEW</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest dark:bg-[#1a211f] border border-outline-variant dark:border-tertiary rounded-xl p-4 hover:shadow-[0_4px_12px_rgba(23,32,30,0.05)] transition-shadow cursor-pointer">
+<div class="flex items-center gap-2 text-on-surface-variant dark:text-outline-variant mb-2">
+<span class="material-symbols-outlined text-sm">inventory_2</span>
+<h3 class="font-label-md text-label-md">TOTAL ORDERS</h3>
+</div>
+<p class="font-display text-display text-on-background dark:text-white">12</p>
+</div>
+</section>
+<!-- Recent Projects -->
+<section class="flex flex-col gap-4">
+<div class="flex justify-between items-end border-b border-outline-variant dark:border-tertiary pb-2">
+<h3 class="font-headline-md text-headline-md text-on-background dark:text-white">Recent Projects</h3>
+<a class="font-label-md text-label-md text-primary dark:text-inverse-primary hover:underline" href="#">View All</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Project Card 1 -->
+<div class="bg-surface-container-lowest dark:bg-[#1a211f] border border-outline-variant dark:border-tertiary rounded-xl overflow-hidden hover:shadow-[0_4px_12px_rgba(23,32,30,0.05)] transition-all group cursor-pointer">
+<div class="h-40 w-full relative">
+<img class="w-full h-full object-cover" data-alt="A high-end architectural rendering of a modern luxury villa featuring extensive glass facades, brutalist concrete elements, and minimalist landscaping, viewed at twilight with warm interior lighting contrasting against a cool blue evening sky. The style is hyper-realistic, pristine, and precise, aligning with a professional architectural presentation." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDwLGV3IUBvUnoFIKQ3C3B5JuzQph3cyXqyYCiSdePKCtajRJ2117-RbDiuCk-CyYuJQIR281FHhOfC3iXC8g9_H5nKCicAMCwv7lok4mDE4N_TWYNM6iPm_fD8Sf_n2HC2papk_Zh82YxrVt8-lmQrvWIdjDL4W4APc9bDOzTsLs5PgBhK2D-MHUXX3xgW5IpF3gDVRH1XVeSZtfAsQZaXzZW17TlLbzFo9xZu-gthiLWodK1W0MK9lw">
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<span class="absolute bottom-3 left-3 bg-surface-container-lowest dark:bg-inverse-surface text-on-background dark:text-white px-2 py-1 rounded font-mono-technical text-mono-technical">PRJ-001</span>
+</div>
+<div class="p-4">
+<h4 class="font-headline-sm text-headline-sm text-on-background dark:text-white mb-1">Modern Villa Alpha</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant dark:text-outline-variant mb-4">Phase: Structural Foundation</p>
+<div class="w-full bg-surface-variant dark:bg-tertiary-container rounded-full h-2 mb-1">
+<div class="bg-primary dark:bg-inverse-primary h-2 rounded-full" style="width: 45%"></div>
+</div>
+<div class="flex justify-between font-label-md text-label-md text-on-surface-variant dark:text-outline-variant">
+<span class="">Progress</span>
+<span class="">45%</span>
+</div>
+</div>
+</div>
+<!-- Project Card 2 -->
+<div class="bg-surface-container-lowest dark:bg-[#1a211f] border border-outline-variant dark:border-tertiary rounded-xl overflow-hidden hover:shadow-[0_4px_12px_rgba(23,32,30,0.05)] transition-all group cursor-pointer">
+<div class="h-40 w-full relative">
+<img class="w-full h-full object-cover" data-alt="An isometric 3D architectural rendering of a sustainable eco-office complex featuring green roofs, solar panels, and exposed structural steel frames. The lighting is bright daylight, creating sharp, crisp shadows that emphasize the building's geometric precision and technical design details. The color palette is cool and professional." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCldHusb5hraZHpNhPd_KkrtECI8u7f0AXrt0gJlC9pYSDOzchQsDPfcEsNxHjP4FVVJeghj3I8qES_8BbrL9UFQelHXr9Xl38G7-1sZtI5Ww4ATtJnhvRDGOx6npJtV6J5WkubfTsruCeOEystNdRwW7S5lNQWi2UvhCd718MT1xl51-jom8-pFc9LHa9wwQl6t1XenPNq32NcngE-e9e99ktEgdpGOBkzk7eKvByunQQ_a5w5w46nxg">
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<span class="absolute bottom-3 left-3 bg-surface-container-lowest dark:bg-inverse-surface text-on-background dark:text-white px-2 py-1 rounded font-mono-technical text-mono-technical">PRJ-002</span>
+</div>
+<div class="p-4">
+<h4 class="font-headline-sm text-headline-sm text-on-background dark:text-white mb-1">Eco-Office Complex</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant dark:text-outline-variant mb-4">Phase: MEP Installation</p>
+<div class="w-full bg-surface-variant dark:bg-tertiary-container rounded-full h-2 mb-1">
+<div class="bg-[#A66A00] dark:bg-[#F2B04E] h-2 rounded-full" style="width: 78%"></div>
+</div>
+<div class="flex justify-between font-label-md text-label-md text-on-surface-variant dark:text-outline-variant">
+<span class="">Progress</span>
+<span class="">78%</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Marketplace Quick Picks Horizontal Scroll -->
+<section class="flex flex-col gap-4 mt-8">
+<div class="flex justify-between items-end border-b border-outline-variant dark:border-tertiary pb-2">
+<h3 class="font-headline-md text-headline-md text-on-background dark:text-white">Marketplace Quick Picks</h3>
+<a class="font-label-md text-label-md text-primary dark:text-inverse-primary hover:underline" href="#">Explore Market</a>
+</div>
+<div class="flex overflow-x-auto gap-4 pb-4 hide-scrollbar -mx-margin-mobile px-margin-mobile md:mx-0 md:px-0">
+<!-- Material Item 1 -->
+<div class="min-w-[200px] flex-shrink-0 bg-surface-container-lowest dark:bg-[#1a211f] border border-outline-variant dark:border-tertiary rounded-xl p-3 hover:shadow-[0_4px_12px_rgba(23,32,30,0.05)] transition-all cursor-pointer">
+<div class="h-24 w-full bg-surface-variant dark:bg-tertiary-container rounded mb-3 flex items-center justify-center">
+<span class="material-symbols-outlined text-outline dark:text-outline-variant text-3xl">foundation</span>
+</div>
+<h5 class="font-body-md text-body-md font-semibold text-on-background dark:text-white line-clamp-1">Portland Cement Type I</h5>
+<p class="font-label-md text-label-md text-on-surface-variant dark:text-outline-variant mt-1">$145.00 / ton</p>
+</div>
+<!-- Material Item 2 -->
+<div class="min-w-[200px] flex-shrink-0 bg-surface-container-lowest dark:bg-[#1a211f] border border-outline-variant dark:border-tertiary rounded-xl p-3 hover:shadow-[0_4px_12px_rgba(23,32,30,0.05)] transition-all cursor-pointer">
+<div class="h-24 w-full bg-surface-variant dark:bg-tertiary-container rounded mb-3 flex items-center justify-center">
+<span class="material-symbols-outlined text-outline dark:text-outline-variant text-3xl">hardware</span>
+</div>
+<h5 class="font-body-md text-body-md font-semibold text-on-background dark:text-white line-clamp-1">Rebar Grade 60 (#4)</h5>
+<p class="font-label-md text-label-md text-on-surface-variant dark:text-outline-variant mt-1">$850.00 / bundle</p>
+</div>
+<!-- Material Item 3 -->
+<div class="min-w-[200px] flex-shrink-0 bg-surface-container-lowest dark:bg-[#1a211f] border border-outline-variant dark:border-tertiary rounded-xl p-3 hover:shadow-[0_4px_12px_rgba(23,32,30,0.05)] transition-all cursor-pointer">
+<div class="h-24 w-full bg-surface-variant dark:bg-tertiary-container rounded mb-3 flex items-center justify-center">
+<span class="material-symbols-outlined text-outline dark:text-outline-variant text-3xl">grid_on</span>
+</div>
+<h5 class="font-body-md text-body-md font-semibold text-on-background dark:text-white line-clamp-1">Porcelain Floor Tiles</h5>
+<p class="font-label-md text-label-md text-on-surface-variant dark:text-outline-variant mt-1">$24.50 / sq ft</p>
+</div>
+<!-- Material Item 4 -->
+<div class="min-w-[200px] flex-shrink-0 bg-surface-container-lowest dark:bg-[#1a211f] border border-outline-variant dark:border-tertiary rounded-xl p-3 hover:shadow-[0_4px_12px_rgba(23,32,30,0.05)] transition-all cursor-pointer">
+<div class="h-24 w-full bg-surface-variant dark:bg-tertiary-container rounded mb-3 flex items-center justify-center">
+<span class="material-symbols-outlined text-outline dark:text-outline-variant text-3xl">wb_sunny</span>
+</div>
+<h5 class="font-body-md text-body-md font-semibold text-on-background dark:text-white line-clamp-1">Solar Glass Panels</h5>
+<p class="font-label-md text-label-md text-on-surface-variant dark:text-outline-variant mt-1">$310.00 / unit</p>
+</div>
+</div>
+</section>
+</div>
+<!-- Side Column: Activity Feed -->
+<aside class="lg:col-span-4 xl:col-span-3 flex flex-col gap-lg">
+<div class="bg-white dark:bg-[#1a211f] border border-outline-variant dark:border-tertiary rounded-xl p-6 h-full flex flex-col">
+<h3 class="font-headline-sm text-headline-sm text-on-background dark:text-white border-b border-outline-variant dark:border-tertiary pb-3 mb-4">Project Activity</h3>
+<div class="relative flex-1">
+<!-- Vertical line -->
+<div class="absolute left-3 top-2 bottom-0 w-px bg-outline-variant dark:bg-tertiary"></div>
+<ul class="space-y-6 relative">
+<!-- Feed Item 1 -->
+<li class="flex gap-4">
+<div class="w-6 h-6 rounded-full bg-[#eaf7f1] dark:bg-[#101413] border border-primary dark:border-inverse-primary flex items-center justify-center flex-shrink-0 relative z-10">
+<div class="w-2 h-2 rounded-full bg-primary dark:bg-inverse-primary"></div>
+</div>
+<div>
+<p class="font-body-sm text-body-sm text-on-background dark:text-white"><span class="font-semibold">Estimate Approved</span> for Modern Villa Alpha.</p>
+<p class="font-label-md text-label-md text-on-surface-variant dark:text-outline-variant mt-1">2 hours ago</p>
+</div>
+</li>
+<!-- Feed Item 2 -->
+<li class="flex gap-4">
+<div class="w-6 h-6 rounded-full bg-surface-container-lowest dark:bg-[#101413] border border-outline dark:border-outline-variant flex items-center justify-center flex-shrink-0 relative z-10">
+<span class="material-symbols-outlined text-[12px] text-outline dark:text-outline-variant">description</span>
+</div>
+<div>
+<p class="font-body-sm text-body-sm text-on-background dark:text-white">New blueprints uploaded: <span class="font-mono-technical text-mono-technical">floor_plan_v3.dwg</span></p>
+<p class="font-label-md text-label-md text-on-surface-variant dark:text-outline-variant mt-1">Yesterday, 14:30</p>
+</div>
+</li>
+<!-- Feed Item 3 -->
+<li class="flex gap-4">
+<div class="w-6 h-6 rounded-full bg-surface-container-lowest dark:bg-[#101413] border border-outline dark:border-outline-variant flex items-center justify-center flex-shrink-0 relative z-10">
+<span class="material-symbols-outlined text-[12px] text-outline dark:text-outline-variant">shopping_cart</span>
+</div>
+<div>
+<p class="font-body-sm text-body-sm text-on-background dark:text-white">Order <span class="font-mono-technical text-mono-technical">#ORD-992</span> delivered to Eco-Office site.</p>
+<p class="font-label-md text-label-md text-on-surface-variant dark:text-outline-variant mt-1">Oct 24, 09:15</p>
+</div>
+</li>
+<!-- Feed Item 4 -->
+<li class="flex gap-4">
+<div class="w-6 h-6 rounded-full bg-[#fff8e6] dark:bg-[#101413] border border-[#A66A00] dark:border-[#F2B04E] flex items-center justify-center flex-shrink-0 relative z-10">
+<span class="material-symbols-outlined text-[12px] text-[#A66A00] dark:text-[#F2B04E]">warning</span>
+</div>
+<div>
+<p class="font-body-sm text-body-sm text-on-background dark:text-white">Pending approval on structural revision <span class="font-mono-technical text-mono-technical">REV-02</span>.</p>
+<p class="font-label-md text-label-md text-on-surface-variant dark:text-outline-variant mt-1">Oct 22, 11:00</p>
+<button class="mt-2 text-xs border border-outline-variant dark:border-outline-variant rounded px-2 py-1 font-label-md hover:bg-surface-variant dark:hover:bg-tertiary-container transition-colors dark:text-white">Review Now</button>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</aside>
+</div>
+</main>
+<script>
+    const themeToggleBtn = document.getElementById('themeToggle');
+    const htmlRoot = document.documentElement;
+
+    themeToggleBtn.addEventListener('click', () => {
+        if (htmlRoot.classList.contains('dark')) {
+            htmlRoot.classList.remove('dark');
+            htmlRoot.classList.add('light');
+        } else {
+            htmlRoot.classList.remove('light');
+            htmlRoot.classList.add('dark');
+        }
+    });
+</script>
+
+
+</body></html>
